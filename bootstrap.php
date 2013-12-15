@@ -9,11 +9,17 @@ switch ($global_app_name)
         \Dsc\System::instance()->getDispatcher()->addListener(\Users\Listener::instance());
         
         // register all the routes
+        $f3->route('GET|POST /admin/users', '\Users\Admin\Controllers\Users->display');
+        $f3->route('GET|POST /admin/users/@page', '\Users\Admin\Controllers\Users->display');
+        $f3->route('GET /admin/user/edit/@id', '\Users\Admin\Controllers\User->edit');
         
         // append this app's UI folder to the path, e.g. UI=../apps/blog/admin/views/
         
         // TODO set some app-specific settings, if desired
-                
+        $ui = $f3->get('UI');
+        $ui .= ";" . $f3->get('PATH_ROOT') . "vendor/dioscouri/f3-users/src/Users/Admin/Views/";
+        $f3->set('UI', $ui);
+                        
         break;
     case "site":
         // TODO register all the routes
