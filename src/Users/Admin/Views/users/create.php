@@ -1,13 +1,16 @@
 <?php //echo \Dsc\Debug::dump( $state, false ); ?>
 
-<form id="detail-form" action="./admin/user/<?php echo $item->get( $model->getItemKey() ); ?>" class="form-horizontal" method="post">
+<form id="detail-form" action="./admin/user" class="form-horizontal"
+    method="post">
 
     <div class="form-group">
 
         <label class="col-md-3">Username</label>
 
         <div class="col-md-7">
-            <input type="text" name="username" value="<?php echo $flash->old('username'); ?>" class="form-control" />
+            <input type="text" name="username"
+                value="<?php echo $flash->old('username'); ?>"
+                class="form-control" />
         </div>
         <!-- /.col -->
 
@@ -19,7 +22,9 @@
         <label class="col-md-3">First Name</label>
 
         <div class="col-md-7">
-            <input type="text" name="first_name" value="<?php echo $flash->old('first_name'); ?>" class="form-control" />
+            <input type="text" name="first_name"
+                value="<?php echo $flash->old('first_name'); ?>"
+                class="form-control" />
         </div>
         <!-- /.col -->
 
@@ -31,7 +36,9 @@
         <label class="col-md-3">Last Name</label>
 
         <div class="col-md-7">
-            <input type="text" name="last_name" value="<?php echo $flash->old('last_name'); ?>" class="form-control" />
+            <input type="text" name="last_name"
+                value="<?php echo $flash->old('last_name'); ?>"
+                class="form-control" />
         </div>
         <!-- /.col -->
 
@@ -43,15 +50,17 @@
         <label class="col-md-3">Email Address</label>
 
         <div class="col-md-7">
-            <input type="text" name="email" value="<?php echo $flash->old('email'); ?>" class="form-control" />
+            <input type="text" name="email"
+                value="<?php echo $flash->old('email'); ?>"
+                class="form-control" />
         </div>
         <!-- /.col -->
 
     </div>
     <!-- /.form-group -->
 
-    <hr/>
-    
+    <hr />
+
     <div class="form-actions">
 
         <div>

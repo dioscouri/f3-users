@@ -11,7 +11,14 @@ switch ($global_app_name)
         // register all the routes
         $f3->route('GET|POST /admin/users', '\Users\Admin\Controllers\Users->display');
         $f3->route('GET|POST /admin/users/@page', '\Users\Admin\Controllers\Users->display');
-        $f3->route('GET /admin/user/edit/@id', '\Users\Admin\Controllers\User->edit');
+        $f3->route('GET|POST /admin/users/delete', '\Users\Admin\Controllers\Users->delete');
+        $f3->route('GET /admin/user', '\Users\Admin\Controllers\User->create');
+        $f3->route('POST /admin/user', '\Users\Admin\Controllers\User->add');
+        $f3->route('GET /admin/user/@id', '\Users\Admin\Controllers\User->read');
+        $f3->route('GET /admin/user/@id/edit', '\Users\Admin\Controllers\User->edit');
+        $f3->route('POST /admin/user/@id', '\Users\Admin\Controllers\User->update');
+        $f3->route('DELETE /admin/user/@id', '\Users\Admin\Controllers\User->delete');
+        $f3->route('GET /admin/user/@id/delete', '\Users\Admin\Controllers\User->delete');        
         
         // append this app's UI folder to the path, e.g. UI=../apps/blog/admin/views/
         
