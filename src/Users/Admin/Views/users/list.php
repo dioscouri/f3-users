@@ -95,7 +95,7 @@
                         <?php echo $item->last_name; ?>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/user/edit/<?php echo $item->id; ?>">
+                        <a class="btn btn-xs btn-secondary" href="./admin/user/<?php echo $item->id; ?>/edit">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
