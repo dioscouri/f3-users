@@ -112,7 +112,7 @@
                         <div class="list-group-item">
                             <script>
                             Dsc.refreshCategories = function(r) {
-
+                                console.log('trying to get groups');
                                 var form_data = new Array();
                                 jQuery.merge( form_data, jQuery('#groups-checkboxes').find(':input').serializeArray() );
                                 jQuery.merge( form_data, [{ name: "groups_ids[]", value: r.result._id['$id'] }] );
@@ -121,9 +121,11 @@
                                     type: 'post', 
                                     url: './admin/users/groups/checkboxes',
                                     data: form_data
+
                                 }).done(function(data){
                                     var lr = jQuery.parseJSON( JSON.stringify(data), false);
                                     if (lr.result) {
+                                         console.log(lr.result);
                                         jQuery('#groups-checkboxes').html(lr.result);
                                         App.initICheck();
                                     }
@@ -131,40 +133,6 @@
                             }
                             </script>
                                                     
-                            <div data-toggle="collapse" data-target="#addCategoryForm" class="btn btn-link">
-                                Add New Group
-                            </div>
-                            <div id="addCategoryForm" class="collapse">
-                                <div class="panel-body">
-                                    
-                                    <div id="quick-form" action="./admin/users/group" data-callback="Dsc.refreshCategories" data-message_container="quick-form-response-container">
-                                    
-                                    <div id="quick-form-response-container"></div>
-                                    
-                                    <div class="form-group">
-                                        <input type="text" name="name" placeholder="Name" class="form-control" />
-                                    </div>
-                                    <!-- /.form-group -->
-                                    
-                                    <div id="parents" class="form-group">
-                                        <?php echo $this->renderLayout('categories/list_parents.php'); ?>                    
-                                    </div>
-                                    <!-- /.form-group -->        
-                    
-                                    <hr />
-                    
-                                    <div class="form-actions">
-                    
-                                        <div>
-                                            <button type="button" class="btn btn-primary dsc-ajax-submit" data-target="quick-form">Create</button>
-                                        </div>
-                    
-                                    </div>
-                                    <!-- /.form-group -->
-                                    </div>
-                                    
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

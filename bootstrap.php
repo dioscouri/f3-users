@@ -29,7 +29,9 @@ switch ($global_app_name)
         $f3->route('GET /admin/users/group/@id/edit', '\Users\Admin\Controllers\Group->edit');
         $f3->route('POST /admin/users/group/@id', '\Users\Admin\Controllers\Group->update');
         $f3->route('DELETE /admin/users/group/@id', '\Users\Admin\Controllers\Group->delete');
-        $f3->route('GET /admin/users/group/@id/delete', '\Users\Admin\Controllers\Group->delete');    
+        $f3->route('GET /admin/users/group/@id/delete', '\Users\Admin\Controllers\Group->delete'); 
+       // $f3->route('GET|POST  /admin/users/groups/checkboxes', '\Users\Admin\Controllers\Groups->getCheckboxes');
+ 
         // append this app's UI folder to the path, e.g. UI=../apps/blog/admin/views/
         
         // TODO set some app-specific settings, if desired

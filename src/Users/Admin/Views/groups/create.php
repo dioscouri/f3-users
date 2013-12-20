@@ -15,9 +15,6 @@
 
     </div>
     <!-- /.form-group -->
-
-  
-
     <hr />
 
     <div class="form-actions">

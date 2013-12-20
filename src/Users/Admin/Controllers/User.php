@@ -38,6 +38,7 @@ class User extends \Admin\Controllers\BaseAuth
 	{
 		$f3 = \Base::instance();
 		$f3->set('pagetitle', 'Create User');
+
 		$model = new \Users\Admin\Models\Groups;
         $groups = $model->getList();
         \Base::instance()->set('groups', $groups );	
@@ -51,7 +52,11 @@ class User extends \Admin\Controllers\BaseAuth
 	{
 		$f3 = \Base::instance();
 		$f3->set('pagetitle', 'Edit User');
-	
+		
+		$model = new \Users\Admin\Models\Groups;
+        $groups = $model->getList();
+        \Base::instance()->set('groups', $groups );		
+
 		$view = new \Dsc\Template;
 		echo $view->render('Users/Admin/Views::users/edit.php');
 	}

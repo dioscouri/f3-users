@@ -54,6 +54,7 @@
                 <th data-sortable="email">Email</th>
                 <th>First Name</th>
                 <th data-sortable="last_name">Last Name</th>
+                <th>Groups</th>
                 <th></th>
             </tr>
 			<tr class="filter-row">
@@ -66,7 +67,13 @@
                 </th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <th><select  id="group_filter" name="filter[group]" class="form-control" >
+                <option value="">-Group Filter-</option>
+                <?php foreach ($groups as $group) : ?>
+                <option <?php if($state->get('filter.group') == $group->id) { echo 'selected'; } ?> value="<?=$group->_id;?>"><?=$group->name;?></option>
+                <?php endforeach; ?>
+            </select></th>
+                <th><button class="btn " type="sumbit">Filter</button></th>
             </tr>
 		</thead>
 		<tbody>    
@@ -93,6 +100,16 @@
                     </td>
                     <td class="">
                         <?php echo $item->last_name; ?>
+                    </td>
+                    <td class="">
+                    <ul>
+                    <?php foreach ($item->groups as $group) : ?>
+                    <li id="<?=$group['id'];?>">
+                    <?=$group['name'];?>
+                    </li>
+                    <?php endforeach; ?>
+                    </ul> 
+                        
                     </td>
                     <td class="text-center">
                         <a class="btn btn-xs btn-secondary" href="./admin/user/<?php echo $item->id; ?>/edit">
