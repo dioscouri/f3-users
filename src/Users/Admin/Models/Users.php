@@ -21,7 +21,6 @@ class Users extends \Dsc\Models\Db\Mongo
     
     protected function fetchFilters()
     {   
-        var_dump($this->filters);
        
         $filter_keyword = $this->getState('filter.keyword');
         if ($filter_keyword && is_string($filter_keyword))
