@@ -108,32 +108,7 @@
                         <div id="groups-checkboxes">
                         <?php echo $this->renderLayout('groups/checkboxes.php'); ?>
                         </div>
-                
-                        <div class="list-group-item">
-                            <script>
-                            Dsc.refreshCategories = function(r) {
-                                console.log('trying to get groups');
-                                var form_data = new Array();
-                                jQuery.merge( form_data, jQuery('#groups-checkboxes').find(':input').serializeArray() );
-                                jQuery.merge( form_data, [{ name: "groups_ids[]", value: r.result._id['$id'] }] );
-
-                                var request = jQuery.ajax({
-                                    type: 'post', 
-                                    url: './admin/users/groups/checkboxes',
-                                    data: form_data
-
-                                }).done(function(data){
-                                    var lr = jQuery.parseJSON( JSON.stringify(data), false);
-                                    if (lr.result) {
-                                         console.log(lr.result);
-                                        jQuery('#groups-checkboxes').html(lr.result);
-                                        App.initICheck();
-                                    }
-                                });
-                            }
-                            </script>
-                                                    
-                        </div>
+            
                     </div>
                 </div>
                 <!-- /.portlet-content -->
