@@ -103,11 +103,13 @@
                     </td>
                     <td class="">
                     <ul>
-                    <?php foreach (@$item->groups as $group) : ?>
+                    <?php if(is_array($item->groups)) : ?> 
+                    <?php foreach ($item->groups as $group) : ?>
                     <li id="<?=$group['id'];?>">
                     <?=$group['name'];?>
                     </li>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                     </ul> 
                         
                     </td>
