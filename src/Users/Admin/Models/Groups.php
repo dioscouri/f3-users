@@ -3,7 +3,7 @@ namespace Users\Admin\Models;
 
 class Groups extends \Dsc\Models\Db\Mongo 
 {
-	protected $collection = 'user.groups';
+	protected $collection = 'users.groups';
     protected $default_ordering_direction = '1';
     protected $default_ordering_field = 'name';
     
