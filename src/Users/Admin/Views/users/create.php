@@ -1,9 +1,8 @@
-<?php //echo \Dsc\Debug::dump( $state, false ); ?>
 
-<form id="detail-form" action="./admin/user" class="form-horizontal"
-    method="post">
-
-    <div class="form-group">
+<form id="detail-form" action="./admin/user" class="form-horizontal" method="post">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-group">
 
         <label class="col-md-3">Username</label>
 
@@ -59,7 +58,7 @@
     </div>
     <!-- /.form-group -->
 
-    <hr />
+<hr />
 
     <div class="form-actions">
 
@@ -89,4 +88,34 @@
     </div>
     <!-- /.form-group -->
 
+
+        </div>
+        <div class="col-md-3">
+
+            
+            
+            <div class="portlet">
+
+                <div class="portlet-header">
+
+                    <h3>Groups</h3>
+
+                </div>
+                <!-- /.portlet-header -->
+
+                <div class="">
+                    <div id="groups" class="list-group">
+                        <div id="groups-checkboxes">
+                        <?php echo $this->renderLayout('groups/checkboxes.php'); ?>
+                        </div>
+            
+                    </div>
+                </div>
+                <!-- /.portlet-content -->
+
+            </div>
+            
+ 
+        </div>
+    </div>
 </form>

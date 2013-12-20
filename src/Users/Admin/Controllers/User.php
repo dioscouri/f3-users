@@ -22,7 +22,7 @@ class User extends \Admin\Controllers\BaseAuth
 		$id = $this->inputfilter->clean( $f3->get('PARAMS.id'), 'alnum' );
 		$model = $this->getModel()
 		->setState('filter.id', $id);
-	
+		
 		try {
 			$item = $model->getItem();
 		} catch ( \Exception $e ) {
@@ -38,7 +38,12 @@ class User extends \Admin\Controllers\BaseAuth
 	{
 		$f3 = \Base::instance();
 		$f3->set('pagetitle', 'Create User');
-	
+
+		$model = new \Users\Admin\Models\Groups;
+        $groups = $model->getList();
+        \Base::instance()->set('groups', $groups );	
+
+
 		$view = new \Dsc\Template;
 		echo $view->render('Users/Admin/Views::users/create.php');
 	}
@@ -47,7 +52,11 @@ class User extends \Admin\Controllers\BaseAuth
 	{
 		$f3 = \Base::instance();
 		$f3->set('pagetitle', 'Edit User');
-	
+		
+		$model = new \Users\Admin\Models\Groups;
+        $groups = $model->getList();
+        \Base::instance()->set('groups', $groups );		
+
 		$view = new \Dsc\Template;
 		echo $view->render('Users/Admin/Views::users/edit.php');
 	}

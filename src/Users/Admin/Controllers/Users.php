@@ -17,7 +17,11 @@ class Users extends \Admin\Controllers\BaseAuth
     
         $pagination = new \Dsc\Pagination($list['total'], $list['limit']);
         \Base::instance()->set('pagination', $pagination );
-    
+        
+        $model = new \Users\Admin\Models\Groups;
+        $groups = $model->getList();
+        \Base::instance()->set('groups', $groups ); 
+        
         $view = new \Dsc\Template;
         echo $view->render('Users/Admin/Views::users/list.php');
     }

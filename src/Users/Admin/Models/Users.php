@@ -56,10 +56,20 @@ class Users extends \Dsc\Models\Db\Mongo
             $key =  new \MongoRegex('/'. $filter_email_contains .'/i');
             $this->filters['email'] = $key;
         }
+
+        $filter_group = $this->getState('filter.group');
+
+        if (strlen($filter_group))
+        {
+            $this->filters['groups.id'] = new \MongoId((string) $filter_group);
+        }
     
         return $this->filters;
     }
     
+
+
+
     protected function buildOrderClause()
     {
         $order = null;
@@ -80,4 +90,55 @@ class Users extends \Dsc\Models\Db\Mongo
     
         return $order;
     }
+
+
+    public function save( $values, $options=array(), $mapper=null )
+    {   
+
+        
+
+        if (empty($options['skip_validation']))
+        {
+            $this->validate( $values, $options, $mapper );
+        }
+        
+        $key = strtolower( get_class() ) . "." . microtime(true);
+        $key = $this->inputfilter->clean($key, 'ALNUM');
+        $f3 = \Base::instance();
+        $f3->set($key, $values);
+        
+        // bind the mapper to the values array
+        if (empty($mapper)) {
+            $mapper = $this->getMapper();
+        }
+        $mapper->copyFrom( $key );
+        $f3->clear($key);
+         
+        //get the groups model, so down the line we can add more information to the document about the group if need
+        if($values['groups']) {
+            $groups = array();
+            foreach ($values['groups'] as $key => $id) {
+                $model = new \Users\Admin\Models\Groups;
+                $model->setState('filter.id', $id);
+                $item =  $model->getItem();
+                 $groups[] = array("id" =>  $item->_id, "name" => $item->name);
+                
+            }
+            $mapper->groups = $groups;
+         }
+
+
+
+
+        // do the save
+        try {
+            $mapper->save();
+        } catch (\Exception $e) {
+            $this->setError( $e->getMessage() );
+            return $this->checkErrors();
+        }
+        
+        return $mapper;
+    }
+
 }
