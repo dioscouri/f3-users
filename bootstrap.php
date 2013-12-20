@@ -40,7 +40,19 @@ switch ($global_app_name)
         $f3->set('UI', $ui);
                         
         break;
-    case "site":
+    case "site":    
+        //TODO if this section is removed it will load the UI from your apps/site app or whereever you set your ui, maybe we
+        $ui = $f3->get('UI');
+        $ui .= ";" . $f3->get('PATH_ROOT') . "vendor/dioscouri/f3-users/src/Users/Site/Views/";
+        $f3->set('UI', $ui);
+
+        $f3->route('GET /signup', '\Users\Site\Controllers\Auth->showSignup');
+        $f3->route('GET /login', '\Users\Site\Controllers\Auth->showLogin'); 
+        $f3->route('POST /signup', '\Users\Site\Controllers\Auth->doSignup');
+        $f3->route('POST /login', '\Users\Site\Controllers\Auth->doLogin');
+        $f3->route('GET|POST /logout', '\Users\Site\Controllers\User->logout'); 
+
+
         // TODO register all the routes
         
         // append this app's UI folder to the path, e.g. UI=../apps/blog/site/views/

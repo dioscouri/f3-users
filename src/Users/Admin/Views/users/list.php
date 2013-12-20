@@ -69,7 +69,7 @@
                 <th></th>
                 <th><select  id="group_filter" name="filter[group]" class="form-control" >
                 <option value="">-Group Filter-</option>
-                <?php foreach ($groups as $group) : ?>
+                <?php foreach (@$groups as $group) : ?>
                 <option <?php if($state->get('filter.group') == $group->id) { echo 'selected'; } ?> value="<?=$group->_id;?>"><?=$group->name;?></option>
                 <?php endforeach; ?>
             </select></th>
@@ -103,7 +103,7 @@
                     </td>
                     <td class="">
                     <ul>
-                    <?php foreach ($item->groups as $group) : ?>
+                    <?php foreach (@$item->groups as $group) : ?>
                     <li id="<?=$group['id'];?>">
                     <?=$group['name'];?>
                     </li>
