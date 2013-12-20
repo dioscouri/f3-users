@@ -20,9 +20,9 @@ class Users extends \Dsc\Models\Db\Mongo
     }
     
     protected function fetchFilters()
-    {
-        $this->filters = array();
-    
+    {   
+        var_dump($this->filters);
+       
         $filter_keyword = $this->getState('filter.keyword');
         if ($filter_keyword && is_string($filter_keyword))
         {
@@ -55,6 +55,13 @@ class Users extends \Dsc\Models\Db\Mongo
         {
             $key =  new \MongoRegex('/'. $filter_email_contains .'/i');
             $this->filters['email'] = $key;
+        }
+       
+
+        $filter_password = $this->getState('filter.password');
+        if (strlen($filter_password))
+        {
+            $this->filters['password'] = $filter_password;
         }
 
         $filter_group = $this->getState('filter.group');
@@ -121,7 +128,7 @@ class Users extends \Dsc\Models\Db\Mongo
                 $model = new \Users\Admin\Models\Groups;
                 $model->setState('filter.id', $id);
                 $item =  $model->getItem();
-                 $groups[] = array("id" =>  $item->_id, "name" => $item->name);
+                $groups[] = array("id" =>  $item->_id, "name" => $item->name);
                 
             }
             $mapper->groups = $groups;
