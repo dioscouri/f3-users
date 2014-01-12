@@ -43,8 +43,9 @@ class User extends \Admin\Controllers\BaseAuth
         $groups = $model->getList();
         \Base::instance()->set('groups', $groups );	
 
-
 		$view = new \Dsc\Template;
+		$view->event = $view->trigger( 'onDisplayAdminUserEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
+		
 		echo $view->render('Users/Admin/Views::users/create.php');
 	}
 	
@@ -58,6 +59,8 @@ class User extends \Admin\Controllers\BaseAuth
         \Base::instance()->set('groups', $groups );		
 
 		$view = new \Dsc\Template;
+		$view->event = $view->trigger( 'onDisplayAdminUserEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
+				
 		echo $view->render('Users/Admin/Views::users/edit.php');
 	}
 	
