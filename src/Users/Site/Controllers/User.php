@@ -1,80 +1,83 @@
-<?php 
+<?php
 namespace Users\Site\Controllers;
 
-class User extends \Dsc\Controller 
+class User extends \Dsc\Controller
 {
-	
-	protected $list_route = '/admin/users';
-	protected $create_item_route = '/admin/user';
-	protected $get_item_route = '/admin/user/{id}';
-	protected $edit_item_route = '/admin/user/{id}/edit';
-	
-	protected function getModel()
-	{
-		$model = new \Users\Admin\Models\Users;
-		return $model;
-	}
-	public function logout()
+    protected $list_route = '/admin/users';
+    protected $create_item_route = '/admin/user';
+    protected $get_item_route = '/admin/user/{id}';
+    protected $edit_item_route = '/admin/user/{id}/edit';
+
+    protected function getModel()
     {
-        \Base::instance()->clear('SESSION');
-        \Base::instance()->reroute('/');
+        $model = new \Users\Admin\Models\Users();
+        return $model;
     }
-	
-	protected function getItem()
-	{
-		$f3 = \Base::instance();
-		$id = $this->inputfilter->clean( $f3->get('PARAMS.id'), 'alnum' );
-		$model = $this->getModel()
-		->setState('filter.id', $id);
-		
-		try {
-			$item = $model->getItem();
-		} catch ( \Exception $e ) {
-			\Dsc\System::instance()->addMessage( "Invalid Item: " . $e->getMessage(), 'error');
-			$f3->reroute( $this->list_route );
-			return;
-		}
-	
-		return $item;
-	}
-	
-	protected function displayCreate()
-	{
-		$f3 = \Base::instance();
-		$f3->set('pagetitle', 'Create User');
 
-		$model = new \Users\Admin\Models\Groups;
+    public function logout()
+    {
+        \Base::instance()->clear( 'SESSION' );
+        \Base::instance()->reroute( '/' );
+    }
+
+    protected function getItem()
+    {
+        $f3 = \Base::instance();
+        $id = $this->inputfilter->clean( $f3->get( 'PARAMS.id' ), 'alnum' );
+        $model = $this->getModel()->setState( 'filter.id', $id );
+        
+        try
+        {
+            $item = $model->getItem();
+        }
+        catch ( \Exception $e )
+        {
+            \Dsc\System::instance()->addMessage( "Invalid Item: " . $e->getMessage(), 'error' );
+            $f3->reroute( $this->list_route );
+            return;
+        }
+        
+        return $item;
+    }
+
+    protected function displayCreate()
+    {
+        $f3 = \Base::instance();
+        $f3->set( 'pagetitle', 'Create User' );
+        
+        $model = new \Users\Admin\Models\Groups();
         $groups = $model->getList();
-        \Base::instance()->set('groups', $groups );	
+        \Base::instance()->set( 'groups', $groups );
+        
+        $view = new \Dsc\Template();
+        echo $view->render( 'Users/Site/Views::auth/dual.php' );
+    }
 
-
-		$view = new \Dsc\Template;
-		echo $view->render('Users/Site/Views::auth/dual.php');
-	}
-	
-	protected function displayEdit()
-	{
-		$f3 = \Base::instance();
-		$f3->set('pagetitle', 'Edit User');
-		
-		$model = new \Users\Admin\Models\Groups;
+    protected function displayEdit()
+    {
+        $f3 = \Base::instance();
+        $f3->set( 'pagetitle', 'Edit User' );
+        
+        $model = new \Users\Admin\Models\Groups();
         $groups = $model->getList();
-        \Base::instance()->set('groups', $groups );		
+        \Base::instance()->set( 'groups', $groups );
+        
+        $view = new \Dsc\Template();
+        echo $view->render( 'Users/Admin/Views::users/edit.php' );
+    }
 
-		$view = new \Dsc\Template;
-		echo $view->render('Users/Admin/Views::users/edit.php');
-	}
-	
-	/**
-	 * This controller doesn't allow reading, only editing, so redirect to the edit method
-	 */
-	protected function doRead(array $data, $key=null)
-	{
-		$f3 = \Base::instance();
-		$id = $this->getItem()->get( $this->getItemKey() );
-		$route = str_replace('{id}', $id, $this->edit_item_route );
-		$f3->reroute( $route );
-	}
-	
-	protected function displayRead() {}
+    /**
+     * This controller doesn't allow reading, only editing, so redirect to the edit method
+     */
+    protected function doRead( array $data, $key = null )
+    {
+        $f3 = \Base::instance();
+        $id = $this->getItem()->get( $this->getItemKey() );
+        $route = str_replace( '{id}', $id, $this->edit_item_route );
+        $f3->reroute( $route );
+    }
+
+    protected function displayRead()
+    {
+    }
 }

@@ -1,7 +1,5 @@
 <?php if (!empty($groups)) { ?>
 <div class="max-height-200 list-group-item">
-    
-
 	<?php $current = \Joomla\Utilities\ArrayHelper::getColumn( (array) $flash->old('groups'), 'id' ); ?>
     <?php foreach ($groups as $one) { ?>
     <div class="checkbox">
