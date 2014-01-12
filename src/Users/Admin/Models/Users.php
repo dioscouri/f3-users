@@ -72,9 +72,6 @@ class Users extends \Dsc\Models\Db\Mongo
     
         return $this->filters;
     }
-    
-
-
 
     protected function buildOrderClause()
     {
@@ -96,55 +93,71 @@ class Users extends \Dsc\Models\Db\Mongo
     
         return $order;
     }
-
-
-    public function save( $values, $options=array(), $mapper=null )
-    {   
-
+    
+    public function validate( $values, $options=array(), $mapper=null )
+    {
+        if (empty($values['email'])) {
+            $this->setError('Email is required');
+        }
         
+        if (empty($values['password'])) {
+            $this->setError('Password is required');
+        }
 
+        return parent::validate( $values, $options );
+    }
+
+    public function create( $values, $options=array() )
+    {
+        if (empty($values['password'])) {
+            $this->auto_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
+            $values['password'] = (new \Joomla\Crypt\Password\Simple)->create( $this->auto_password );
+        }
+                
+        return $this->save( $values, $options );
+    }
+    
+    public function save( $values, $options=array(), $mapper=null )
+    {
         if (empty($options['skip_validation']))
         {
             $this->validate( $values, $options, $mapper );
         }
         
-        $key = strtolower( get_class() ) . "." . microtime(true);
-        $key = $this->inputfilter->clean($key, 'ALNUM');
-        $f3 = \Base::instance();
-        $f3->set($key, $values);
-        
-        // bind the mapper to the values array
-        if (empty($mapper)) {
-            $mapper = $this->getMapper();
+        if (empty($values['username'])) {
+            $values['username'] = $values['email'];
         }
-        $mapper->copyFrom( $key );
-        $f3->clear($key);
-         
-        //get the groups model, so down the line we can add more information to the document about the group if need
-        if($values['groups']) {
+        
+        if (!empty($values['groups'])) 
+        {
             $groups = array();
-            foreach ($values['groups'] as $key => $id) {
-                $model = new \Users\Admin\Models\Groups;
-                $model->setState('filter.id', $id);
-                $item =  $model->getItem();
-                $groups[] = array("id" =>  $item->_id, "name" => $item->name);
-                
-            }
-            $mapper->groups = $groups;
-         }
-
-
-
-
-        // do the save
-        try {
-            $mapper->save();
-        } catch (\Exception $e) {
-            $this->setError( $e->getMessage() );
-            return $this->checkErrors();
-        }
+            foreach ($values['groups'] as $key => $id) 
+            {
+                $item = (new \Users\Admin\Models\Groups)->setState('filter.id', $id)->getItem();
+                $groups[] = array("id" =>  $item->id, "name" => $item->name);
         
-        return $mapper;
+            }
+            $values['groups'] = $groups;
+        }        
+        
+        $options['skip_validation'] = true; // we've already done it above, so stop the parent from doing it
+    
+        return parent::save( $values, $options, $mapper );
     }
 
+    /**
+     * Generates a random password string
+     * @param number $length
+     * @return string
+     */
+    function generateRandomString( $length=10 ) 
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        
+        return $randomString;
+    }
 }

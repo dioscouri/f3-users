@@ -92,7 +92,31 @@
                         <!-- /.col -->
         
                     </div>
-                    <!-- /.form-group -->   
+                    <!-- /.form-group -->
+                    
+                    <div class="form-group">
+        
+                        <label class="col-md-3">New Password</label>
+        
+                        <div class="col-md-7">
+                            <input type="password" name="new_password" class="form-control" autocomplete="off" />
+                        </div>
+                        <!-- /.col -->
+        
+                    </div>
+                    <!-- /.form-group -->
+                    
+                    <div class="form-group">
+        
+                        <label class="col-md-3">Confirm New Password</label>
+        
+                        <div class="col-md-7">
+                            <input type="password" name="confirm_new_password" class="form-control" autocomplete="off" />
+                        </div>
+                        <!-- /.col -->
+        
+                    </div>
+                    <!-- /.form-group -->
                                  
                 </div>
                 <!-- /.tab-pane -->
