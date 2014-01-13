@@ -177,6 +177,12 @@
                 </div>
                 <!-- /.tab-pane -->
                 
+                <?php foreach ((array) $this->event->getArgument('content') as $key => $content ) { ?>
+                <div class="tab-pane" id="tab-<?php echo $key; ?>">
+                    <?php echo $content; ?>
+                </div>
+                <?php } ?>
+                
             </div>
             <!-- /.tab-content -->
         </div>
