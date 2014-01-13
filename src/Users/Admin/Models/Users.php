@@ -42,7 +42,13 @@ class Users extends \Dsc\Models\Db\Mongo
             $this->filters['_id'] = new \MongoId((string) $filter_id);
         }
         
-        $filter_username_contains = $this->getState('filter.username-contains', null, 'username');
+        $filter_username = $this->getState('filter.username', null, 'alnum');
+        if (strlen($filter_username))
+        {
+            $this->filters['username'] = $filter_username;
+        }
+        
+        $filter_username_contains = $this->getState('filter.username-contains', null, 'alnum');
         if (strlen($filter_username_contains))
         {
             $key =  new \MongoRegex('/'. $filter_username_contains .'/i');
@@ -110,11 +116,38 @@ class Users extends \Dsc\Models\Db\Mongo
     public function create( $values, $options=array() )
     {
         if (empty($values['password'])) {
-            $this->auto_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
+            $this->new_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
             $values['password'] = (new \Joomla\Crypt\Password\Simple)->create( $this->auto_password );
         }
                 
         return $this->save( $values, $options );
+    }
+    
+    public function update( $mapper, $values, $options=array() )
+    {
+        if (!empty($values['new_password'])) 
+        {
+            if (empty($values['confirm_new_password']))
+            {
+                $this->setError('Must confirm new password');
+            }
+            
+            if ($values['new_password'] != $values['confirm_new_password'])
+            {
+                $this->setError('New password and confirmation value do not match');
+            }
+
+            $values['password'] = (new \Joomla\Crypt\Password\Simple)->create( $values['new_password'] );
+        }
+            else 
+        {
+            $values['password'] = $mapper->password;
+        }
+
+        unset($values['new_password']);
+        unset($values['confirm_new_password']);
+        
+        return $this->save( $values, $options, $mapper );
     }
     
     public function save( $values, $options=array(), $mapper=null )
@@ -127,6 +160,8 @@ class Users extends \Dsc\Models\Db\Mongo
         if (empty($values['username'])) {
             $values['username'] = $values['email'];
         }
+        
+        $values['username'] = $this->inputfilter->clean( $values['username'], 'ALNUM' );
         
         if (!empty($values['groups'])) 
         {
