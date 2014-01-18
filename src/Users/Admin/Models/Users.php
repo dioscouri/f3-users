@@ -116,7 +116,7 @@ class Users extends \Dsc\Models\Db\Mongo
     public function create( $values, $options=array() )
     {
         if (empty($values['password'])) {
-            $this->new_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
+            $this->auto_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
             $values['password'] = (new \Joomla\Crypt\Password\Simple)->create( $this->auto_password );
         }
                 
