@@ -1,18 +1,44 @@
 <?php //echo \Dsc\Debug::dump( $state, false ); ?>
 
 <form id="detail-form" action="./admin/users/group" class="form-horizontal" method="post">
+	<?php if( $this->additional_tabs ) { ?>
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab-basics" data-toggle="tab"> Basics </a>
+                </li>
+                <?php foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
+                <li>
+                    <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
+                </li>
+                <?php } ?>
+            </ul>
 
-    <div class="form-group">
 
-        <label class="col-md-3">Group Name</label>
+    <div class="tab-content">
 
-        <div class="col-md-7">
-            <input type="text" name="name" value="<?php echo $flash->old('name'); ?>" class="form-control" />
-        </div>
-        <!-- /.col -->
+        <div class="tab-pane active" id="tab-basics">
+	<?php } ?>
+		    <div class="form-group">
+		
+		        <label class="col-md-3">Group Name</label>
+		
+		        <div class="col-md-7">
+		            <input type="text" name="name" value="<?php echo $flash->old('name'); ?>" class="form-control" />
+		        </div>
+		        <!-- /.col -->
+		
+		    </div>
+		    <!-- /.form-group -->
+	<?php if( $this->additional_tabs ) { ?>
+		</div>
+		<?php	foreach ((array) $this->event->getArgument('content') as $key => $content ) { ?>
+	        <div class="tab-pane" id="tab-<?php echo $key; ?>">
+	            <?php echo $content; ?>
+	        </div>
+		<?php } ?>
+		</div>
+	<?php } ?>
 
-    </div>
-    <!-- /.form-group -->
     <hr />
 
     <div class="form-actions">
@@ -34,7 +60,7 @@
                 </ul>
             </div>
             &nbsp;
-            <a class="btn btn-default" href="./admin/users">Cancel</a>
+            <a class="btn btn-default" href="./admin/users/groups">Cancel</a>
         </div>
 
     </div>

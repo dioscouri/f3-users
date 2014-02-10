@@ -40,15 +40,21 @@ class Group extends \Admin\Controllers\BaseAuth
         $f3->set('pagetitle', 'Create Group');
     
         $view = new \Dsc\Template;
+		$view->event = $view->trigger( 'onDisplayAdminGroupEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array(), 'identifier' => $this->create_item_route, 'isNew' => true ) );
+		$view->additional_tabs = !empty( $view->event->getArgument( 'tabs' ) );		
         echo $view->render('Users/Admin/Views::groups/create.php');
     }
     
     protected function displayEdit()
     {
+		$item = $this->getItem();
+    	$identifier = preg_replace('/\{id\}/', $item->get( $this->getModel()->getItemKey() ), $this->edit_item_route);
         $f3 = \Base::instance();
         $f3->set('pagetitle', 'Edit Group');
     
         $view = new \Dsc\Template;
+		$view->event = $view->trigger( 'onDisplayAdminGroupEdit', array( 'item' => $item, 'tabs' => array(), 'content' => array(), 'identifier' => $identifier, 'isNew' => false ) );
+		$view->additional_tabs = !empty( $view->event->getArgument( 'tabs' ) );
         echo $view->render('Users/Admin/Views::groups/edit.php');
     }
     
