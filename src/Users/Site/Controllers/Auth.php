@@ -52,7 +52,7 @@ class Auth extends \Dsc\Controller
         $f3 = \Base::instance();
         $f3->set( 'pagetitle', 'Sign up' );
         
-        $view = new \Dsc\Template();
+        $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::auth/dual.php' );
     }
 
@@ -61,7 +61,7 @@ class Auth extends \Dsc\Controller
         $f3 = \Base::instance();
         $f3->set( 'pagetitle', 'Login' );
         
-        $view = new \Dsc\Template();
+        $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::auth/dual.php' );
     }
 

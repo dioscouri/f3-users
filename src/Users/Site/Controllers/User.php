@@ -49,7 +49,7 @@ class User extends \Dsc\Controller
         $groups = $model->getList();
         \Base::instance()->set( 'groups', $groups );
         
-        $view = new \Dsc\Template();
+        $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::auth/dual.php' );
     }
 
@@ -62,7 +62,7 @@ class User extends \Dsc\Controller
         $groups = $model->getList();
         \Base::instance()->set( 'groups', $groups );
         
-        $view = new \Dsc\Template();
+        $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Admin/Views::users/edit.php' );
     }
 

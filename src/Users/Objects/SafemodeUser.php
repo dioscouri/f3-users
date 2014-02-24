@@ -1,7 +1,7 @@
 <?php
 namespace Users\Objects;
 
-class SafemodeUser extends \Dsc\Object 
+class SafemodeUser extends \Dsc\Singleton 
 {
 	/*
 	public $user_id;

@@ -24,7 +24,7 @@ class Groups extends \Admin\Controllers\BaseAuth
         $pagination = new \Dsc\Pagination($list['total'], $list['limit']);
         \Base::instance()->set('pagination', $pagination );
     
-        $view = new \Dsc\Template;
+        $view = \Dsc\System::instance()->get('theme');
         echo $view->render('Users/Admin/Views::groups/list.php');
     }
 
@@ -49,7 +49,7 @@ class Groups extends \Admin\Controllers\BaseAuth
         $flash->store( array( 'metadata'=>array('groups'=>$selected) ) );
         \Base::instance()->set('flash', $flash );
         
-        $view = new \Dsc\Template;
+        $view = \Dsc\System::instance()->get('theme');
         $html = $view->renderLayout('Users/Admin/Views::groups/checkboxes.php');
     
         return $this->outputJson( $this->getJsonResponse( array(

@@ -30,33 +30,32 @@ switch ($global_app_name)
         $f3->route('POST /admin/users/group/@id', '\Users\Admin\Controllers\Group->update');
         $f3->route('DELETE /admin/users/group/@id', '\Users\Admin\Controllers\Group->delete');
         $f3->route('GET /admin/users/group/@id/delete', '\Users\Admin\Controllers\Group->delete'); 
-       // $f3->route('GET|POST  /admin/users/groups/checkboxes', '\Users\Admin\Controllers\Groups->getCheckboxes');
+        // $f3->route('GET|POST  /admin/users/groups/checkboxes', '\Users\Admin\Controllers\Groups->getCheckboxes');
  
-        // append this app's UI folder to the path, e.g. UI=../apps/blog/admin/views/
-        
-        // TODO set some app-specific settings, if desired
+        // append this app's UI folder to the path
+        // new way
+        \Dsc\System::instance()->get('theme')->registerViewPath( __dir__ . '/src/Users/Admin/Views/', 'Users/Admin/Views' );
+        // old way
         $ui = $f3->get('UI');
         $ui .= ";" . $f3->get('PATH_ROOT') . "vendor/dioscouri/f3-users/src/Users/Admin/Views/";
         $f3->set('UI', $ui);
                         
         break;
     case "site":    
-        //TODO if this section is removed it will load the UI from your apps/site app or whereever you set your ui, maybe we
+        // new way
+        \Dsc\System::instance()->get('theme')->registerViewPath( __dir__ . '/src/Users/Site/Views/', 'Users/Site/Views' );
+        // old way
         $ui = $f3->get('UI');
         $ui .= ";" . $f3->get('PATH_ROOT') . "vendor/dioscouri/f3-users/src/Users/Site/Views/";
         $f3->set('UI', $ui);
 
+        // TODO register all the routes
         $f3->route('GET /signup', '\Users\Site\Controllers\Auth->showSignup');
         $f3->route('GET /login', '\Users\Site\Controllers\Auth->showLogin'); 
         $f3->route('POST /signup', '\Users\Site\Controllers\Auth->doSignup');
         $f3->route('POST /login', '\Users\Site\Controllers\Auth->doLogin');
         $f3->route('GET|POST /logout', '\Users\Site\Controllers\User->logout'); 
 
-
-        // TODO register all the routes
-        
-        // append this app's UI folder to the path, e.g. UI=../apps/blog/site/views/
-                
         // TODO set some app-specific settings, if desired
         break;
 }
