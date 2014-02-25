@@ -1,10 +1,11 @@
+<div class="well">
 
 <form id="detail-form" action="./admin/user/<?php echo $item->get( $model->getItemKey() ); ?>" class="form-horizontal" method="post">
 
     <div class="row">
         <div class="col-md-12">
         
-            <div class="form-actions clearfix">
+            <div class="clearfix">
 
                 <div class="pull-right">
                     <div class="btn-group">
@@ -189,3 +190,5 @@
     </div>
 
 </form>
+
+</div>

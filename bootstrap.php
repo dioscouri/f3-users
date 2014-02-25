@@ -9,28 +9,31 @@ switch ($global_app_name)
         \Dsc\System::instance()->getDispatcher()->addListener(\Users\Listener::instance());
         
         // register all the routes
+        // settings routes
+        $f3->route('GET /admin/users/settings', '\Users\Admin\Controllers\Settings->display');
+        $f3->route('POST /admin/users/settings', '\Users\Admin\Controllers\Settings->save');
+        // users list
         $f3->route('GET|POST /admin/users', '\Users\Admin\Controllers\Users->display');
-        $f3->route('GET|POST /admin/users/@page', '\Users\Admin\Controllers\Users->display');
-        $f3->route('GET|POST /admin/users/delete', '\Users\Admin\Controllers\Users->delete');
-        $f3->route('GET /admin/user', '\Users\Admin\Controllers\User->create');
-        $f3->route('POST /admin/user', '\Users\Admin\Controllers\User->add');
-        $f3->route('GET /admin/user/@id', '\Users\Admin\Controllers\User->read');
-        $f3->route('GET /admin/user/@id/edit', '\Users\Admin\Controllers\User->edit');
-        $f3->route('POST /admin/user/@id', '\Users\Admin\Controllers\User->update');
-        $f3->route('DELETE /admin/user/@id', '\Users\Admin\Controllers\User->delete');
-        $f3->route('GET /admin/user/@id/delete', '\Users\Admin\Controllers\User->delete');        
-        //GROUPS ROUTES
+        $f3->route('GET|POST /admin/users/page/@page', '\Users\Admin\Controllers\Users->display');
+        $f3->route('GET|POST /admin/users/delete', '\Users\Admin\Controllers\Users->delete');        
+        // user crud
+        $f3->route('GET /admin/user/create', '\Users\Admin\Controllers\User->create');
+        $f3->route('POST /admin/user/add', '\Users\Admin\Controllers\User->add');
+        $f3->route('GET /admin/user/read/@id', '\Users\Admin\Controllers\User->read');
+        $f3->route('GET /admin/user/edit/@id', '\Users\Admin\Controllers\User->edit');
+        $f3->route('POST /admin/user/update/@id', '\Users\Admin\Controllers\User->update');
+        $f3->route('GET|DELETE /admin/user/delete/@id', '\Users\Admin\Controllers\User->delete');
+        // groups list
         $f3->route('GET|POST /admin/users/groups', '\Users\Admin\Controllers\Groups->display');
-        $f3->route('GET|POST /admin/users/groups/@page', '\Users\Admin\Controllers\Groups->display');
+        $f3->route('GET|POST /admin/users/groups/page/@page', '\Users\Admin\Controllers\Groups->display');
         $f3->route('GET|POST /admin/users/groups/delete', '\Users\Admin\Controllers\Groups->delete');
-        $f3->route('GET /admin/users/group', '\Users\Admin\Controllers\Group->create');
-        $f3->route('POST /admin/users/group', '\Users\Admin\Controllers\Group->add');
-        $f3->route('GET /admin/users/group/@id', '\Users\Admin\Controllers\Group->read');
-        $f3->route('GET /admin/users/group/@id/edit', '\Users\Admin\Controllers\Group->edit');
-        $f3->route('POST /admin/users/group/@id', '\Users\Admin\Controllers\Group->update');
-        $f3->route('DELETE /admin/users/group/@id', '\Users\Admin\Controllers\Group->delete');
-        $f3->route('GET /admin/users/group/@id/delete', '\Users\Admin\Controllers\Group->delete'); 
-        // $f3->route('GET|POST  /admin/users/groups/checkboxes', '\Users\Admin\Controllers\Groups->getCheckboxes');
+        // groups crud
+        $f3->route('GET /admin/users/group/create', '\Users\Admin\Controllers\Group->create');
+        $f3->route('POST /admin/users/group/add', '\Users\Admin\Controllers\Group->add');
+        $f3->route('GET /admin/users/group/read/@id', '\Users\Admin\Controllers\Group->read');
+        $f3->route('GET /admin/users/group/edit/@id', '\Users\Admin\Controllers\Group->edit');
+        $f3->route('POST /admin/users/group/update/@id', '\Users\Admin\Controllers\Group->update');
+        $f3->route('GET|DELETE /admin/users/group/delete/@id', '\Users\Admin\Controllers\Group->delete');
  
         // append this app's UI folder to the path
         // new way

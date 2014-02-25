@@ -1,6 +1,38 @@
-<?php //echo \Dsc\Debug::dump( $state, false ); ?>
+<div class="well">
 
 <form id="detail-form" action="./admin/users/group" class="form-horizontal" method="post">
+
+    <div class="clearfix">
+
+        <div class="pull-right">
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <input id="primarySubmit" type="hidden"
+                    value="save_edit" name="submitType" />
+                <button type="button"
+                    class="btn btn-primary dropdown-toggle"
+                    data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a
+                        onclick="document.getElementById('primarySubmit').value='save_new'; document.getElementById('detail-form').submit();"
+                        href="javascript:void(0);">Save & Create Another</a>
+                    </li>
+                    <li><a
+                        onclick="document.getElementById('primarySubmit').value='save_close'; document.getElementById('detail-form').submit();"
+                        href="javascript:void(0);">Save & Close</a></li>
+                </ul>
+            </div>
+            &nbsp; <a class="btn btn-default" href="./admin/users/groups">Cancel</a>
+        </div>
+
+    </div>
+    
+    <hr/>
+    
+    <!-- /.form-group -->
+
 	<?php if( $this->additional_tabs ) { ?>
             <ul class="nav nav-tabs">
                 <li class="active">
@@ -39,31 +71,6 @@
 		</div>
 	<?php } ?>
 
-    <hr />
-
-    <div class="form-actions">
-
-        <div>
-            <div class="btn-group">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <input id="primarySubmit" type="hidden" value="save_edit" name="submitType" />
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a onclick="document.getElementById('primarySubmit').value='save_new'; document.getElementById('detail-form').submit();" href="javascript:void(0);">Save & Create Another</a>
-                    </li>
-                    <li>
-                        <a onclick="document.getElementById('primarySubmit').value='save_close'; document.getElementById('detail-form').submit();" href="javascript:void(0);">Save & Close</a>
-                    </li>
-                </ul>
-            </div>
-            &nbsp;
-            <a class="btn btn-default" href="./admin/users/groups">Cancel</a>
-        </div>
-
-    </div>
-    <!-- /.form-group -->
-
 </form>
+
+</div>

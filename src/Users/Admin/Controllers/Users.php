@@ -8,7 +8,7 @@ class Users extends \Admin\Controllers\BaseAuth
         \Base::instance()->set('pagetitle', 'Users');
         \Base::instance()->set('subtitle', '');
     
-        $model = new \Users\Admin\Collections\Users;
+        $model = new \Users\Admin\Models\Users;
         $state = $model->populateState()->getState();
         \Base::instance()->set('state', $state );
     
@@ -17,8 +17,6 @@ class Users extends \Admin\Controllers\BaseAuth
         	'subset' => $pagination->items,
             'count' => $pagination->getItemCount()
         ) );
-    
-        //$pagination = new \Dsc\Pagination($list['total'], $list['limit']);
         \Base::instance()->set('pagination', $pagination );
         
         $model = new \Users\Admin\Models\Groups;

@@ -3,25 +3,27 @@ namespace Users\Admin\Models;
 
 use Joomla\Crypt\Password;
 
-class Users extends \Dsc\Models\Db\Mongo 
+class Users extends \Dsc\Mongo\Collection 
 {
-	protected $collection = 'users';
-    protected $default_ordering_direction = '1';
-    protected $default_ordering_field = 'username';
-    
-    public function __construct($config=array())
-    {
-        $config['filter_fields'] = array(
-            'username', 'email', 'first_name', 'last_name'
-        );
-        $config['order_directions'] = array('1', '-1');
-        
-        parent::__construct($config);
-    }
-    
-    protected function fetchFilters()
+	/**
+	 * Document Structure
+	 * @var unknown
+	 */
+	public $_id;
+	public $username;
+	public $first_name;
+	public $last_name;
+	public $email;
+	
+	protected $__collection_name = 'users';
+	protected $__default_options = array(
+        'append' => true
+	);
+	
+    protected function fetchConditions()
     {   
-       
+        parent::fetchConditions();
+        
         $filter_keyword = $this->getState('filter.keyword');
         if ($filter_keyword && is_string($filter_keyword))
         {
@@ -33,74 +35,53 @@ class Users extends \Dsc\Models\Db\Mongo
             $where[] = array('first_name'=>$key);
             $where[] = array('last_name'=>$key);
     
-            $this->filters['$or'] = $where;
+            $this->setCondition('$or', $where);
         }
     
         $filter_id = $this->getState('filter.id');
         if (strlen($filter_id))
         {
-            $this->filters['_id'] = new \MongoId((string) $filter_id);
+            $this->setCondition('_id', new \MongoId((string) $filter_id));
         }
         
         $filter_username = $this->getState('filter.username', null, 'alnum');
         if (strlen($filter_username))
         {
-            $this->filters['username'] = $filter_username;
+            $this->setCondition('username', $filter_username);
         }
         
         $filter_username_contains = $this->getState('filter.username-contains', null, 'alnum');
         if (strlen($filter_username_contains))
         {
             $key =  new \MongoRegex('/'. $filter_username_contains .'/i');
-            $this->filters['username'] = $key;
+            $this->setCondition('username', $key);
         }
         
         $filter_email_contains = $this->getState('filter.email-contains');
         if (strlen($filter_email_contains))
         {
             $key =  new \MongoRegex('/'. $filter_email_contains .'/i');
-            $this->filters['email'] = $key;
+            $this->setCondition('email', $key);
         }
        
 
         $filter_password = $this->getState('filter.password');
         if (strlen($filter_password))
         {
-            $this->filters['password'] = $filter_password;
+            $this->setCondition('password', $filter_password);
         }
 
         $filter_group = $this->getState('filter.group');
 
         if (strlen($filter_group))
         {
-            $this->filters['groups.id'] = new \MongoId((string) $filter_group);
+            $this->setCondition('groups.id', new \MongoId((string) $filter_group) );
         }
     
-        return $this->filters;
+        return $this;
     }
 
-    protected function buildOrderClause()
-    {
-        $order = null;
-    
-        if ($this->getState('order_clause')) {
-            return $this->getState('order_clause');
-        }
-    
-        if ($this->getState('list.order') && in_array($this->getState('list.order'), $this->filter_fields)) {
-    
-            $direction = '1';
-            if ($this->getState('list.direction') && in_array($this->getState('list.direction'), $this->order_directions)) {
-                $direction = (int) $this->getState('list.direction');
-            }
-    
-            $order = array( $this->getState('list.order') => $direction);
-        }
-    
-        return $order;
-    }
-    
-    public function validate( $values, $options=array(), $mapper=null )
+    public function OLDvalidate( $values, $options=array(), $mapper=null )
     {
         if (empty($values['email'])) {
             $this->setError('Email is required');
@@ -113,7 +94,7 @@ class Users extends \Dsc\Models\Db\Mongo
         return parent::validate( $values, $options );
     }
 
-    public function create( $values, $options=array() )
+    public function OLDcreate( $values, $options=array() )
     {
         if (empty($values['password'])) {
             $this->auto_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
@@ -123,7 +104,7 @@ class Users extends \Dsc\Models\Db\Mongo
         return $this->save( $values, $options );
     }
     
-    public function update( $mapper, $values, $options=array() )
+    public function OLDupdate( $mapper, $values, $options=array() )
     {
         if (!empty($values['new_password'])) 
         {
@@ -150,7 +131,7 @@ class Users extends \Dsc\Models\Db\Mongo
         return $this->save( $values, $options, $mapper );
     }
     
-    public function save( $values, $options=array(), $mapper=null )
+    public function OLDsave( $values, $options=array(), $mapper=null )
     {
         if (empty($options['skip_validation']))
         {
