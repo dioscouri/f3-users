@@ -1,6 +1,6 @@
 <div class="well">
 
-<form id="detail-form" action="./admin/users/group/update/<?php echo $item->get( $model->getItemKey() ); ?>" class="form-horizontal" method="post">
+<form id="detail-form" action="./admin/users/group/<?php echo $item->get( $model->getItemKey() ); ?>/update" class="form-horizontal" method="post">
     
     <div class="clearfix">
 

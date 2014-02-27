@@ -7,8 +7,8 @@ class User extends \Admin\Controllers\BaseAuth
 	
 	protected $list_route = '/admin/users';
 	protected $create_item_route = '/admin/user/create';
-	protected $get_item_route = '/admin/user/read/{id}';
-	protected $edit_item_route = '/admin/user/edit/{id}';
+	protected $get_item_route = '/admin/user/{id}';
+	protected $edit_item_route = '/admin/user/{id}/edit';
 	
 	protected function getModel()
 	{

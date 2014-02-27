@@ -9,7 +9,7 @@ class Groups extends \Admin\Controllers\BaseAuth
         return $model;
     }
 
-    public function display()
+    public function index()
     {
         parent::isAllowed( parent::getIdentity(), __CLASS__, __FUNCTION__ );
     

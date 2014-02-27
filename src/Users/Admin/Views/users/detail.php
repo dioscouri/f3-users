@@ -10,7 +10,7 @@
         <hr />
 
         <p>
-            <a href="./admin/user/edit/<?php echo $item->_id; ?>" class="btn btn-secondary">Edit</a>
+            <a href="./admin/user/<?php echo $item->_id; ?>/edit" class="btn btn-secondary">Edit</a>
         </p>
 
         <hr />

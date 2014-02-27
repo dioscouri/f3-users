@@ -3,7 +3,7 @@ namespace Users\Admin\Controllers;
 
 class Users extends \Admin\Controllers\BaseAuth 
 {
-    public function display()
+    public function index()
     {
         parent::isAllowed( parent::getIdentity(), __CLASS__, __FUNCTION__ );
         

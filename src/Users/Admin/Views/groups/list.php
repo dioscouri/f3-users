@@ -113,16 +113,16 @@
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                        <a href="./admin/users/group/edit/<?php echo $item->id; ?>">
+                        <a href="./admin/users/group/<?php echo $item->id; ?>/edit">
                             <?php echo $item->name; ?>
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/users/group/edit/<?php echo $item->id; ?>">
+                        <a class="btn btn-xs btn-secondary" href="./admin/users/group/<?php echo $item->id; ?>/edit">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/group/delete/<?php echo $item->id; ?>">
+	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/group/<?php echo $item->id; ?>/delete">
 	                        <i class="fa fa-times"></i>
 	                    </a>
                     </td>
