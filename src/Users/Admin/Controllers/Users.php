@@ -5,23 +5,18 @@ class Users extends \Admin\Controllers\BaseAuth
 {
     public function index()
     {
-        \Base::instance()->set('pagetitle', 'Users');
-        \Base::instance()->set('subtitle', '');
-    
+        parent::isAllowed( parent::getIdentity(), __CLASS__, __FUNCTION__ );
+        
         $model = new \Users\Admin\Models\Users;
         $state = $model->populateState()->getState();
         \Base::instance()->set('state', $state );
     
-        $pagination = $model->paginate();
-        \Base::instance()->set('list', array(
-        	'subset' => $pagination->items,
-            'count' => $pagination->getItemCount()
-        ) );
-        \Base::instance()->set('pagination', $pagination );
+        $paginated = $model->paginate();
+        \Base::instance()->set('paginated', $paginated );
         
         $model = new \Users\Admin\Models\Groups;
         $groups = $model->getList();
-        \Base::instance()->set('groups', $groups ); 
+        \Base::instance()->set('groups', $groups );
         
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render('Users/Admin/Views::users/list.php');

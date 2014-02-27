@@ -138,7 +138,7 @@
                         <div class="">
                             <div id="groups" class="list-group">
                                 <div id="groups-checkboxes">
-                                <?php echo $this->renderLayout('groups/checkboxes.php'); ?>
+                                <?php echo $this->renderLayout('Users/Admin/Views::groups/checkboxes.php'); ?>
                                 </div>
                                 <script>
                                     Dsc.refreshCategories = function(r) {

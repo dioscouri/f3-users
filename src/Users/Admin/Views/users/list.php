@@ -65,14 +65,14 @@
                 <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
                     <div class="row text-align-right">
                         <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <?php if (!empty($list['count']) && $list['count'] > 1 && !empty($pagination)) { ?>
-                                <?php echo $pagination->serve(); ?>
+                            <?php if (!empty($paginated->total_pages) && $paginated->total_pages > 1) { ?>
+                                <?php echo $paginated->serve(); ?>
                             <?php } ?>
                         </div>
-                        <?php if (!empty($list['subset'])) { ?>
+                        <?php if (!empty($paginated->items)) { ?>
                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                             <span class="pagination">
-                            <?php echo $pagination->getLimitBox( $state->get('list.limit') ); ?>
+                            <?php echo $paginated->getLimitBox( $state->get('list.limit') ); ?>
                             </span>
                         </div>
                         <?php } ?>
@@ -91,13 +91,13 @@
         <table class="table table-striped table-bordered table-hover table-highlight table-checkable">
 		<thead>
 			<tr>
-				<th class="checkbox-column"><input type="checkbox" class="icheck-input"></th>
+				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
                 <th data-sortable="username">Username</th>
                 <th data-sortable="email">Email</th>
                 <th>First Name</th>
                 <th data-sortable="last_name">Last Name</th>
                 <th>Groups</th>
-                <th></th>
+                <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 			<tr class="filter-row">
 				<th></th>
@@ -120,19 +120,17 @@
 		</thead>
 		<tbody>    
         
-        <?php if (!empty($list['subset'])) { ?>
+        <?php if (!empty($paginated->items)) { ?>
     
-            <?php foreach ($list['subset'] as $item) { ?>
+            <?php foreach($paginated->items as $item) { ?>
                 <tr>
 	                <td class="checkbox-column">
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                    	<h5>
-                        <a href="./admin/user/<?php echo $item->id; ?>/read">
+                        <a href="./admin/user/<?php echo $item->id; ?>/edit">
                             <?php echo $item->username; ?>
                         </a>
-                        </h5>
                     </td>
                     <td class="">
                         <?php echo $item->email; ?>
@@ -184,14 +182,14 @@
         <div class="dt-row dt-bottom-row">
             <div class="row">
                 <div class="col-sm-10">
-                <?php if (!empty($list['count']) && $list['count'] > 1 && !empty($pagination)) { ?>
-                    <?php echo (!empty($list['count']) && $list['count'] > 1) ? $pagination->serve() : null; ?>
-                <?php } ?>
+                    <?php if (!empty($paginated->total_pages) && $paginated->total_pages > 1) { ?>
+                        <?php echo $paginated->serve(); ?>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-2">
                     <div class="datatable-results-count pull-right">
                         <span class="pagination">
-                            <?php echo (!empty($pagination)) ? $pagination->getResultsCounter() : null; ?>
+                            <?php echo (!empty($paginated->total_pages)) ? $paginated->getResultsCounter() : null; ?>
                         </span>
                     </div>
                 </div>        
