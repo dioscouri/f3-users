@@ -3,12 +3,12 @@ namespace Users\Admin\Controllers;
 
 class User extends \Admin\Controllers\BaseAuth 
 {
-	use \Dsc\Traits\Controllers\CrudItem;
+	use \Dsc\Traits\Controllers\CrudItemCollection;
 	
 	protected $list_route = '/admin/users';
 	protected $create_item_route = '/admin/user/create';
-	protected $get_item_route = '/admin/user/{id}';
-	protected $edit_item_route = '/admin/user/{id}/edit';
+	protected $get_item_route = '/admin/user/read/{id}';
+	protected $edit_item_route = '/admin/user/edit/{id}';
 	
 	protected function getModel()
 	{

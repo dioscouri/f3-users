@@ -128,7 +128,7 @@
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                        <a href="./admin/user/<?php echo $item->id; ?>/edit">
+                        <a href="./admin/user/edit/<?php echo $item->id; ?>">
                             <?php echo $item->username; ?>
                         </a>
                     </td>
@@ -154,11 +154,11 @@
                         
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/user/<?php echo $item->id; ?>/edit">
+                        <a class="btn btn-xs btn-secondary" href="./admin/user/edit/<?php echo $item->id; ?>">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/<?php echo $item->id; ?>/delete">
+	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/delete/<?php echo $item->id; ?>">
 	                        <i class="fa fa-times"></i>
 	                    </a>
                     </td>
