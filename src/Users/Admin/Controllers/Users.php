@@ -5,7 +5,7 @@ class Users extends \Admin\Controllers\BaseAuth
 {
     public function display()
     {
-        parent::isAllowed( parent::getIdentity(), __NAMESPACE__, __FUNCTION__ );
+        parent::isAllowed( parent::getIdentity(), __CLASS__, __FUNCTION__ );
         
         $model = new \Users\Admin\Models\Users;
         $state = $model->populateState()->getState();

@@ -11,7 +11,7 @@
 	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
         <ul id="sparks" class="list-actions list-unstyled list-inline">
             <li>
-                <a class="btn btn-default" href="./admin/users/groups/create">Add New</a>
+                <a class="btn btn-default" href="./admin/users/group/create">Add New</a>
             </li>
         </ul>            	
 	</div>
@@ -65,14 +65,14 @@
                 <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
                     <div class="row text-align-right">
                         <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <?php if (!empty($list['count']) && $list['count'] > 1 && !empty($pagination)) { ?>
-                                <?php echo $pagination->serve(); ?>
+                            <?php if (!empty($paginated->total_pages) && $paginated->total_pages > 1) { ?>
+                                <?php echo $paginated->serve(); ?>
                             <?php } ?>
                         </div>
-                        <?php if (!empty($list['subset'])) { ?>
+                        <?php if (!empty($paginated->items)) { ?>
                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                             <span class="pagination">
-                            <?php echo $pagination->getLimitBox( $state->get('list.limit') ); ?>
+                            <?php echo $paginated->getLimitBox( $state->get('list.limit') ); ?>
                             </span>
                         </div>
                         <?php } ?>
@@ -91,57 +91,38 @@
         <table class="table table-striped table-bordered table-hover table-highlight table-checkable">
 		<thead>
 			<tr>
-				<th class="checkbox-column"><input type="checkbox" class="icheck-input"></th>
+				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
                 <th data-sortable="name">Name</th>
-                <th data-sortable="tbd">tbd</th>
-                <th>tbd</th>
-                <th data-sortable="tbd1">tbd</th>
-                <th></th>
+                <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 			<tr class="filter-row">
 				<th></th>
                 <th>
                     <input placeholder="name" name="filter[name-contains]" value="<?php echo $state->get('filter.name-contains'); ?>" type="text" class="form-control input-sm">
                 </th>
-                <th>
-                    
-                </th>
-                <th></th>
-                <th></th>
                 <th></th>
             </tr>
 		</thead>
 		<tbody>    
         
-        <?php if (!empty($list['subset'])) { ?>
+        <?php if (!empty($paginated->items)) { ?>
     
-            <?php foreach ($list['subset'] as $item) { ?>
+            <?php foreach($paginated->items as $item) { ?>
                 <tr>
 	                <td class="checkbox-column">
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                    	<h5>
-                        <a href="./admin/users/group/<?php echo $item->id; ?>">
+                        <a href="./admin/users/group/edit/<?php echo $item->id; ?>">
                             <?php echo $item->name; ?>
                         </a>
-                        </h5>
-                    </td>
-                    <td class="">
-                        <?php //echo $item->email; ?>
-                    </td>
-                    <td class="">
-                        <?php //echo $item->first_name; ?>
-                    </td>
-                    <td class="">
-                        <?php //echo $item->last_name; ?>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/users/group/<?php echo $item->id; ?>/edit">
+                        <a class="btn btn-xs btn-secondary" href="./admin/users/group/edit/<?php echo $item->id; ?>">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/group/<?php echo $item->id; ?>/delete">
+	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/group/delete/<?php echo $item->id; ?>">
 	                        <i class="fa fa-times"></i>
 	                    </a>
                     </td>
@@ -165,14 +146,14 @@
         <div class="dt-row dt-bottom-row">
             <div class="row">
                 <div class="col-sm-10">
-                <?php if (!empty($list['count']) && $list['count'] > 1 && !empty($pagination)) { ?>
-                    <?php echo (!empty($list['count']) && $list['count'] > 1) ? $pagination->serve() : null; ?>
-                <?php } ?>
+                    <?php if (!empty($paginated->total_pages) && $paginated->total_pages > 1) { ?>
+                        <?php echo $paginated->serve(); ?>
+                    <?php } ?>
                 </div>
                 <div class="col-sm-2">
                     <div class="datatable-results-count pull-right">
                         <span class="pagination">
-                            <?php echo (!empty($pagination)) ? $pagination->getResultsCounter() : null; ?>
+                            <?php echo (!empty($paginated->total_pages)) ? $paginated->getResultsCounter() : null; ?>
                         </span>
                     </div>
                 </div>        

@@ -6,9 +6,9 @@ class Group extends \Admin\Controllers\BaseAuth
     use \Dsc\Traits\Controllers\CrudItem;
     
     protected $list_route = '/admin/users/groups';
-    protected $create_item_route = '/admin/users/group';
-    protected $get_item_route = '/admin/users/group/{id}';
-    protected $edit_item_route = '/admin/users/group/{id}/edit';
+    protected $create_item_route = '/admin/users/group/create';
+    protected $get_item_route = '/admin/users/group/read/{id}';
+    protected $edit_item_route = '/admin/users/group/edit/{id}';
     
     protected function getModel()
     {

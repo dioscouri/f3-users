@@ -91,13 +91,13 @@
         <table class="table table-striped table-bordered table-hover table-highlight table-checkable">
 		<thead>
 			<tr>
-				<th class="checkbox-column"><input type="checkbox" class="icheck-input"></th>
+				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
                 <th data-sortable="username">Username</th>
                 <th data-sortable="email">Email</th>
                 <th>First Name</th>
                 <th data-sortable="last_name">Last Name</th>
                 <th>Groups</th>
-                <th></th>
+                <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 			<tr class="filter-row">
 				<th></th>
@@ -128,11 +128,9 @@
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                    	<h5>
-                        <a href="./admin/user/<?php echo $item->id; ?>">
+                        <a href="./admin/user/edit/<?php echo $item->id; ?>">
                             <?php echo $item->username; ?>
                         </a>
-                        </h5>
                     </td>
                     <td class="">
                         <?php echo $item->email; ?>
@@ -156,11 +154,11 @@
                         
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/user/<?php echo $item->id; ?>/edit">
+                        <a class="btn btn-xs btn-secondary" href="./admin/user/edit/<?php echo $item->id; ?>">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/<?php echo $item->id; ?>/delete">
+	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/delete/<?php echo $item->id; ?>">
 	                        <i class="fa fa-times"></i>
 	                    </a>
                     </td>

@@ -11,23 +11,18 @@ class Groups extends \Admin\Controllers\BaseAuth
 
     public function display()
     {
-        \Base::instance()->set('pagetitle', 'User Groups');
-        \Base::instance()->set('subtitle', '');
+        parent::isAllowed( parent::getIdentity(), __CLASS__, __FUNCTION__ );
     
-        $model = new \Users\Admin\Models\Groups;
+        $model = $this->getModel();
         $state = $model->populateState()->getState();
         \Base::instance()->set('state', $state );
     
-        $list = $model->paginate();
-        \Base::instance()->set('list', $list );
-    
-        $pagination = new \Dsc\Pagination($list['total'], $list['limit']);
-        \Base::instance()->set('pagination', $pagination );
+        $paginated = $model->paginate();
+        \Base::instance()->set('paginated', $paginated );
     
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render('Users/Admin/Views::groups/list.php');
     }
-
 
     public function getCheckboxes()
     {

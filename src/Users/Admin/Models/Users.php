@@ -11,14 +11,13 @@ class Users extends \Dsc\Mongo\Collection
 	 */
 	public $_id;
 	public $username;
+	public $password;
 	public $first_name;
 	public $last_name;
 	public $email;
+	public $groups = array();
 	
 	protected $__collection_name = 'users';
-	protected $__default_options = array(
-        'append' => true
-	);
 	
     protected function fetchConditions()
     {   
@@ -80,85 +79,71 @@ class Users extends \Dsc\Mongo\Collection
     
         return $this;
     }
-
-    public function OLDvalidate( $values, $options=array(), $mapper=null )
-    {
-        if (empty($values['email'])) {
-            $this->setError('Email is required');
-        }
-        
-        if (empty($values['password'])) {
-            $this->setError('Password is required');
-        }
-
-        return parent::validate( $values, $options );
-    }
-
-    public function OLDcreate( $values, $options=array() )
-    {
-        if (empty($values['password'])) {
-            $this->auto_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
-            $values['password'] = (new \Joomla\Crypt\Password\Simple)->create( $this->auto_password );
-        }
-                
-        return $this->save( $values, $options );
-    }
     
-    public function OLDupdate( $mapper, $values, $options=array() )
+    protected function beforeValidate()
     {
-        if (!empty($values['new_password'])) 
+        if (!empty($this->new_password))
         {
-            if (empty($values['confirm_new_password']))
+            if (empty($this->confirm_new_password))
             {
                 $this->setError('Must confirm new password');
             }
-            
-            if ($values['new_password'] != $values['confirm_new_password'])
+        
+            if ($this->new_password != $this->confirm_new_password)
             {
                 $this->setError('New password and confirmation value do not match');
             }
-
-            $values['password'] = (new \Joomla\Crypt\Password\Simple)->create( $values['new_password'] );
-        }
-            else 
-        {
-            $values['password'] = $mapper->password;
-        }
-
-        unset($values['new_password']);
-        unset($values['confirm_new_password']);
         
-        return $this->save( $values, $options, $mapper );
+            $this->password = password_hash( $this->new_password, PASSWORD_DEFAULT );
+        }
+        
+        unset($this->new_password);
+        unset($this->confirm_new_password);
+        
+        if (empty($this->password)) {
+            $this->__auto_password = $this->generateRandomString( 10 ); // save this for later emailing to the user, if necessary
+            $this->password = password_hash($this->__auto_password, PASSWORD_DEFAULT);
+        }
+
+        return parent::beforeValidate();
+    }
+
+    public function validate()
+    {
+        // if you want, use $this->validateWith( $validator ) here
+        
+        if (empty($this->email)) {
+            $this->setError('Email is required');
+        }
+        
+        if (empty($this->password)) {
+            $this->setError('Password is required');
+        }
+        
+        return parent::validate();
     }
     
-    public function OLDsave( $values, $options=array(), $mapper=null )
+    public function beforeSave()
     {
-        if (empty($options['skip_validation']))
-        {
-            $this->validate( $values, $options, $mapper );
-        }
+        if (empty($this->username)) {
+            $this->username = $this->email;
+        }        
         
-        if (empty($values['username'])) {
-            $values['username'] = $values['email'];
-        }
-        
-        $values['username'] = $this->inputfilter->clean( $values['username'], 'ALNUM' );
-        
-        if (!empty($values['groups'])) 
+        $this->username = \Dsc\System::instance()->inputfilter->clean( $this->username, 'ALNUM' );
+
+        if (!empty($this->groups)) 
         {
             $groups = array();
-            foreach ($values['groups'] as $key => $id) 
+            foreach ($this->groups as $key => $id) 
             {
                 $item = (new \Users\Admin\Models\Groups)->setState('filter.id', $id)->getItem();
                 $groups[] = array("id" =>  $item->id, "name" => $item->name);
         
             }
-            $values['groups'] = $groups;
+            $this->groups = $groups;
         }        
         
-        $options['skip_validation'] = true; // we've already done it above, so stop the parent from doing it
-    
-        return parent::save( $values, $options, $mapper );
+        return parent::beforeSave();
     }
 
     /**

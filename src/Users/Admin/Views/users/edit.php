@@ -1,6 +1,6 @@
 <div class="well">
 
-<form id="detail-form" action="./admin/user/<?php echo $item->get( $model->getItemKey() ); ?>" class="form-horizontal" method="post">
+<form id="detail-form" action="./admin/user/update/<?php echo $item->get( $model->getItemKey() ); ?>" class="form-horizontal" method="post">
 
     <div class="row">
         <div class="col-md-12">
@@ -138,7 +138,7 @@
                         <div class="">
                             <div id="groups" class="list-group">
                                 <div id="groups-checkboxes">
-                                <?php echo $this->renderLayout('groups/checkboxes.php'); ?>
+                                <?php echo $this->renderLayout('Users/Admin/Views::groups/checkboxes.php'); ?>
                                 </div>
                                 <script>
                                     Dsc.refreshCategories = function(r) {
