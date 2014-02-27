@@ -3,6 +3,10 @@ namespace Users\Admin\Models;
 
 class Groups extends \Dsc\Mongo\Collection 
 {
+    /**
+     * Default Document Structure
+     * @var unknown
+     */
 	public $_id;
 	public $name;
     

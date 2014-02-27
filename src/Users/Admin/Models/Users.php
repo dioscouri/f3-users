@@ -6,7 +6,7 @@ use Joomla\Crypt\Password;
 class Users extends \Dsc\Mongo\Collection 
 {
 	/**
-	 * Document Structure
+	 * Default Document Structure
 	 * @var unknown
 	 */
 	public $_id;
@@ -151,7 +151,7 @@ class Users extends \Dsc\Mongo\Collection
      * @param number $length
      * @return string
      */
-    function generateRandomString( $length=10 ) 
+    public function generateRandomString( $length=10 ) 
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
         $randomString = '';
