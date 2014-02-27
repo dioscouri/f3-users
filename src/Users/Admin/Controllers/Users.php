@@ -3,7 +3,7 @@ namespace Users\Admin\Controllers;
 
 class Users extends \Admin\Controllers\BaseAuth 
 {
-    public function display()
+    public function index()
     {
         \Base::instance()->set('pagetitle', 'Users');
         \Base::instance()->set('subtitle', '');

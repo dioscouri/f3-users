@@ -122,7 +122,7 @@
 	                </td>                
                     <td class="">
                     	<h5>
-                        <a href="./admin/users/group/<?php echo $item->id; ?>">
+                        <a href="./admin/users/group/<?php echo $item->id; ?>/read">
                             <?php echo $item->name; ?>
                         </a>
                         </h5>

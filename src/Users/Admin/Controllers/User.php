@@ -6,7 +6,7 @@ class User extends \Admin\Controllers\BaseAuth
 	use \Dsc\Traits\Controllers\CrudItem;
 	
 	protected $list_route = '/admin/users';
-	protected $create_item_route = '/admin/user';
+	protected $create_item_route = '/admin/user/create';
 	protected $get_item_route = '/admin/user/{id}';
 	protected $edit_item_route = '/admin/user/{id}/edit';
 	

@@ -11,7 +11,7 @@
 	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
         <ul id="sparks" class="list-actions list-unstyled list-inline">
             <li>
-                <a class="btn btn-default" href="./admin/user">Add New</a>
+                <a class="btn btn-default" href="./admin/user/create">Add New</a>
             </li>
         </ul>            	
 	</div>
@@ -129,7 +129,7 @@
 	                </td>                
                     <td class="">
                     	<h5>
-                        <a href="./admin/user/<?php echo $item->id; ?>">
+                        <a href="./admin/user/<?php echo $item->id; ?>/read">
                             <?php echo $item->username; ?>
                         </a>
                         </h5>

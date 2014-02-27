@@ -9,7 +9,7 @@ class Groups extends \Admin\Controllers\BaseAuth
         return $model;
     }
 
-    public function display()
+    public function index()
     {
         \Base::instance()->set('pagetitle', 'User Groups');
         \Base::instance()->set('subtitle', '');
