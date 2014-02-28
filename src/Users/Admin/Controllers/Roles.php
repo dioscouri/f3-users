@@ -1,18 +1,14 @@
 <?php 
 namespace Users\Admin\Controllers;
 
-class Users extends \Admin\Controllers\BaseAuth 
+class Roles extends \Admin\Controllers\BaseAuth 
 {
-	protected function getModel($name='Users')
+	protected function getModel($name='Role')
 	{
 	    switch (strtolower($name)) 
 	    {
-	        case "group":
-	    	case "groups":
-	    	    $model = new \Users\Models\Groups;
-	    	    break;
 	    	default:
-	    	    $model = new \Users\Models\Users;
+	    	    $model = new \Users\Models\Roles;
 	    	    break;	    	    
 	    }
 		
@@ -30,11 +26,7 @@ class Users extends \Admin\Controllers\BaseAuth
         $paginated = $model->paginate();
         \Base::instance()->set('paginated', $paginated );
         
-        $model = $this->getModel('groups');
-        $groups = $model->getList();
-        \Base::instance()->set('groups', $groups );
-        
         $view = \Dsc\System::instance()->get('theme');
-        echo $view->render('Users/Admin/Views::users/list.php');
+        echo $view->render('Users/Admin/Views::roles/list.php');
     }
 }

@@ -10,9 +10,19 @@ class User extends \Admin\Controllers\BaseAuth
 	protected $get_item_route = '/admin/user/read/{id}';
 	protected $edit_item_route = '/admin/user/edit/{id}';
 	
-	protected function getModel()
+	protected function getModel($name='Users')
 	{
-		$model = new \Users\Admin\Models\Users;
+	    switch (strtolower($name)) 
+	    {
+	        case "group":
+	    	case "groups":
+	    	    $model = new \Users\Models\Groups;
+	    	    break;
+	    	default:
+	    	    $model = new \Users\Models\Users;
+	    	    break;	    	    
+	    }
+		
 		return $model;
 	}
 	
@@ -39,7 +49,7 @@ class User extends \Admin\Controllers\BaseAuth
 		$f3 = \Base::instance();
 		$f3->set('pagetitle', 'Create User');
 
-		$model = new \Users\Admin\Models\Groups;
+		$model = $this->getModel('groups');
         $groups = $model->getList();
         \Base::instance()->set('groups', $groups );	
 
@@ -54,7 +64,7 @@ class User extends \Admin\Controllers\BaseAuth
 		$f3 = \Base::instance();
 		$f3->set('pagetitle', 'Edit User');
 		
-		$model = new \Users\Admin\Models\Groups;
+		$model = $this->getModel('groups');
         $groups = $model->getList();
         \Base::instance()->set('groups', $groups );		
 

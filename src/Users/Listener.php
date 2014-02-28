@@ -14,9 +14,9 @@ class Listener extends \Prefab
         	$mapper->route = '';
         	$mapper->icon = 'fa fa-user';
         	$mapper->children = array(
-        			json_decode(json_encode(array( 'title'=>'List', 'route'=>'/admin/users', 'icon'=>'fa fa-list' )))
-                    ,json_decode(json_encode(array( 'title'=>'Groups', 'route'=>'/admin/users/groups', 'icon'=>'fa fa-list' )))
-
+        			json_decode(json_encode(array( 'title'=>'List', 'route'=>'/admin/users', 'icon'=>'fa fa-user' )))
+                    ,json_decode(json_encode(array( 'title'=>'Groups', 'route'=>'/admin/users/groups', 'icon'=>'fa fa-group' )))
+                    ,json_decode(json_encode(array( 'title'=>'Roles', 'route'=>'/admin/users/roles', 'icon'=>'fa fa-unlock' )))
         	);
         	$mapper->save();
         	

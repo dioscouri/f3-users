@@ -12,7 +12,7 @@ class Group extends \Admin\Controllers\BaseAuth
     
     protected function getModel()
     {
-        $model = new \Users\Admin\Models\Groups;
+        $model = new \Users\Models\Groups;
         return $model;
     }
     

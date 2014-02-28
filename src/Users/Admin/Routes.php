@@ -44,6 +44,11 @@ class Routes extends \Dsc\Routes\Group{
         
         // groups crud
         $this->addCrudItem( 'Group', array( 'prefix_url' => '/users/group' ) );
-
+        
+        // roles list
+        $this->addCrudList( 'Roles', array( 'prefix_url' => '/users/roles' ) );
+        
+        // roles crud
+        $this->addCrudItem( 'Role', array( 'prefix_url' => '/users/role' ) );
 	}
 }

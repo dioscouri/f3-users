@@ -3,16 +3,14 @@ namespace Users\Admin\Controllers;
 
 class Groups extends \Admin\Controllers\BaseAuth 
 {   
-     protected function getModel()
+    protected function getModel()
     {
-        $model = new \Users\Admin\Models\Groups;
+        $model = new \Users\Models\Groups;
         return $model;
     }
 
     public function index()
     {
-        parent::isAllowed( parent::getIdentity(), __CLASS__, __FUNCTION__ );
-    
         $model = $this->getModel();
         $state = $model->populateState()->getState();
         \Base::instance()->set('state', $state );
