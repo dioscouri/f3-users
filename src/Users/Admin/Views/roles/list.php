@@ -2,7 +2,7 @@
 	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
 		<h1 class="page-title txt-color-blueDark">
 			<i class="fa fa-table fa-fw "></i> 
-				Groups 
+				Roles 
 			<span> > 
 				List
 			</span>
@@ -11,13 +11,13 @@
 	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
         <ul id="sparks" class="list-actions list-unstyled list-inline">
             <li>
-                <a class="btn btn-default" href="./admin/users/group/create">Add New</a>
+                <a class="btn btn-default" href="./admin/users/role/create">Add New</a>
             </li>
         </ul>            	
 	</div>
 </div>
 
-<form id="list-form" action="./admin/users/groups" method="post">
+<form id="list-form" action="./admin/roles" method="post">
 
     <div class="no-padding">
     
@@ -35,7 +35,7 @@
                         <a class="btn btn-link">Quicklink Filter</a>
                     </li>                    
                 </ul>    
-                */ ?>            
+                */ ?>        
             </div>
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
                 <div class="form-group">
@@ -58,7 +58,7 @@
                     <div class="input-group">
                         <select id="bulk-actions" name="bulk_action" class="form-control">
                             <option value="null">-Bulk Actions-</option>
-                            <option value="delete" data-action="./admin/users/groups/delete">Delete</option>
+                            <option value="delete" data-action="./admin/users/roles/delete">Delete</option>
                         </select>
                         <span class="input-group-btn">
                             <button class="btn btn-default bulk-actions" type="button" data-target="bulk-actions">Apply</button>
@@ -99,13 +99,6 @@
                 <th data-sortable="name">Name</th>
                 <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
-			<tr class="filter-row">
-				<th></th>
-                <th>
-                    <input placeholder="name" name="filter[name-contains]" value="<?php echo $state->get('filter.name-contains'); ?>" type="text" class="form-control input-sm">
-                </th>
-                <th></th>
-            </tr>
 		</thead>
 		<tbody>    
         
@@ -117,16 +110,16 @@
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                        <a href="./admin/users/group/edit/<?php echo $item->id; ?>">
-                            <?php echo $item->name; ?>
+                        <a href="./admin/users/role/edit/<?php echo $item->id; ?>">
+                            <?php echo @str_repeat( "&ndash;", substr_count( @$item->path, "/" ) - 1 ) . " " . $item->title; ?>
                         </a>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/users/group/edit/<?php echo $item->id; ?>">
+                        <a class="btn btn-xs btn-secondary" href="./admin/users/role/edit/<?php echo $item->id; ?>">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/group/delete/<?php echo $item->id; ?>">
+	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/role/delete/<?php echo $item->id; ?>">
 	                        <i class="fa fa-times"></i>
 	                    </a>
                     </td>
@@ -143,7 +136,7 @@
 
         </tbody>
         </table>
-
+    
         </div>
         <!-- /.table-responsive .datatable .dt-wrapper -->
         

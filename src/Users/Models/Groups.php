@@ -1,5 +1,5 @@
 <?php 
-namespace Users\Admin\Models;
+namespace Users\Models;
 
 class Groups extends \Dsc\Mongo\Collection 
 {

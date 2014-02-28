@@ -1,5 +1,5 @@
 <?php 
-namespace Users\Admin\Models;
+namespace Users\Models;
 
 use Joomla\Crypt\Password;
 
@@ -15,6 +15,10 @@ class Users extends \Dsc\Mongo\Collection
 	public $first_name;
 	public $last_name;
 	public $email;
+	public $role;
+	public $active;
+	public $banned;
+	public $suspended;
 	public $groups = array();
 	
 	protected $__collection_name = 'users';
