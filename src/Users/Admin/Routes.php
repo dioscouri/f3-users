@@ -35,7 +35,13 @@ class Routes extends \Dsc\Routes\Group{
 
         // groups list
         $this->addCrudList( 'Groups', array( 'prefix_url' => '/users/groups' ) );
-		
+        $this->add( '/users/groups/checkboxes', array( 'GET', 'POST' ),
+        		array(
+        				'controller' => 'Categories',
+        				'action' => 'getCheckboxes'
+        		)
+        );
+        
         // groups crud
         $this->addCrudItem( 'Group', array( 'prefix_url' => '/users/group' ) );
 
