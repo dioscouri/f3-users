@@ -18,7 +18,7 @@ switch ($global_app_name)
         $f3->set('UI', $ui);
 
         // register all the routes
-        \Dsc\System::instance()->get('router')->mount( new \Users\Admin\Routes );
+        \Dsc\System::instance()->get('router')->mount( new \Users\Admin\Routes, 'users' );
         
         break;
     case "site":    
@@ -30,7 +30,7 @@ switch ($global_app_name)
         $f3->set('UI', $ui);
 
         // register all the routes
-        \Dsc\System::instance()->get('router')->mount( new \Users\Site\Routes );
+        \Dsc\System::instance()->get('router')->mount( new \Users\Site\Routes, 'users' );
         
         // TODO set some app-specific settings, if desired
         break;

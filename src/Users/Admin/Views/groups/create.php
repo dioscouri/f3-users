@@ -1,6 +1,6 @@
 <div class="well">
 
-<form id="detail-form" action="./admin/users/group/add" class="form-horizontal" method="post">
+<form id="detail-form" class="form-horizontal" method="post">
 
     <div class="clearfix">
 
