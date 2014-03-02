@@ -165,4 +165,10 @@ class Users extends \Dsc\Mongo\Collection
         
         return $randomString;
     }
+    
+    public function getName()
+    {
+        $name = trim( $this->first_name . " " . $this->last_name ); 
+        return $name;
+    }
 }
