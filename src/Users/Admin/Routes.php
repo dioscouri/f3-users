@@ -27,14 +27,12 @@ class Routes extends \Dsc\Routes\Group{
         // settings routes
 		$this->addSettingsRoutes( '/users' );
 		
-		//users list
-		$this->addCrudList( 'Users' );
-				
-		//user crud
-		$this->addCrudItem( 'User' );
-
-        // groups list
-        $this->addCrudList( 'Groups', array( 'prefix_url' => '/users/groups' ) );
+		$this->addCrudGroup( 'Users', 'User' );
+		$this->addCrudGroup( 'Groups', 'Group',
+							array( 'prefix_url' => '/users/groups' ),
+							array( 'prefix_url' => '/users/group' )
+		 );
+		
         $this->add( '/users/groups/checkboxes', array( 'GET', 'POST' ),
         		array(
         				'controller' => 'Categories',
@@ -42,13 +40,9 @@ class Routes extends \Dsc\Routes\Group{
         		)
         );
         
-        // groups crud
-        $this->addCrudItem( 'Group', array( 'prefix_url' => '/users/group' ) );
-        
-        // roles list
-        $this->addCrudList( 'Roles', array( 'prefix_url' => '/users/roles' ) );
-        
-        // roles crud
-        $this->addCrudItem( 'Role', array( 'prefix_url' => '/users/role' ) );
+		$this->addCrudGroup( 'Roles', 'Role',
+							array( 'prefix_url' => '/users/roles' ),
+							array( 'prefix_url' => '/users/role' )
+		 );
 	}
 }
