@@ -127,7 +127,7 @@ class Users extends \Dsc\Mongo\Collection
         return parent::validate();
     }
     
-    public function beforeSave()
+    protected function beforeSave()
     {
         if (empty($this->username)) {
             $this->username = $this->email;

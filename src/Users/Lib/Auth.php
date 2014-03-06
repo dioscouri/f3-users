@@ -35,6 +35,7 @@ class Auth extends \Dsc\Singleton
                 $user = new \Users\Models\Users;
                 $user->id = new \MongoId;
                 $user->username = $safemode_user;
+                $user->first_name = $safemode_user;
                 $user->password = $safemode_password;
                 $user->email = \Base::instance()->get('safemode.email');
                 $role = \Base::instance()->get('safemode.role');
