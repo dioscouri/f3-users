@@ -1,5 +1,5 @@
 <?php 
-class UsersBootstrap extends \Dsc\BaseBootstrap{
+class UsersBootstrap extends \Dsc\Bootstrap{
 	protected $dir = __DIR__;
 	protected $namespace = 'Users';
 }
