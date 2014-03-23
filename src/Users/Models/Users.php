@@ -59,6 +59,12 @@ class Users extends \Dsc\Mongo\Collection
             $key =  new \MongoRegex('/'. $filter_username_contains .'/i');
             $this->setCondition('username', $key);
         }
+
+        $filter_email = $this->getState('filter.email');
+        if (strlen($filter_email))
+        {
+            $this->setCondition('email', $filter_email);
+        }
         
         $filter_email_contains = $this->getState('filter.email-contains');
         if (strlen($filter_email_contains))
@@ -66,7 +72,6 @@ class Users extends \Dsc\Mongo\Collection
             $key =  new \MongoRegex('/'. $filter_email_contains .'/i');
             $this->setCondition('email', $key);
         }
-       
 
         $filter_password = $this->getState('filter.password');
         if (strlen($filter_password))

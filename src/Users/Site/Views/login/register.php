@@ -2,9 +2,10 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-4 well well-sm">
             <legend>
-                <i class="glyphicon glyphicon-globe"></i>Sign up!
+                <i class="glyphicon glyphicon-globe"></i>
+                Register
             </legend>
-            <form action="" method="post" class="form" role="form">
+            <form action="./register" method="post" class="form" role="form">
                 <div class="row">
                     <div class="col-xs-6 col-md-6">
                         <input class="form-control" name="first_name" placeholder="First Name" type="text" required autofocus />

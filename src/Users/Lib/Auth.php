@@ -20,15 +20,16 @@ class Auth extends \Dsc\Singleton
      */
     public function check($credentials)
     {
-        $username_input = $this->inputfilter->clean( $credentials['login-username'], 'alnum' );
+        $username_input = $this->inputfilter->clean( $credentials['login-username'] );
         $password_input = $this->inputfilter->clean( $credentials['login-password'] );
         
         // check if safemode is being used
         $safemode_enabled = \Base::instance()->get('safemode.enabled');
         $safemode_user = \Base::instance()->get('safemode.username');
+        $safemode_email = \Base::instance()->get('safemode.email');
         $safemode_password = \Base::instance()->get('safemode.password');
         
-        if ($safemode_enabled && $username_input === $safemode_user)
+        if ($safemode_enabled && ($username_input === $safemode_user || $username_input === $safemode_email))
         {
             if (password_verify($password_input, $safemode_password))
             {
@@ -37,12 +38,13 @@ class Auth extends \Dsc\Singleton
                 $user->username = $safemode_user;
                 $user->first_name = $safemode_user;
                 $user->password = $safemode_password;
-                $user->email = \Base::instance()->get('safemode.email');
+                $user->email = $safemode_email;
                 $role = \Base::instance()->get('safemode.role');
                 if (!$role) {
                     $role = 'root';
                 }
                 $user->role = $role;
+                $user->__safemode = true;
         
                 $this->setIdentity( $user );
                 return true;
@@ -50,20 +52,36 @@ class Auth extends \Dsc\Singleton
         }
 
         // now check standard login via username
-        $model = new \Users\Models\Users;
-        $model->setState('filter.username', $username_input);
-        
         try {
-            $item = $model->getItem();
+            $model = new \Users\Models\Users;
+            $model->setState('filter.username', $username_input);
+            if ($itemByUsername = $model->getItem()) 
+            {
+                if (password_verify($password_input, $itemByUsername->password))
+                {
+                    $this->setIdentity( $item );
+                    return true;
+                }            	
+            }            
         } catch ( \Exception $e ) {
-            throw new \Exception('Invalid Username');
+            $error = new \Exception('Invalid Username');
         }
         
-        if (password_verify($password_input, $item->password))
-        {
-            $this->setIdentity( $item );
-            return true;
-        }        
+        // now check via email
+        try {
+            $model = new \Users\Models\Users;
+            $model->setState('filter.email', $username_input);
+            if ($itemByEmail = $model->getItem()) 
+            {
+                if (password_verify($password_input, $itemByEmail->password))
+                {
+                    $this->setIdentity( $item );
+                    return true;
+                }
+            }
+        } catch ( \Exception $e ) {
+            $error = new \Exception('Invalid Email');
+        }
         
         throw new \Exception('Invalid login');
         

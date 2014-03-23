@@ -5,8 +5,10 @@
                 <i class="glyphicon glyphicon-globe"></i>
                 Login
             </legend>
-            <form action="" method="post" class="form" role="form">
-                <input class="form-control" name="login-username" placeholder="Your Email" type="email" /> <input class="form-control" name="login-password" placeholder="New Password" type="password" /> <br />
+            <form action="./login" method="post" class="form" role="form">
+                <input class="form-control" name="login-username" placeholder="Your Email" type="email" /> 
+                <input class="form-control" name="login-password" placeholder="New Password" type="password" /> 
+                <br />
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
             </form>
         </div>
