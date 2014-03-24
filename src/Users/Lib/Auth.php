@@ -116,7 +116,7 @@ class Auth extends \Dsc\Singleton
         if (!empty($identity->id))
         {
             // If so, login has been successful, so trigger Login Listeners
-            $event = new \Joomla\Event\Event( 'onUserLogin' );
+            $event = new \Joomla\Event\Event( 'afterUserLogin' );
             $event->addArgument('identity', $identity);
             \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
 
@@ -163,7 +163,20 @@ class Auth extends \Dsc\Singleton
      */
     public function logout()
     {
+        $identity = $this->getIdentity();
+        
+        // Trigger plugin event for before logout
+        $event = new \Joomla\Event\Event( 'beforeUserLogout' );
+        $event->addArgument('identity', $identity);
+        \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
+        
+        // actually logout the user, completely killing the session
         \Dsc\System::instance()->get('session')->destroy();
+        
+        // Trigger plugin event for after logout
+        $event = new \Joomla\Event\Event( 'afterUserLogout' );
+        $event->addArgument('identity', $identity);
+        \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
     }
 
     /**
