@@ -76,12 +76,16 @@ class Login extends \Dsc\Controller
         }
         */
         
+        $redirect = '/user';
+        if ($custom_redirect = \Dsc\System::instance()->get('session')->get('site.login.redirect'))
+        {
+            $redirect = $custom_redirect;
+        }
+        
         $input = $this->input->getArray();
         
         try {
             $this->auth->check($input);
-            \Base::instance()->reroute("/user");
-            return;
             
         } catch (\Exception $e) {
             \Dsc\System::addMessage('Login failed', 'error');
@@ -89,8 +93,10 @@ class Login extends \Dsc\Controller
             \Base::instance()->reroute("/login");
             return;
         }
-
-        \Base::instance()->reroute("/");
+        
+        \Dsc\System::instance()->get('session')->set('site.login.redirect', null);
+        \Base::instance()->reroute($redirect);
+        
         return;            
     }
     
