@@ -42,12 +42,6 @@ class User extends Auth
         echo $view->render( 'Users/Site/Views::profile/readSelf.php' );
     }
     
-    public function logout()
-    {
-        \Base::instance()->clear( 'SESSION' );
-        \Base::instance()->reroute( '/' );
-    }
-    
     protected function getModel()
     {
         $model = new \Users\Models\Users;

@@ -20,21 +20,34 @@ class Auth extends \Dsc\Singleton
      */
     public function check($credentials)
     {
-        $username_input = $this->inputfilter->clean( $credentials['login-username'] );
-        $password_input = $this->inputfilter->clean( $credentials['login-password'] );
+        $identity = null;
+        
+        $username_input = !empty($credentials['login-username']) ? $this->inputfilter->clean( $credentials['login-username'] ) : null;
+        $password_input = !empty($credentials['login-password']) ? $this->inputfilter->clean( $credentials['login-password'] ) : null;
         
         // check if safemode is being used
         $safemode_enabled = \Base::instance()->get('safemode.enabled');
         $safemode_user = \Base::instance()->get('safemode.username');
         $safemode_email = \Base::instance()->get('safemode.email');
         $safemode_password = \Base::instance()->get('safemode.password');
+        $safemode_id = \Base::instance()->get('safemode.id');
+        
+        $regex = '/^[0-9a-z]{24}$/';
+        if (preg_match($regex, (string) $safemode_id))
+        {
+            $safemode_id = new \MongoId($safemode_id);
+        }
+        else
+        {
+            $safemode_id = new \MongoId();
+        }        
         
         if ($safemode_enabled && ($username_input === $safemode_user || $username_input === $safemode_email))
         {
             if (password_verify($password_input, $safemode_password))
             {
                 $user = new \Users\Models\Users;
-                $user->id = new \MongoId;
+                $user->id = $safemode_id;
                 $user->username = $safemode_user;
                 $user->first_name = $safemode_user;
                 $user->password = $safemode_password;
@@ -47,42 +60,70 @@ class Auth extends \Dsc\Singleton
                 $user->__safemode = true;
         
                 $this->setIdentity( $user );
-                return true;
+                $identity = $user;
             }
         }
 
-        // now check standard login via username
-        try {
-            $model = new \Users\Models\Users;
-            $model->setState('filter.username', $username_input);
-            if ($itemByUsername = $model->getItem()) 
-            {
-                if (password_verify($password_input, $itemByUsername->password))
+        if (!$identity && !empty($username_input)) 
+        {
+            // now check standard login via username
+            try {
+                $model = new \Users\Models\Users;
+                $model->setState('filter.username', $username_input);
+                if ($itemByUsername = $model->getItem())
                 {
-                    $this->setIdentity( $item );
-                    return true;
-                }            	
-            }            
-        } catch ( \Exception $e ) {
-            $error = new \Exception('Invalid Username');
-        }
-        
-        // now check via email
-        try {
-            $model = new \Users\Models\Users;
-            $model->setState('filter.email', $username_input);
-            if ($itemByEmail = $model->getItem()) 
-            {
-                if (password_verify($password_input, $itemByEmail->password))
-                {
-                    $this->setIdentity( $item );
-                    return true;
+                    if (password_verify($password_input, $itemByUsername->password))
+                    {
+                        $this->setIdentity( $item );
+                        $identity = $item;
+                    }
                 }
+            } catch ( \Exception $e ) {
+                $this->setError('Invalid Username');
             }
-        } catch ( \Exception $e ) {
-            $error = new \Exception('Invalid Email');
         }
         
+        if (!$identity && !empty($username_input)) 
+        {
+            // now check via email
+            try {
+                $model = new \Users\Models\Users;
+                $model->setState('filter.email', $username_input);
+                if ($itemByEmail = $model->getItem())
+                {
+                    if (password_verify($password_input, $itemByEmail->password))
+                    {
+                        $this->setIdentity( $item );
+                        $identity = $item;
+                    }
+                }
+            } catch ( \Exception $e ) {
+                $this->setError('Invalid Email');
+            }
+        }
+
+        // If auth has not happened already, trigger Authentication Listeners
+        if (!$identity) 
+        {
+        	// they are responsible for setting the identity with ->setIdentity( $identity );
+            $event = new \Joomla\Event\Event( 'onUserAuthentication' );
+            $event->addArgument('credentials', $credentials);
+            \Dsc\System::instance()->getDispatcher()->triggerEvent($event);        	
+        }
+        
+        // after triggering Auth Listeners, check if identity has been set.
+        $identity = $this->getIdentity();
+        if (!empty($identity->id))
+        {
+            // If so, login has been successful, so trigger Login Listeners
+            $event = new \Joomla\Event\Event( 'onUserLogin' );
+            $event->addArgument('identity', $identity);
+            \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
+
+            return true;
+        }
+        
+        // otherwise, login failed
         throw new \Exception('Invalid login');
         
         /*
@@ -112,13 +153,17 @@ class Auth extends \Dsc\Singleton
             $this->createRememberEnviroment($user);
         }
 
-        // TODO move this somewhere else
-        $this->session->set('auth-identity', array(
-            'id' => $user->id,
-            'name' => $user->name,
-            'profile' => $user->profile->name
-        ));
         */
+    }
+    
+    /**
+     * Perform logout actions (e.g. trigger Listeners, etc)
+     * and logout the user
+     * 
+     */
+    public function logout()
+    {
+        \Dsc\System::instance()->get('session')->destroy();
     }
 
     /**

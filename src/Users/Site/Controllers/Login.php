@@ -53,7 +53,7 @@ class Login extends \Dsc\Controller
      */
     public function logout()
     {
-        \Base::instance()->clear('SESSION');
+        \Dsc\System::instance()->get('auth')->logout();
         \Base::instance()->reroute('/');
     }
     
@@ -62,21 +62,23 @@ class Login extends \Dsc\Controller
      */
     public function auth()
     {
+        /*
+         * Let $this->auth->check() set the error, 
+         * in case we want to pass social logins through this auth method
+         *    
         $username_input = $this->input->getAlnum('login-username');
         $password_input = $this->input->getString('login-password');
-        
         if (empty($username_input) || empty($password_input)) 
         {
             \Dsc\System::instance()->addMessage('Login failed - Incomplete Form', 'error');
             \Base::instance()->reroute("/login");
             return;
         }
+        */
         
-        // TODO Push this to the \Users\Lib\Auth class, and let it run through any Auth listeners
         $input = $this->input->getArray();
         
         try {
-            
             $this->auth->check($input);
             \Base::instance()->reroute("/user");
             return;
