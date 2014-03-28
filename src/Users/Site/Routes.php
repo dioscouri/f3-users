@@ -47,5 +47,15 @@ class Routes extends \Dsc\Routes\Group
             'controller' => 'Login',
             'action' => 'create' 
         ) );
+        
+        $this->add( '/social', 'GET|POST', array(
+            'controller' => 'Login',
+            'action' => 'social' 
+        ) );
+
+        $this->add( '/social/auth/@provider', 'GET|POST', array(
+            'controller' => 'Login',
+            'action' => 'provider' 
+        ) ); 
     }
 }
