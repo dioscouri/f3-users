@@ -140,10 +140,6 @@ class Login extends \Dsc\Controller
 
 
 
-            $tag = $f3->get('SESSION.tag');
-
-           
-
             $model = new \Users\Models\Users;
             $filter = 'social.'.$provider;
             //$model->setState($filter, $user_profile->identifier)->getItem();
@@ -175,14 +171,15 @@ class Login extends \Dsc\Controller
           
 
             $data = array();
-            $data['tagid'] = $tag->id;
             $data['social'][$provider]['identifier'] = $user_profile->identifier;
-            $data['email'] = $user_profile->email;
+           $data['social'][$provider]['profile_url'] = $user_profile->profileURL;
+	    $data['social'][$provider]['display_name'] = $user_profile->displayName;
+
+	    $data['email'] = $user_profile->email;
             $data['first_name'] = $user_profile->firstName;
             $data['last_name'] = $user_profile->lastName;
             $data['display_name'] = $user_profile->displayName;
             $data['website_url'] = $user_profile->webSiteURL;
-            $data['social'][$provider]['profile_url'] = $user_profile->profileURL;
         
             $password      = rand( ) ; # for the password we generate something random
 
