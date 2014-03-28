@@ -147,15 +147,14 @@ class Login extends \Dsc\Controller
             $filter = 'social.'.$provider.'.identifier';
 
             $user = $model->setCondition($filter, $user_profile->identifier)->getItem();
+     
 
-            if($user->_id) {
-               $this->setIdentity( $user );
-               $f3->reroute('/user'); 
+       if(!empty($user->id)) {
+	$this->auth->setIdentity($user );
+		$f3->reroute('/user'); 
             }
 
-
-
-            # here lets check if the user email we got from the provider already exists in our database ( for this example the email is UNIQUE for each user )
+           # here lets check if the user email we got from the provider already exists in our database ( for this example the email is UNIQUE for each user )
             // if authentication does not exist, but the email address returned  by the provider does exist in database, 
             // then authenticatewith the user having the address email in the database
                if ($user_profile->email) 
@@ -174,7 +173,7 @@ class Login extends \Dsc\Controller
                             
                             $user->save();
                             
-                            $this->setIdentity( $user );
+                            $this->auth->setIdentity( $user );
         
                             $f3->reroute('/user');
                         }
@@ -189,17 +188,6 @@ class Login extends \Dsc\Controller
 
             $data = array();
             $data['social'][$provider]['identifier'] = $user_profile->identifier;
-<<<<<<< HEAD
-           $data['social'][$provider]['profile_url'] = $user_profile->profileURL;
-	    $data['social'][$provider]['display_name'] = $user_profile->displayName;
-
-	    $data['email'] = $user_profile->email;
-            $data['first_name'] = $user_profile->firstName;
-            $data['last_name'] = $user_profile->lastName;
-            $data['display_name'] = $user_profile->displayName;
-            $data['website_url'] = $user_profile->webSiteURL;
-        
-=======
             $data['social'][$provider]['profile_url'] = $user_profile->profileURL;
             $data['social'][$provider]['website_url'] = $user_profile->webSiteURL;
             $data['social'][$provider]['display_name'] = $user_profile->displayName;
@@ -210,12 +198,12 @@ class Login extends \Dsc\Controller
             $data['first_name'] = $user_profile->firstName;
             $data['last_name'] = $user_profile->lastName;
                 
->>>>>>> 0a27d367e0e99b656cb26b8f4d32687828d53e20
             $password      = rand( ) ; # for the password we generate something random
             // 4.1 - create new user
-            $doc = $model->create($data);    
+         $model = new \Users\Models\Users;    
+	$user = $model->create($data);    
 
-            $this->setIdentity( $user );
+            $this->auth->setIdentity( $user );
         
             $f3->reroute('/user');
         }
