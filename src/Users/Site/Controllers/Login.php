@@ -125,13 +125,12 @@ class Login extends \Dsc\Controller
     {  
         $f3 = \Base::instance();
         $provider = $f3->get('PARAMS.provider');
-        $hybridauth_config = (new \Users\Model\Settings)->fetch();
-        
-        var_dump($hybridauth_config);
-        die();
+        $hybridauth_config = (new \Users\Models\Settings)->fetch();
+        $config = (array) $hybridauth_config->{'social'};
+    
         try{
         // create an instance for Hybridauth with the configuration file path as parameter
-            $hybridauth = new \Hybrid_Auth( $hybridauth_config );
+            $hybridauth = new \Hybrid_Auth( $config );
 
         // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate( $provider );
@@ -145,7 +144,7 @@ class Login extends \Dsc\Controller
 
            
 
-            $model = new \Users\Model\Users;
+            $model = new \Users\Models\Users;
             $filter = 'social.'.$provider;
             //$model->setState($filter, $user_profile->identifier)->getItem();
         # 1 - check if user already have authenticated using this provider before
