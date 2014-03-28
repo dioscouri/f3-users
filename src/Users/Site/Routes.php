@@ -48,12 +48,12 @@ class Routes extends \Dsc\Routes\Group
             'action' => 'create' 
         ) );
         
-        $this->add( '/social', 'GET|POST', array(
+        $this->add( '/login/social', 'GET|POST', array(
             'controller' => 'Login',
             'action' => 'social' 
         ) );
 
-        $this->add( '/social/auth/@provider', 'GET|POST', array(
+        $this->add( '/login/social/auth/@provider', 'GET|POST', array(
             'controller' => 'Login',
             'action' => 'provider' 
         ) ); 
