@@ -22,15 +22,18 @@ class Login extends \Dsc\Controller
      * Displays just a login form
      */
     public function only($f3)
-    {
+    {   
+
         $identity = $this->getIdentity();
         if (!empty($identity->id))
         {
             $f3->reroute('/user');
         }
-    
+        
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::login/login.php' );
+        
+
     }
     
     /**
