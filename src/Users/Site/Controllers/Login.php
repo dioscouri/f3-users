@@ -125,7 +125,7 @@ class Login extends \Dsc\Controller
     {  
         $f3 = \Base::instance();
         $provider = $f3->get('PARAMS.provider');
-        $hybridauth_config = (new \Users\Models\Settings)->fetch();
+        $hybridauth_config =  \Users\Models\Settings::fetch();
         $config = (array) $hybridauth_config->{'social'};
     
         try{
