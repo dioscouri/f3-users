@@ -19,6 +19,7 @@ class Users extends \Dsc\Mongo\Collection
 	public $active;
 	public $banned;
 	public $suspended;
+    public $social;
 	public $groups = array();
 	
 	protected $__collection_name = 'users';
