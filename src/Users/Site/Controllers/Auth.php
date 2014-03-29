@@ -13,6 +13,7 @@ class Auth extends \Dsc\Controller
     public function beforeRoute($f3)
     {
         $identity = $this->getIdentity();
+
         if (empty($identity->id))
         {
             $f3->reroute('/login');

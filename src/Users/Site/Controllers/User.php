@@ -19,7 +19,6 @@ class User extends Auth
         $f3 = \Base::instance();
     
         $identity = $this->getIdentity();
-        
         if (empty($identity->id)) 
         {
             $f3->reroute( '/login' );
