@@ -74,8 +74,8 @@ class Auth extends \Dsc\Singleton
                 {
                     if (password_verify($password_input, $itemByUsername->password))
                     {
-                        $this->setIdentity( $item );
-                        $identity = $item;
+                        $this->setIdentity( $itemByUsername );
+                        $identity = $itemByUsername;
                     }
                 }
             } catch ( \Exception $e ) {
@@ -93,8 +93,8 @@ class Auth extends \Dsc\Singleton
                 {
                     if (password_verify($password_input, $itemByEmail->password))
                     {
-                        $this->setIdentity( $item );
-                        $identity = $item;
+                        $this->setIdentity( $itemByEmail );
+                        $identity = $itemByEmail;
                     }
                 }
             } catch ( \Exception $e ) {
