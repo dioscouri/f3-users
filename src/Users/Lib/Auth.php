@@ -287,15 +287,22 @@ class Auth extends \Dsc\Singleton
     }
 
     /**
-     * Returns the current identity
-     *
-     * @return array
+     * Returns the current logged in user's Users object.
+     * Returns an empty Users object if no logged in user.
+     * 
+     * @return \Users\Models\Users
      */
     public function getIdentity()
     {
         $global_app_name = \Base::instance()->get('APP_NAME');
         
-        return $this->session->get('auth-identity.'.$global_app_name);
+        $identity = $this->session->get('auth-identity.'.$global_app_name);
+        
+        if (empty($identity->id)) {
+        	return new \Users\Models\Users;
+        }
+        
+        return $identity;
     }
     
     /**
