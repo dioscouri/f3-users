@@ -165,8 +165,7 @@ class Login extends \Dsc\Controller
                         $model->setState('filter.email', $user_profile->email);
                         if ($user = $model->getItem())
                         {   
-                            $user->set('social.'.$provider.'profile', (array) $adapter->getUserProfile();
-                            
+                            $user->set('social.'.$provider.'profile', (array) $adapter->getUserProfile() );                            
                             
                             $user->save();
                             
