@@ -97,7 +97,7 @@
 			<tr>
 				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
                 <th data-sortable="name">Name</th>
-                <th data-sortable="ordering" class="text-center">Ordering</th>
+                <th data-sortable="ordering" class="col-sm-1 col-md-1 col-lg-1 text-center">Ordering</th>
                 <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 			<tr class="filter-row">
