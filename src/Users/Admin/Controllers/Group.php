@@ -3,7 +3,7 @@ namespace Users\Admin\Controllers;
 
 class Group extends \Admin\Controllers\BaseAuth 
 {
-    use \Dsc\Traits\Controllers\CrudItemCollection;
+    use \Dsc\Traits\Controllers\OrderableItemCollection;
     
     protected $list_route = '/admin/users/groups';
     protected $create_item_route = '/admin/users/group/create';

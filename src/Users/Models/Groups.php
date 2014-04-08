@@ -3,12 +3,15 @@ namespace Users\Models;
 
 class Groups extends \Dsc\Mongo\Collection 
 {
+    use \Dsc\Traits\Models\OrderableCollection;
+    
     /**
      * Default Document Structure
      * @var unknown
      */
 	public $_id;
 	public $name;
+	public $ordering;
     
     protected $__collection_name = 'users.groups';
     protected $__config = array(
@@ -46,5 +49,25 @@ class Groups extends \Dsc\Mongo\Collection
         }
     
         return $this;
+    }
+    
+    protected function beforeCreate()
+    {
+        if (empty($this->ordering)) 
+        {
+            $this->ordering = $this->nextOrdering();
+        }
+        
+        return parent::beforeCreate();
+    }
+    
+    protected function afterSave()
+    {
+    	$this->compressOrdering();
+    }
+    
+    protected function afterDelete()
+    {
+        $this->compressOrdering();
     }
 }

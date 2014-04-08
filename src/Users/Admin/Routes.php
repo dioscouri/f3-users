@@ -6,6 +6,7 @@ namespace Users\Admin;
  */
 class Routes extends \Dsc\Routes\Group
 {
+
     /**
      * Initializes all routes for this group
      * NOTE: This method should be overriden by every group
@@ -26,6 +27,16 @@ class Routes extends \Dsc\Routes\Group
             'prefix_url' => '/users/groups' 
         ), array(
             'prefix_url' => '/users/group' 
+        ) );
+        
+        $this->add( '/users/group/moveup/@id', 'GET', array(
+            'controller' => 'Group',
+            'action' => 'moveUp' 
+        ) );
+        
+        $this->add( '/users/group/movedown/@id', 'GET', array(
+            'controller' => 'Group',
+            'action' => 'moveDown' 
         ) );
         
         $this->add( '/users/groups/checkboxes', array(

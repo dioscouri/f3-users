@@ -97,6 +97,7 @@
 			<tr>
 				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
                 <th data-sortable="name">Name</th>
+                <th data-sortable="ordering" class="text-center">Ordering</th>
                 <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 			<tr class="filter-row">
@@ -104,6 +105,7 @@
                 <th>
                     <input placeholder="name" name="filter[name-contains]" value="<?php echo $state->get('filter.name-contains'); ?>" type="text" class="form-control input-sm">
                 </th>
+                <th></th>
                 <th></th>
             </tr>
 		</thead>
@@ -121,6 +123,17 @@
                             <?php echo $item->name; ?>
                         </a>
                     </td>
+                    
+                    <td class="text-center">
+                        <a class="btn btn-xs btn-tertiary" href="./admin/users/group/moveup/<?php echo $item->id; ?>">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        &nbsp;
+                        <a class="btn btn-xs btn-tertiary" href="./admin/users/group/movedown/<?php echo $item->id; ?>">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                    </td>
+                    
                     <td class="text-center">
                         <a class="btn btn-xs btn-secondary" href="./admin/users/group/edit/<?php echo $item->id; ?>">
                             <i class="fa fa-pencil"></i>
