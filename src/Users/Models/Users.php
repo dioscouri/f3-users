@@ -146,9 +146,12 @@ class Users extends \Dsc\Mongo\Collection
             $groups = array();
             foreach ($this->groups as $key => $id) 
             {
-                $item = (new \Users\Admin\Models\Groups)->setState('filter.id', $id)->getItem();
-                $groups[] = array("id" =>  $item->id, "name" => $item->name);
-        
+                if (is_array($id)) {
+                    $groups[] = $id;                	
+                } elseif (is_string($id)) {
+                    $item = (new \Users\Models\Groups)->setState('filter.id', $id)->getItem();
+                    $groups[] = array("id" =>  $item->id, "name" => $item->name);                	
+                }        
             }
             $this->groups = $groups;
         }        
