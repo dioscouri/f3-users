@@ -8,7 +8,7 @@
 </div>
 <?php } ?>
     
-<?php if ($settings->{'social.providers.Twitter.enabled'} && $settings->{'social.providers.Twitter.keys.id'} && $settings->{'social.providers.Twitter.keys.secret'}) { ?>
+<?php if ($settings->{'social.providers.Twitter.enabled'} && $settings->{'social.providers.Twitter.keys.key'} && $settings->{'social.providers.Twitter.keys.secret'}) { ?>
 <div class="form-group">
     <a href="./login/social/auth/twitter" class="btn btn-twitter btn-default">
     <i class="fa fa-twitter"></i> &nbsp;&nbsp;Login with Twitter

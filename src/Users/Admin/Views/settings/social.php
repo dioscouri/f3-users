@@ -66,7 +66,7 @@
 
                 <div class="form-group">
                     <label>App ID</label>
-                    <input type="text" name="social[providers][Twitter][keys][id]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.id'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Twitter][keys][key]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.key'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 

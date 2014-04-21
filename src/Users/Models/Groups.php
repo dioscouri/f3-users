@@ -11,7 +11,6 @@ class Groups extends \Dsc\Mongo\Collection
      */
 	public $_id;
 	public $name;
-	public $ordering;
     
     protected $__collection_name = 'users.groups';
     protected $__config = array(
