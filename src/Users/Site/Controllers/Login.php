@@ -191,13 +191,21 @@ class Login extends \Dsc\Controller
             $data['email'] = $user_profile->email;
             $data['first_name'] = $user_profile->firstName;
             $data['last_name'] = $user_profile->lastName;
+            $data['username'] = \Users\Models\Users::usernameFromString( $user_profile->displayName );
+            
+            // if last name is empty, try to extract last name from first name field
+            if (empty($user_profile->lastName) && !empty($user_profile->firstName) && strrpos($user_profile->firstName, ' ') !== false ) 
+            {
+            	$pieces = explode(' ', $user_profile->firstName, 2);
+            	$data['first_name'] = $pieces[0];
+            	$data['last_name'] = $pieces[1];            	
+            }
             
             // put the data array into the session, and bind the array to a Users\Models\Users object on the flip side
             \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', $data );
             
             // Now push the user to a "complete your profile" form prepopulated with data from the provider identity
-            $this->completeProfileForm();
-            
+            $f3->reroute( '/login/completeProfile' );
             
             // 4.1 - create new user
             /**
@@ -275,17 +283,25 @@ class Login extends \Dsc\Controller
         
         // bind the data to a model
         $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
-        $model = (new \Users\Models\Users)->bind($data);
+        $user = (new \Users\Models\Users)->bind($data);
+        
+        $flash = \Dsc\Flash::instance();
+        $f3->set('flash', $flash );
+        
+        $flash_filled = \Dsc\System::instance()->getUserState('users.site.login.complete_profile.flash_filled');
+        if (!$flash_filled) {
+            $flash->store($user->cast());
+        }
         
         // TODO If the profile is complete, redirect to /user
-        \Base::instance()->set('model', $model);
+        \Base::instance()->set('model', $user);
     
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->renderTheme( 'Users/Site/Views::login/complete_profile.php' );
     }
     
     /**
-     * 
+     * Target for the completeProfileForm submission 
      */
     public function completeProfile()
     {
@@ -294,13 +310,27 @@ class Login extends \Dsc\Controller
         $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
         $user = (new \Users\Models\Users)->bind($data);
          
-        // TODO Take the POST and bind it to the user model
         $email = $this->input->get( 'email', null, 'string' );
         $user->email = $email;
         
-        // TODO If the email already exists, push the user back to the login page, 
-        // and tell them that they must first sign-in using another method (the one they previously setup),
-        // then upon login, they can link this current social provider to their existing account 
+        // Check if the email already exists
+        if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
+        {
+            if ((empty($user->id) || $user->id != $existing->id))
+            {
+                // This email is already registered
+                // Push the user back to the login page,
+                // and tell them that they must first sign-in using another method (the one they previously setup),
+                // then upon login, they can link this current social provider to their existing account
+                \Dsc\System::addMessage( 'This email is already registered.', 'error' );
+                \Dsc\System::addMessage( 'Please login using the registered email address or with the other social profile that also uses this email address.', 'error' );
+                \Dsc\System::addMessage( 'Once you are logged in, you may link additional social profiles to your account.', 'error' );
+                
+                $f3->reroute( '/login' );
+                
+                return;
+            }
+        }
         
         try 
         {
@@ -311,16 +341,18 @@ class Login extends \Dsc\Controller
             \Dsc\System::addMessage( 'Save failed', 'error' );
             \Dsc\System::addMessage( $e->getMessage(), 'error' );
 
+            \Dsc\System::instance()->setUserState('users.site.login.complete_profile.flash_filled', true);
+            $flash = \Dsc\Flash::instance();
+            $flash->store($user->cast());
+            
             $f3->reroute('/login/completeProfile');
             
             return;
         }
 
-        $this->auth->setIdentity( $user );
-        
-        \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );
-        
+        // if we have reached here, then all is right with the world.  login the user.
+        $this->auth->setIdentity( $user );        
+        \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );        
         $f3->reroute( '/user' );
-        
     }
 }

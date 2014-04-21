@@ -16,12 +16,13 @@ class Users extends \Dsc\Mongo\Collection
     public $first_name;
     public $last_name;
     public $email;
-    public $role;
-    public $active;
-    public $banned;
-    public $suspended;
-    public $social;
+    public $active = true;
+    public $banned = false;
+    public $suspended = false;
+    public $social = array();
     public $groups = array();
+    public $photo;
+    
     protected $__collection_name = 'users';
 
     protected function fetchConditions()
@@ -140,18 +141,42 @@ class Users extends \Dsc\Mongo\Collection
             $this->setError('Password is required');
         }
         
-        return parent::validate();
-    }
-
-    protected function beforeSave()
-    {
+        // is the email unique?
+        // this would be a great case for $this->validateWith( $validator ); -- using a Uniqueness Validator
+        if (!empty($this->email) && $existing = $this->emailExists( $this->email ))
+        {
+            if ((empty($this->id) || $this->id != $existing->id))
+            {
+                $this->setError('This email is already registered');
+            }
+        }
+        
         if (empty($this->username))
         {
             $this->username = $this->email;
         }
         
-        $this->username = \Dsc\System::instance()->inputfilter->clean($this->username, 'ALNUM');
+        $this->username = static::usernameFromString( $this->username );
+        if (empty($this->username))
+        {
+            $this->setError('Username is required');
+        }
         
+        // is the username unique?
+        // this would be a great case for $this->validateWith( $validator ); -- using a Uniqueness Validator
+        if (!empty($this->username) && $existing = $this->usernameExists( $this->username ))
+        {
+            if ((empty($this->id) || $this->id != $existing->id))
+            {
+                $this->setError('This username is taken');
+            }
+        }
+        
+        return parent::validate();
+    }
+
+    protected function beforeSave()
+    {
         if (! empty($this->groups))
         {
             $groups = array();
@@ -194,9 +219,62 @@ class Users extends \Dsc\Mongo\Collection
         return $randomString;
     }
 
-    public function getName()
+    /**
+     * Gets the user's full name
+     * @return unknown
+     */
+    public function fullName()
     {
         $name = trim($this->first_name . " " . $this->last_name);
         return $name;
+    }
+    
+    /**
+     *
+     *
+     * @param string $slug
+     * @return unknown|boolean
+     */
+    public static function emailExists( $email )
+    {
+        $clone = (new static)->load(array('email'=>$email));
+    
+        if (!empty($clone->id)) {
+            return $clone;
+        }
+    
+        return false;
+    }
+    
+    /**
+     *
+     *
+     * @param string $slug
+     * @return unknown|boolean
+     */
+    public static function usernameExists( $username )
+    {
+        $username = static::usernameFromString( $username );
+        
+        $clone = (new static)->load(array('username'=>$username));
+    
+        if (!empty($clone->id)) {
+            return $clone;
+        }
+    
+        return false;
+    }    
+    
+    /**
+     * Strips whitespace and converts to lowercase
+     * 
+     * @param unknown $string
+     * @return unknown
+     */
+    public static function usernameFromString( $string ) 
+    {
+        $username = \Dsc\System::instance()->inputfilter->clean($string, 'ALNUM');
+        
+        return $username;
     }
 }
