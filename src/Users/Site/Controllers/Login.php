@@ -159,9 +159,7 @@ class Login extends \Dsc\Controller
             if ($user_profile->email)
             {
                 // now check via email
-                $model = new \Users\Models\Users();
-                $model->setState( 'filter.email', $user_profile->email );
-                $user = $model->getItem();
+                $user = (new \Users\Models\Users)->setState( 'filter.email', $user_profile->email )->getItem();
                 if (!empty($user->id))
                 {
                     $user->set( 'social.' . $provider . 'profile', (array) $adapter->getUserProfile() );

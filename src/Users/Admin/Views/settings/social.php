@@ -32,7 +32,7 @@
 
                 <div class="form-group">
                     <label>App Secret</label>
-                    <input type="text" name="social[providers][Facebook][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Facebook.keys.secret'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Facebook][keys][secret]" placeholder="App Secret" value="<?php echo $flash->old('social.providers.Facebook.keys.secret'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
@@ -72,7 +72,7 @@
 
                 <div class="form-group">
                     <label>App Secret</label>
-                    <input type="text" name="social[providers][Twitter][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.secret'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Twitter][keys][secret]" placeholder="App Secret" value="<?php echo $flash->old('social.providers.Twitter.keys.secret'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
@@ -112,7 +112,7 @@
 
                 <div class="form-group">
                     <label>App Secret</label>
-                    <input type="text" name="social[providers][Google][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Google.keys.secret'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Google][keys][secret]" placeholder="App Secret" value="<?php echo $flash->old('social.providers.Google.keys.secret'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
