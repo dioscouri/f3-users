@@ -100,6 +100,9 @@ class Login extends \Dsc\Controller
     {
     }
 
+    /**
+     * Target for social logins
+     */
     public function social()
     {
         try
@@ -114,6 +117,9 @@ class Login extends \Dsc\Controller
         }
     }
 
+    /**
+     * 
+     */
     public function provider()
     {
         $f3 = \Base::instance();

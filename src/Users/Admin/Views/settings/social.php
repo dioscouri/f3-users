@@ -26,13 +26,13 @@
 
                 <div class="form-group">
                     <label>App ID</label>
-                    <input type="text" name="social[providers][Facebook][keys][id]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Facebook.keys.id]'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Facebook][keys][id]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Facebook.keys.id'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
                 <div class="form-group">
                     <label>App Secret</label>
-                    <input type="text" name="social[providers][Facebook][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Facebook.keys.secret]'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Facebook][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Facebook.keys.secret'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
@@ -66,13 +66,53 @@
 
                 <div class="form-group">
                     <label>App ID</label>
-                    <input type="text" name="social[providers][Twitter][keys][id]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.id]'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Twitter][keys][id]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.id'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
                 <div class="form-group">
                     <label>App Secret</label>
-                    <input type="text" name="social[providers][Twitter][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.secret]'); ?>" class="form-control" />
+                    <input type="text" name="social[providers][Twitter][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Twitter.keys.secret'); ?>" class="form-control" />
+                </div>
+                <!-- /.form-group -->
+
+            </div>
+            <!-- /.col-md-10 -->
+
+        </div>
+        <!-- /.row -->
+        
+        <hr />
+
+        <div class="row">
+            <div class="col-md-2">
+
+                <h3>Google</h3>
+
+            </div>
+            <!-- /.col-md-2 -->
+
+            <div class="col-md-10">
+
+                <div class="form-group">
+                    <label>Enabled?</label>
+                    <select name="social[providers][Google][enabled]" class="form-control">
+                        <option value="0" <?php if ($flash->old('social.providers.Google.enabled') == '0') { echo "selected='selected'"; } ?>>No</option>
+                        <option value="1" <?php if ($flash->old('social.providers.Google.enabled') == '1') { echo "selected='selected'"; } ?>>Yes</option>
+                    </select>
+                
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group">
+                    <label>App ID</label>
+                    <input type="text" name="social[providers][Google][keys][id]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Google.keys.id'); ?>" class="form-control" />
+                </div>
+                <!-- /.form-group -->
+
+                <div class="form-group">
+                    <label>App Secret</label>
+                    <input type="text" name="social[providers][Google][keys][secret]" placeholder="App ID" value="<?php echo $flash->old('social.providers.Google.keys.secret'); ?>" class="form-control" />
                 </div>
                 <!-- /.form-group -->
 
