@@ -56,6 +56,16 @@ class Routes extends \Dsc\Routes\Group
         $this->add( '/login/social/auth/@provider', 'GET|POST', array(
             'controller' => 'Login',
             'action' => 'provider' 
-        ) ); 
+        ) );
+
+        $this->add( '/login/completeProfile', 'GET', array(
+            'controller' => 'Login',
+            'action' => 'completeProfileForm'
+        ) );
+        
+        $this->add( '/login/completeProfile', 'POST', array(
+            'controller' => 'Login',
+            'action' => 'completeProfile'
+        ) );
     }
 }

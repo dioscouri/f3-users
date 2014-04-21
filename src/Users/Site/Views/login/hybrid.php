@@ -16,7 +16,7 @@
 </div>
 <?php } ?>
 
-<?php if ($settings->{'social.providers.Google.enabled'}) { ?>
+<?php if ($settings->{'social.providers.Google.enabled'} && $settings->{'social.providers.Google.keys.id'} && $settings->{'social.providers.Google.keys.secret'}) { ?>
 <div class="form-group">
     <a href="./login/social/auth/google" class="btn btn-google btn-default">
     <i class="fa fa-google"></i> &nbsp;&nbsp;Login with Google
@@ -24,7 +24,7 @@
 </div>
 <?php } ?>
 
-<?php if ($settings->{'social.providers.Linkedin.enabled'}) { ?>
+<?php if ($settings->{'social.providers.Linkedin.enabled'} && $settings->{'social.providers.Linkedin.keys.id'} && $settings->{'social.providers.Linkedin.keys.secret'}) { ?>
 <div class="form-group">
     <a href="./login/social/auth/linkedin" class="btn btn-linkedin btn-default">
     <i class="fa fa-linkedin"></i> &nbsp;&nbsp;Login with LinkedIn

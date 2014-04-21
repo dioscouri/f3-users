@@ -196,14 +196,16 @@ class Login extends \Dsc\Controller
             \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', $data );
             
             // Now push the user to a "complete your profile" form prepopulated with data from the provider identity
-
+            $this->completeProfileForm();
+            
+            
             // 4.1 - create new user
+            /**
             $model = new \Users\Models\Users();
             $user = $model->create( $data );
-            
             $this->auth->setIdentity( $user );
-            
             $f3->reroute( '/user' );
+             */
         }
         catch ( \Exception $e )
         {
@@ -256,5 +258,69 @@ class Login extends \Dsc\Controller
             
             $f3->reroute( '/login' );
         }
+    }
+
+    /**
+     * Displays a profile completion form
+     */
+    public function completeProfileForm()
+    {
+        $f3 = \Base::instance();
+        
+        $identity = $this->getIdentity();
+        if (! empty( $identity->id ))
+        {
+            $f3->reroute( '/user' );
+        }
+        
+        // bind the data to a model
+        $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
+        $model = (new \Users\Models\Users)->bind($data);
+        
+        // TODO If the profile is complete, redirect to /user
+        \Base::instance()->set('model', $model);
+    
+        $view = \Dsc\System::instance()->get( 'theme' );
+        echo $view->renderTheme( 'Users/Site/Views::login/complete_profile.php' );
+    }
+    
+    /**
+     * 
+     */
+    public function completeProfile()
+    {
+        $f3 = \Base::instance();
+        
+        $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
+        $user = (new \Users\Models\Users)->bind($data);
+         
+        // TODO Take the POST and bind it to the user model
+        $email = $this->input->get( 'email', null, 'string' );
+        $user->email = $email;
+        
+        // TODO If the email already exists, push the user back to the login page, 
+        // and tell them that they must first sign-in using another method (the one they previously setup),
+        // then upon login, they can link this current social provider to their existing account 
+        
+        try 
+        {
+            $user->save();
+        } 
+        catch(\Exception $e) 
+        {
+            \Dsc\System::addMessage( 'Save failed', 'error' );
+            \Dsc\System::addMessage( $e->getMessage(), 'error' );
+
+            $f3->reroute('/login/completeProfile');
+            
+            return;
+        }
+
+        $this->auth->setIdentity( $user );
+        
+        \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );
+        
+        $f3->reroute( '/user' );
+        
     }
 }
