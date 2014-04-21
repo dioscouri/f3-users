@@ -208,48 +208,51 @@ class Login extends \Dsc\Controller
         }
         catch ( \Exception $e )
         {
-            // Display the recived error
+            $user_error = null;
+            
+            switch ($e->getCode())
+            {
+            	case 0 :
+            	    $error = "Unspecified error.";
+            	    break;
+            	case 1 :
+            	    $error = "Hybridauth configuration error.";
+            	    break;
+            	case 2 :
+            	    $error = "Provider not properly configured.";
+            	    break;
+            	case 3 :
+            	    $error = "Unknown or disabled provider.";
+            	    break;
+            	case 4 :
+            	    $error = "Missing provider application credentials.";
+            	    break;
+            	case 5 :
+            	    $error = "Authentication failed. The user has canceled the authentication or the provider refused the connection.";
+            	    $user_error = "Authentication failed.";
+            	    break;
+            	case 6 :
+            	    $error = "User profile request failed. Most likely the user is not connected to the provider and he should to authenticate again.";
+            	    $user_error = "We were unable to get your profile.  Please authenticate again with the profile provider.";
+            	    $adapter->logout();
+            	    break;
+            	case 7 :
+            	    $error = "User not connected to the provider.";
+            	    $user_error = "No profile found with the provider.  Missing connection.";
+            	    $adapter->logout();
+            	    break;
+            }
+                        
             if ($f3->get( 'DEBUG' ))
             {
-                
-                switch ($e->getCode())
-                {
-                    case 0 :
-                        $error = "Unspecified error.";
-                        break;
-                    case 1 :
-                        $error = "Hybridauth configuration error.";
-                        break;
-                    case 2 :
-                        $error = "Provider not properly configured.";
-                        break;
-                    case 3 :
-                        $error = "Unknown or disabled provider.";
-                        break;
-                    case 4 :
-                        $error = "Missing provider application credentials.";
-                        break;
-                    case 5 :
-                        $error = "Authentication failed. The user has canceled the authentication or the provider refused the connection.";
-                        break;
-                    case 6 :
-                        $error = "User profile request failed. Most likely the user is not connected to the provider and he should to authenticate again.";
-                        $adapter->logout();
-                        break;
-                    case 7 :
-                        $error = "User not connected to the provider.";
-                        $adapter->logout();
-                        break;
-                }
-                
-                // well, basically your should not display this to the end user, just give him a hint and move on..
+                // if debug mode is enabled, display the full error
                 $error .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
                 $error .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
             }
             else
             {
-                
-                $error = 'Something went wrong';
+                // otherwise, display something simple
+                $error = $user_error;
             }
             
             \Dsc\System::addMessage( 'Login failed', 'error' );
