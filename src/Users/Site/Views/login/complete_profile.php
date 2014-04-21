@@ -24,7 +24,5 @@
     
 </form>
 
-<?php echo \Dsc\Debug::dump( $model->cast() ); ?>
-
 </div>
 
