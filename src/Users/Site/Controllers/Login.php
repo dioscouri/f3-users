@@ -142,11 +142,11 @@ class Login extends \Dsc\Controller
             // grab the user profile
             $user_profile = $adapter->getUserProfile();
             
-            $model = new \Users\Models\Users();
-            $filter = 'social.' . $provider . '.profile.identifier';
-            
-            $user = $model->setCondition( $filter, $user_profile->identifier )->getItem();
-            
+            // first try to lookup the user based on the profile.identifier
+            // if found, log them in to our system and redirect to their profile page
+            $model = new \Users\Models\Users;
+            $filter = 'social.' . $provider . '.profile.identifier';            
+            $user = $model->setCondition( $filter, $user_profile->identifier )->getItem();            
             if (! empty( $user->id ))
             {
                 $this->auth->setIdentity( $user );
@@ -159,39 +159,45 @@ class Login extends \Dsc\Controller
             if ($user_profile->email)
             {
                 // now check via email
-                try
+                $model = new \Users\Models\Users();
+                $model->setState( 'filter.email', $user_profile->email );
+                $user = $model->getItem();
+                if (!empty($user->id))
                 {
-                    $model = new \Users\Models\Users();
-                    $model->setState( 'filter.email', $user_profile->email );
-                    if ($user = $model->getItem())
-                    {
-                        $user->set( 'social.' . $provider . 'profile', (array) $adapter->getUserProfile() );
-                        
-                        $user->save();
-                        
-                        $this->auth->setIdentity( $user );
-                        
-                        $f3->reroute( '/user' );
-                    }
+                    $user->set( 'social.' . $provider . 'profile', (array) $adapter->getUserProfile() );
+                    $user->save();
+                    $this->auth->setIdentity( $user );
+                    $f3->reroute( '/user' );
                 }
-                catch ( \Exception $e )
+                
+                // email doesn't exist in our database 
+                else 
                 {
-                    $this->setError( 'Invalid Email' );
+                	
                 }
             }
             
-            // 4 - if authentication does not exist and email is not in use, then we create a new user
+            // email not provided by provider
+            else 
+            {
+            	
+            }
             
+            // 4 - if authentication does not exist and email is not in use, then we create a new user
+            // so first let's prepare the data 
             $data = array();
             $data['social'][$provider]['profile'] = (array) $adapter->getUserProfile();
             $data['social'][$provider]['access_token'] = (array) $adapter->getAccessToken();
-            
             $data['email'] = $user_profile->email;
             $data['first_name'] = $user_profile->firstName;
             $data['last_name'] = $user_profile->lastName;
             
-            $password = rand(); // for the password we generate something random
-                                       // 4.1 - create new user
+            // put the data array into the session, and bind the array to a Users\Models\Users object on the flip side
+            \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', $data );
+            
+            // Now push the user to a "complete your profile" form prepopulated with data from the provider identity
+
+            // 4.1 - create new user
             $model = new \Users\Models\Users();
             $user = $model->create( $data );
             
@@ -211,7 +217,7 @@ class Login extends \Dsc\Controller
                         $error = "Unspecified error.";
                         break;
                     case 1 :
-                        $error = "Hybriauth configuration error.";
+                        $error = "Hybridauth configuration error.";
                         break;
                     case 2 :
                         $error = "Provider not properly configured.";
