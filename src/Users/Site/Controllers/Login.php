@@ -183,7 +183,7 @@ class Login extends \Dsc\Controller
             	
             }
             
-            // 4 - if authentication does not exist and email is not in use, then we create a new user
+            // 4 - if authentication does not exist and email is not in use, then we are creating a new user
             // so first let's prepare the data 
             $data = array();
             $data['social'][$provider]['profile'] = (array) $adapter->getUserProfile();
@@ -205,15 +205,8 @@ class Login extends \Dsc\Controller
             \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', $data );
             
             // Now push the user to a "complete your profile" form prepopulated with data from the provider identity
-            $f3->reroute( '/login/completeProfile' );
-            
-            // 4.1 - create new user
-            /**
-            $model = new \Users\Models\Users();
-            $user = $model->create( $data );
-            $this->auth->setIdentity( $user );
-            $f3->reroute( '/user' );
-             */
+            $f3->reroute( '/login/completeProfile' ); 
+
         }
         catch ( \Exception $e )
         {
@@ -313,7 +306,7 @@ class Login extends \Dsc\Controller
         $email = $this->input->get( 'email', null, 'string' );
         $user->email = $email;
         
-        // Check if the email already exists
+        // Check if the email already exists and give a custom message if so
         if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
         {
             if ((empty($user->id) || $user->id != $existing->id))
@@ -334,6 +327,7 @@ class Login extends \Dsc\Controller
         
         try 
         {
+            // this will handle other validations, such as username uniqueness, etc
             $user->save();
         } 
         catch(\Exception $e) 
