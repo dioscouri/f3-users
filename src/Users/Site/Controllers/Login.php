@@ -305,6 +305,9 @@ class Login extends \Dsc\Controller
          
         $email = $this->input->get( 'email', null, 'string' );
         $user->email = $email;
+
+        $username = $this->input->get( 'username', null, 'string' );
+        $user->username = $username;
         
         // Check if the email already exists and give a custom message if so
         if (!empty($user->email) && $existing = $user->emailExists( $user->email ))

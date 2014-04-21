@@ -1,8 +1,6 @@
 <?php
 namespace Users\Models;
 
-use Joomla\Crypt\Password;
-
 class Users extends \Dsc\Mongo\Collection
 {
     /**
@@ -10,7 +8,6 @@ class Users extends \Dsc\Mongo\Collection
      * 
      * @var unknown
      */
-    public $_id;
     public $username;
     public $password;
     public $first_name;
@@ -51,12 +48,6 @@ class Users extends \Dsc\Mongo\Collection
             $this->setCondition('$or', $where);
         }
         
-        $filter_id = $this->getState('filter.id');
-        if (strlen($filter_id))
-        {
-            $this->setCondition('_id', new \MongoId((string) $filter_id));
-        }
-        
         $filter_username = $this->getState('filter.username', null, 'alnum');
         if (strlen($filter_username))
         {
@@ -89,8 +80,7 @@ class Users extends \Dsc\Mongo\Collection
             $this->setCondition('password', $filter_password);
         }
         
-        $filter_group = $this->getState('filter.group');
-        
+        $filter_group = $this->getState('filter.group');        
         if (strlen($filter_group))
         {
             $this->setCondition('groups.id', new \MongoId((string) $filter_group));

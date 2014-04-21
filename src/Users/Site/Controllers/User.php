@@ -32,7 +32,7 @@ class User extends Auth
             else 
         {
             $model = $this->getModel()->setState( 'filter.id', $identity->id );
-            $user = $this->getItem();
+            $user = $model->getItem();
         }
 
         $f3->set('user', $user);

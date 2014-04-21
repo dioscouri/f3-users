@@ -1,6 +1,6 @@
 <div id="content" class="container">		
     
-    Self
+    Self User:
     <?php echo \Dsc\Debug::dump( $user ); ?>
 
 	<div id="content-header">
