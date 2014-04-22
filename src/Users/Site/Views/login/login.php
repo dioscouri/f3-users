@@ -7,11 +7,17 @@
             
             <form action="./login" method="post" class="form" role="form">
                 <div class="form-group">
-                <input class="form-control" name="login-username" placeholder="Your Email" type="email" /> 
-                <input class="form-control" name="login-password" placeholder="New Password" type="password" /> 
-                <br />
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                    <label>Email Address</label>
+                    <input class="form-control" name="login-username" placeholder="Email Address" type="email" />
                 </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input class="form-control" name="login-password" placeholder="Password" type="password" />
+                </div>
+                            
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                
             </form>
         </div>
         
@@ -25,7 +31,7 @@
                 or with a social profile
             </legend>
                         
-            <?php echo $this->renderLayout('Users/Site/Views::login/hybrid.php'); ?>
+            <?php echo $this->renderLayout('Users/Site/Views::login/social.php'); ?>
             </div>
             <?php  
         } 
