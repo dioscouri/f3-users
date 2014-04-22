@@ -1,6 +1,3 @@
-<h3 class="">Social Login Settings</h3>
-<hr />
-
 <div class="row">
     <div class="col-md-12">
 

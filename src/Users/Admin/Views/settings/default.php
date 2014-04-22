@@ -36,12 +36,21 @@
                 </div>
             
                 <div class="tab-pane fade in" id="tab-social">
-                    <?php if(class_exists('Hybrid_Auth')) : ?>
-                    <?php echo $this->renderLayout('Users/Admin/Views::settings/social.php'); ?>
-                    <?php else  : ?>
-                     To enable Social logins, install HybridAuth  via composer.
-                     <pre> "hybridauth/hybridauth" : "dev-master", </pre>
-                    <?php endif; ?>
+                    <?php 
+                    if (class_exists('Hybrid_Auth')) 
+                    {
+                        echo $this->renderLayout('Users/Admin/Views::settings/social.php');
+                    } 
+                    else 
+                    {
+                        ?>
+                        <div class="alert alert-info">
+                            To enable Social logins, install HybridAuth via composer.
+                            <pre> "hybridauth/hybridauth" : "dev-master" </pre>
+                        </div>
+                        <?php 
+                    }
+                    ?>
                 </div>
 
                 <?php if (!empty($this->event)) { foreach ((array) $this->event->getArgument('content') as $key => $content ) { ?>

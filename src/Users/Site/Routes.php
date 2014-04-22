@@ -13,6 +13,8 @@ class Routes extends \Dsc\Routes\Group
      */
     public function initialize()
     {
+        $f3 = \Base::instance();
+        
         $this->setDefaults( array(
             'namespace' => '\Users\Site\Controllers',
             'url_prefix' => '' 
@@ -67,5 +69,23 @@ class Routes extends \Dsc\Routes\Group
             'controller' => 'Login',
             'action' => 'completeProfile'
         ) );
+
+        $this->add( '/login/validate', 'GET', array(
+            'controller' => 'Login',
+            'action' => 'validate'
+        ) );
+        
+        $f3->route( 'POST /login/validate', function ( $f3 )
+        {
+            $token = $f3->get( 'REQUEST.token' );
+            $f3->reroute( '/login/validate/token/' . $token );
+        } );        
+        
+        $this->add( '/login/validate/token/@token', 'GET', array(
+            'controller' => 'Login',
+            'action' => 'validateToken'
+        ) );
+        
+        
     }
 }

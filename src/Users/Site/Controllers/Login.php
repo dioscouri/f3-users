@@ -45,6 +45,9 @@ class Login extends \Dsc\Controller
             $f3->reroute( '/user' );
         }
         
+        $flash = \Dsc\Flash::instance();
+        $f3->set('flash', $flash );
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::login/register.php' );
     }
@@ -98,6 +101,110 @@ class Login extends \Dsc\Controller
      */
     public function create()
     {
+        $f3 = \Base::instance();
+        
+        $data = array(
+        	'email' => $this->input->get( 'email', null, 'string' ),
+            'username' => $this->input->get( 'username', null, 'string' ),
+            'first_name' => $this->input->get( 'first_name', null, 'string' ),
+            'last_name' => $this->input->get( 'last_name', null, 'string' ),
+        );
+        
+        $user = (new \Users\Models\Users)->bind($data);
+        
+        // Check if the email already exists and give a custom message if so
+        if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
+        {
+            if ((empty($user->id) || $user->id != $existing->id))
+            {
+                // This email is already registered
+                // Push the user back to the login page,
+                // and tell them that they must first sign-in using another method (the one they previously setup),
+                // then upon login, they can link this current social provider to their existing account
+                \Dsc\System::addMessage( 'This email is already registered.', 'error' );
+                
+                \Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
+                $flash = \Dsc\Flash::instance();
+                $flash->store($user->cast());
+                        
+                $f3->reroute( '/register' );
+        
+                return;
+            }
+        }
+        
+        try
+        {
+            // this will handle other validations, such as username uniqueness, etc
+            $user->save();
+        }
+        catch(\Exception $e)
+        {
+            \Dsc\System::addMessage( 'Save failed', 'error' );
+            \Dsc\System::addMessage( $e->getMessage(), 'error' );
+        
+            \Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
+            $flash = \Dsc\Flash::instance();
+            $flash->store($user->cast());
+        
+            $f3->reroute('/register');
+        
+            return;
+        }
+        
+        // if we have reached here, then all is right with the form
+        $flash = \Dsc\Flash::instance();
+        $flash->store(array());
+        
+        $settings = \Users\Models\Settings::fetch();
+        $registration_action = $settings->{'general.registration.action'};
+        switch ($registration_action)
+        {
+        	case "auto_login":
+        	    $user->active = true;
+        	    $user->save();
+        	    
+        	    $this->auth->setIdentity( $user );
+        	    
+        	    $redirect = '/user';
+        	    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+        	    {
+        	        $redirect = $custom_redirect;
+        	    }
+        	    \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        	     
+        	    break;
+        	case "auto_login_with_validation":
+        	    $user->active = false;
+        	    $user->save();
+        	            	    
+        	    $this->auth->setIdentity( $user );
+        	    
+        	    $redirect = '/user';
+        	    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+        	    {
+        	        $redirect = $custom_redirect;
+        	    }
+        	    \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+
+        	    // Send validation email
+        	    $user->sendEmailValidatingEmailAddress();
+        	    
+        	    break;
+        	default:
+        	    $user->active = false;
+        	    $user->save();
+        	            	    
+        	    $redirect = '/login/validate';
+        	    
+        	    // Send validation email
+                $user->sendEmailValidatingEmailAddress();
+        	    
+        	    break;
+        }
+        
+        // redirect to the requested target, or the default if none requested
+        \Base::instance()->reroute( $redirect );
     }
 
     /**
@@ -376,5 +483,47 @@ class Login extends \Dsc\Controller
         }
         \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
         \Base::instance()->reroute( $redirect );
+    }
+    
+    /**
+     * Display a static page requesting email validation
+     */
+    public function validate()
+    {
+        $view = \Dsc\System::instance()->get( 'theme' );
+        echo $view->render( 'Users/Site/Views::login/validate.php' );
+    }
+    
+    /**
+     * Validates a token, usually from clicking on a link in an email
+     * 
+     * @throws \Exception
+     */
+    public function validateToken()
+    {
+        $f3 = \Base::instance();
+        $token = $this->inputfilter->clean( $f3->get('PARAMS.token'), 'alnum' );
+        
+        try {
+            
+            $user = (new \Users\Models\Users)->setState('filter.id', $token)->getItem();
+            if (empty($user->id) || $token != (string) $user->id) 
+            {
+            	throw new \Exception( 'Invalid Token' );
+            }
+            $user->active = true;
+            $user->save();
+            
+        } catch (\Exception $e) {
+
+            \Dsc\System::addMessage( 'Email validation failed.  Please confirm the token and try again.', 'error' );
+            \Dsc\System::addMessage( $e->getMessage(), 'error' );
+            \Base::instance()->reroute( '/login/validate' );
+            return;            
+        }
+
+        // redirect to login
+        \Dsc\System::addMessage( 'Thank you for validating your email address. You may now login.' );
+        \Base::instance()->reroute( '/login' );
     }
 }

@@ -268,4 +268,22 @@ class Users extends \Dsc\Mongo\Collection
         
         return $username;
     }
+    
+    /**
+     * Send an email to this user to validate their email address
+     * 
+     * @return \Users\Models\Users
+     */
+    public function sendEmailValidatingEmailAddress()
+    {
+        \Base::instance()->set('user', $this);
+        
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_html/validation.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_text/validation.php' );
+        $subject = 'Please verify your email address'; // TODO Add this to config?
+        
+        $this->__sendEmailValidatingEmailAddress = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
+        
+        return $this;
+    }
 }
