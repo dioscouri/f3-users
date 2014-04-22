@@ -150,7 +150,15 @@ class Login extends \Dsc\Controller
             if (! empty( $user->id ))
             {
                 $this->auth->setIdentity( $user );
-                $f3->reroute( '/user' );
+                
+                // redirect to the requested target, or the default if none requested
+                $redirect = '/user';
+                if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+                {
+                    $redirect = $custom_redirect;
+                }
+                \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+                \Base::instance()->reroute( $redirect );
             }
             
             // here lets check if the user email we got from the provider already exists in our database ( for this example the email is UNIQUE for each user )
@@ -165,7 +173,15 @@ class Login extends \Dsc\Controller
                     $user->set( 'social.' . $provider . 'profile', (array) $adapter->getUserProfile() );
                     $user->save();
                     $this->auth->setIdentity( $user );
-                    $f3->reroute( '/user' );
+                    
+                    // redirect to the requested target, or the default if none requested
+                    $redirect = '/user';
+                    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+                    {
+                        $redirect = $custom_redirect;
+                    }
+                    \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+                    \Base::instance()->reroute( $redirect );
                 }
                 
                 // email doesn't exist in our database 
@@ -350,7 +366,15 @@ class Login extends \Dsc\Controller
 
         // if we have reached here, then all is right with the world.  login the user.
         $this->auth->setIdentity( $user );        
-        \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );        
-        $f3->reroute( '/user' );
+        \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );
+
+        // redirect to the requested target, or the default if none requested
+        $redirect = '/user';
+        if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+        {
+            $redirect = $custom_redirect;
+        }
+        \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        \Base::instance()->reroute( $redirect );
     }
 }
