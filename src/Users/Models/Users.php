@@ -13,6 +13,7 @@ class Users extends \Dsc\Mongo\Collection
     public $first_name;
     public $last_name;
     public $email;
+    public $role = null;
     public $active = true;
     public $banned = false;
     public $suspended = false;

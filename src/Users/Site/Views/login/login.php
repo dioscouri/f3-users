@@ -13,8 +13,8 @@
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
                 </div>
             </form>
-            
         </div>
+        
         <?php 
         if (class_exists('Hybrid_Auth')) 
         {
