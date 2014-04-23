@@ -150,15 +150,14 @@ class Users extends \Dsc\Mongo\Collection
             }
         }
         
-        if (empty($this->username))
+        if (!empty($this->username))
         {
-            $this->username = $this->email;
-        }
+            $this->username = static::usernameFromString( $this->username );
+        }        
         
-        $this->username = static::usernameFromString( $this->username );
         if (empty($this->username))
         {
-            $this->setError('Username is required');
+            $this->username = $this->generateUsername();
         }
         
         // is the username unique?
@@ -216,6 +215,47 @@ class Users extends \Dsc\Mongo\Collection
         }
         
         return $randomString;
+    }
+    
+    /**
+     *
+     * @param string $unique
+     * @return string
+     */
+    public function generateUsername( $unique=true )
+    {
+        $mongo_id = new \MongoId;
+        
+        $username = !empty($this->username) ? $this->username : $this->email;
+        if (empty($username)) {
+            return $mongo_id;
+        }
+    
+        $pieces = explode('@', $username);
+        $username = $pieces[0];
+        if (empty($username)) {
+            return $mongo_id;
+        }
+            
+        $username = $this->usernameFromString( $username );
+        if (empty($username)) {
+            return $mongo_id;
+        }
+
+        if ($unique)
+        {
+            $base = $username;
+            while ($this->usernameExists($username))
+            {
+                if (empty($mongo_id)) {
+                    $mongo_id = new \MongoId;
+                }
+                $username = $base . $mongo_id;
+                unset($mongo_id);
+            }
+        }
+    
+        return $username;
     }
 
     /**
