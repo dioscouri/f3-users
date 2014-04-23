@@ -87,6 +87,12 @@ class Users extends \Dsc\Mongo\Collection
             $this->setCondition('groups.id', new \MongoId((string) $filter_group));
         }
         
+        $filter_forgot_password_token = $this->getState('filter.forgot_password.token');
+        if (strlen($filter_forgot_password_token))
+        {
+            $this->setCondition('forgot_password.token', new \MongoId((string) $filter_forgot_password_token));
+        }
+        
         return $this;
     }
 
@@ -286,6 +292,42 @@ class Users extends \Dsc\Mongo\Collection
         
         $this->__sendEmailValidatingEmailAddress = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
         
+        return $this;
+    }
+    
+    /**
+     * Send an email to this user to reset their password
+     *
+     * @return \Users\Models\Users
+     */
+    public function sendEmailResetPassword()
+    {
+        \Base::instance()->set('user', $this);
+    
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_html/password_reset_request.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_text/password_reset_request.php' );
+        $subject = 'Password reset request'; // TODO Add this to config?
+    
+        $this->__sendEmailResetPassword = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
+    
+        return $this;
+    }
+    
+    /**
+     * Send an email to this user to let them know their password has been reset
+     *
+     * @return \Users\Models\Users
+     */
+    public function sendEmailPasswordResetNotification()
+    {
+        \Base::instance()->set('user', $this);
+    
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_html/password_reset_notification.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_text/password_reset_notification.php' );
+        $subject = 'Password reset notification'; // TODO Add this to config?
+    
+        $this->__sendEmailPasswordResetNotification = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
+    
         return $this;
     }
 }

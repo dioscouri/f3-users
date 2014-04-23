@@ -93,7 +93,22 @@ class Routes extends \Dsc\Routes\Group
         
         $this->add( '/user/forgot-password', 'POST', array(
             'controller' => 'Forgot',
-            'action' => 'findEmail'
+            'action' => 'passwordFindEmail'
+        ) );
+        
+        $this->add( '/user/forgot-password/email', 'GET', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordEmailSent'
+        ) );
+        
+        $this->add( '/user/reset-password/@token', 'GET', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordReset'
+        ) );
+        
+        $this->add( '/user/reset-password', 'POST', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordResetSubmit'
         ) );
     }
 }
