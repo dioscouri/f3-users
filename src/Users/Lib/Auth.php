@@ -116,10 +116,8 @@ class Auth extends \Dsc\Singleton
         if (!empty($identity->id))
         {
             // If so, login has been successful, so trigger Login Listeners
-            $event = new \Joomla\Event\Event( 'afterUserLogin' );
-            $event->addArgument('identity', $identity);
-            \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
-
+            $this->login( $identity );
+            
             return true;
         }
         
@@ -157,25 +155,46 @@ class Auth extends \Dsc\Singleton
     }
     
     /**
+     * Triggers Listeners observing the afterUserLogin event
+     * 
+     * @param unknown $identity
+     */
+    public function login( \Users\Models\Users $user )
+    {
+        $this->setIdentity($user);
+        
+        $event = new \Joomla\Event\Event( 'afterUserLogin' );
+        $event->addArgument('identity', $user);
+        
+        return \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
+    }
+    
+    /**
      * Perform logout actions (e.g. trigger Listeners, etc)
      * and logout the user
      * 
      */
-    public function logout()
+    public function logout($destroy=false)
     {
+        $global_app_name = \Base::instance()->get('APP_NAME');
         $identity = $this->getIdentity();
         
         // Trigger plugin event for before logout
         $event = new \Joomla\Event\Event( 'beforeUserLogout' );
-        $event->addArgument('identity', $identity);
+        $event->addArgument('identity', $identity)->addArgument('global_app', $global_app_name);
         \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
-        
-        // actually logout the user, completely killing the session
-        \Dsc\System::instance()->get('session')->destroy();
+
+        // actually logout the user
+        if (!empty($destroy)) {
+            // completely kill the session
+            \Dsc\System::instance()->get('session')->destroy();
+        } else {
+            $this->remove();
+        }
         
         // Trigger plugin event for after logout
         $event = new \Joomla\Event\Event( 'afterUserLogout' );
-        $event->addArgument('identity', $identity);
+        $event->addArgument('identity', $identity)->addArgument('global_app', $global_app_name);
         \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
     }
 
@@ -296,7 +315,7 @@ class Auth extends \Dsc\Singleton
     {
         $global_app_name = \Base::instance()->get('APP_NAME');
         
-        $identity = $this->session->get('auth-identity.'.$global_app_name);
+        $identity = $this->session->get('auth-identity');
         
         if (empty($identity->id)) {
         	return new \Users\Models\Users;
@@ -314,7 +333,7 @@ class Auth extends \Dsc\Singleton
     {
         $global_app_name = \Base::instance()->get('APP_NAME');
     
-        return $this->session->set('auth-identity.'.$global_app_name, $user);
+        return $this->session->set('auth-identity', $user);
     }    
 
     /**
@@ -341,7 +360,7 @@ class Auth extends \Dsc\Singleton
     /**
      * Removes the user identity information from session
      */
-    public function remove()
+    private function remove()
     {
         /*
         if ($this->cookies->has('RMU')) {
@@ -351,9 +370,8 @@ class Auth extends \Dsc\Singleton
             $this->cookies->get('RMT')->delete();
         }
         */
-        
-        $global_app_name = \Base::instance()->get('APP_NAME');
-        $this->session->remove('auth-identity.'.$global_app_name);
+
+        $this->session->remove('auth-identity');
     }
 
     /**

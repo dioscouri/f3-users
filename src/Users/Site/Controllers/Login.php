@@ -164,7 +164,7 @@ class Login extends \Dsc\Controller
         	    $user->active = true;
         	    $user->save();
         	    
-        	    $this->auth->setIdentity( $user );
+        	    \Dsc\System::instance()->get( 'auth' )->login( $user );
         	    
         	    $redirect = '/user';
         	    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
@@ -178,7 +178,7 @@ class Login extends \Dsc\Controller
         	    $user->active = false;
         	    $user->save();
         	            	    
-        	    $this->auth->setIdentity( $user );
+        	    \Dsc\System::instance()->get( 'auth' )->login( $user );
         	    
         	    $redirect = '/user';
         	    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
