@@ -121,6 +121,8 @@ class Users extends \Dsc\Mongo\Collection
 
     public function validate()
     {
+        $this->email = trim( strtolower( $this->email ) );
+        
         // if you want, use $this->validateWith( $validator ) here
         if (empty($this->email))
         {

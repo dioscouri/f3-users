@@ -15,8 +15,12 @@
                     <label>Password</label>
                     <input class="form-control" name="login-password" placeholder="Password" type="password" />
                 </div>
-                            
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                
+                <div class="form-group">            
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                </div>
+                
+                <p><a href="./user/forgot-password">Forgot your password?</a></p>
                 
             </form>
         </div>

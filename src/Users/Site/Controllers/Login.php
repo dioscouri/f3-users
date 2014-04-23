@@ -104,7 +104,7 @@ class Login extends \Dsc\Controller
         $f3 = \Base::instance();
         
         $data = array(
-        	'email' => $this->input->get( 'email', null, 'string' ),
+        	'email' => trim( strtolower( $this->input->get( 'email', null, 'string' ) ) ),
             'username' => $this->input->get( 'username', null, 'string' ),
             'first_name' => $this->input->get( 'first_name', null, 'string' ),
             'last_name' => $this->input->get( 'last_name', null, 'string' ),

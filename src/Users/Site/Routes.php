@@ -86,6 +86,14 @@ class Routes extends \Dsc\Routes\Group
             'action' => 'validateToken'
         ) );
         
+        $this->add( '/user/forgot-password', 'GET', array(
+            'controller' => 'Forgot',
+            'action' => 'password'
+        ) );
         
+        $this->add( '/user/forgot-password', 'POST', array(
+            'controller' => 'Forgot',
+            'action' => 'findEmail'
+        ) );
     }
 }
