@@ -108,6 +108,8 @@ class Login extends \Dsc\Controller
             'username' => $this->input->get( 'username', null, 'string' ),
             'first_name' => $this->input->get( 'first_name', null, 'string' ),
             'last_name' => $this->input->get( 'last_name', null, 'string' ),
+            'new_password' => $this->input->get( 'new_password', null, 'string' ),
+            'confirm_new_password' => $this->input->get( 'confirm_new_password', null, 'string' )            
         );
         
         $user = (new \Users\Models\Users)->bind($data);
