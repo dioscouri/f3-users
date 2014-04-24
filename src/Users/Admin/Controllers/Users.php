@@ -3,6 +3,10 @@ namespace Users\Admin\Controllers;
 
 class Users extends \Admin\Controllers\BaseAuth 
 {
+	use \Dsc\Traits\Controllers\AdminList;
+	
+	protected $list_route = '/admin/users';
+	
 	protected function getModel($name='Users')
 	{
 	    switch (strtolower($name)) 
