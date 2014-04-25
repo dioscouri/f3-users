@@ -389,4 +389,32 @@ class Users extends \Dsc\Mongo\Collection
     	
     	return $img;
     }
+    
+    /**
+     * Get a customer's groups, ordered by group.ordering (highest first)
+     * 
+     * @return array 
+     */
+    public function groups()
+    {
+        $group_ids = array();
+        foreach ($this->groups as $group)
+        {
+            if ($id = \Dsc\ArrayHelper::get($group, 'id'))
+            {
+                $group_ids[] = $id;
+            }
+        }
+    
+        if (empty($group_ids))
+        {
+            return array();
+        }
+    
+        $list = (new \Users\Models\Groups)->setState('filter.ids', $group_ids)->setState('list.sort', array(
+            'ordering' => 1
+        ))->getItems();
+    
+        return $list;
+    }
 }
