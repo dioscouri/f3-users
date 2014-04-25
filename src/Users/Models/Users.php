@@ -370,4 +370,23 @@ class Users extends \Dsc\Mongo\Collection
     
         return $this;
     }
+    
+    /**
+     * Returns link to user's profile picture
+     * 
+     * @return	Either link to the image, or an empty string
+     */
+    public function getProfilePicture(){
+    	$img = '';
+    	$networks = array( 'facebook', 'google', 'twitter' );
+    	
+    	foreach( $networks as $network ){
+    		if( strlen( $this->{'social.'.$network.'.profile.photoURL'} ) ){
+    			$img = $this->{'social.'.$network.'.profile.photoURL'};
+    			break;
+    		}
+    	}
+    	
+    	return $img;
+    }
 }
