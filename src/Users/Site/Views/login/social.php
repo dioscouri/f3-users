@@ -1,5 +1,7 @@
 <?php $settings = \Users\Models\Settings::fetch(); ?>
 
+<div class="social-login-providers">
+
 <?php if ($settings->{'social.providers.Facebook.enabled'} && $settings->{'social.providers.Facebook.keys.id'} && $settings->{'social.providers.Facebook.keys.secret'}) { ?>
 <div class="form-group">
     <a href="./login/social/auth/facebook" class="btn btn-facebook btn-default">
@@ -31,3 +33,5 @@
     </a>
 </div>
 <?php } ?>
+
+</div>
