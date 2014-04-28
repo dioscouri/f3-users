@@ -326,8 +326,8 @@ class Users extends \Dsc\Mongo\Collection
     {
         \Base::instance()->set('user', $this);
         
-        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_html/validation.php' );
-        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_text/validation.php' );
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/validation.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_text/validation.php' );
         $subject = 'Please verify your email address'; // TODO Add this to config?
         
         $this->__sendEmailValidatingEmailAddress = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
@@ -344,8 +344,8 @@ class Users extends \Dsc\Mongo\Collection
     {
         \Base::instance()->set('user', $this);
     
-        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_html/password_reset_request.php' );
-        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_text/password_reset_request.php' );
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/password_reset_request.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_text/password_reset_request.php' );
         $subject = 'Password reset request'; // TODO Add this to config?
     
         $this->__sendEmailResetPassword = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
@@ -362,8 +362,8 @@ class Users extends \Dsc\Mongo\Collection
     {
         \Base::instance()->set('user', $this);
     
-        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_html/password_reset_notification.php' );
-        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Site/Views::emails_text/password_reset_notification.php' );
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/password_reset_notification.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_text/password_reset_notification.php' );
         $subject = 'Password reset notification'; // TODO Add this to config?
     
         $this->__sendEmailPasswordResetNotification = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
