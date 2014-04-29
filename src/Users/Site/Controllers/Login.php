@@ -258,7 +258,7 @@ class Login extends \Dsc\Controller
             $user = $model->setCondition( $filter, $user_profile->identifier )->getItem();            
             if (! empty( $user->id ))
             {
-                $this->auth->setIdentity( $user );
+                \Dsc\System::instance()->get( 'auth' )->login( $user );
                 
                 // redirect to the requested target, or the default if none requested
                 $redirect = '/user';
@@ -281,7 +281,8 @@ class Login extends \Dsc\Controller
                 {
                     $user->set( 'social.' . $provider . 'profile', (array) $adapter->getUserProfile() );
                     $user->save();
-                    $this->auth->setIdentity( $user );
+                    
+                    \Dsc\System::instance()->get( 'auth' )->login( $user );
                     
                     // redirect to the requested target, or the default if none requested
                     $redirect = '/user';
@@ -474,7 +475,8 @@ class Login extends \Dsc\Controller
         }
 
         // if we have reached here, then all is right with the world.  login the user.
-        $this->auth->setIdentity( $user );        
+        \Dsc\System::instance()->get( 'auth' )->login( $user );
+        
         \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );
 
         // redirect to the requested target, or the default if none requested
