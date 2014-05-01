@@ -163,6 +163,12 @@ class Auth extends \Dsc\Singleton
     {
         $this->setIdentity($user);
         
+        try {
+            $user->setLastVisit();
+        } catch (\Exception $e) {
+        	
+        }
+        
         $event = new \Joomla\Event\Event( 'afterUserLogin' );
         $event->addArgument('identity', $user);
         

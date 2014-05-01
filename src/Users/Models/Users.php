@@ -20,6 +20,7 @@ class Users extends \Dsc\Mongo\Collection
     public $social = array();
     public $groups = array();
     public $photo;
+    public $last_visit = array();
     
     protected $__collection_name = 'users';
 
@@ -419,5 +420,16 @@ class Users extends \Dsc\Mongo\Collection
         ))->getItems();
     
         return $list;
+    }
+    
+    /**
+     * 
+     * @return \Users\Models\Users
+     */
+    public function setLastVisit()
+    {
+        $this->set('last_visit', \Dsc\Mongo\Metastamp::getDate('now') );
+        
+        return $this->save(); 
     }
 }
