@@ -8,12 +8,12 @@
             <form action="./login" method="post" class="form" role="form">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input class="form-control" name="login-username" placeholder="Email Address" type="email" />
+                    <input class="form-control" name="login-username" placeholder="Email Address" type="email" required />
                 </div>
                 
                 <div class="form-group">
                     <label>Password</label>
-                    <input class="form-control" name="login-password" placeholder="Password" type="password" />
+                    <input class="form-control" name="login-password" placeholder="Password" type="password" required />
                 </div>
                 
                 <div class="form-group">            

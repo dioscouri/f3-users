@@ -27,7 +27,7 @@
                 
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input class="form-control" name="email" placeholder="Email Address" value="<?php echo $flash->old('email'); ?>" type="email" />
+                    <input class="form-control" name="email" placeholder="Email Address" value="<?php echo $flash->old('email'); ?>" type="email" required />
                 </div>
                 
                 <div class="form-group">
