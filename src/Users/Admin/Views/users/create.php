@@ -22,7 +22,7 @@
                     </div>
 
                     &nbsp;
-                    <a class="btn btn-default" href="./admin/users">Cancel</a>
+                    <a class="btn btn-default" href="/admin/users">Cancel</a>
                 </div>
 
             </div>
@@ -125,7 +125,7 @@
         
                                         var request = jQuery.ajax({
                                             type: 'post', 
-                                            url: './admin/users/groups/checkboxes',
+                                            url: '/admin/users/groups/checkboxes',
                                             data: form_data
         
                                         }).done(function(data){

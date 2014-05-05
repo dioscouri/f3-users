@@ -5,7 +5,7 @@
                 Sign in with your email address
             </legend>
             
-            <form action="./login" method="post" class="form" role="form">
+            <form action="/login" method="post" class="form" role="form">
                 <div class="form-group">
                     <label>Email Address</label>
                     <input class="form-control" name="login-username" placeholder="Email Address" type="email" required />
@@ -20,7 +20,7 @@
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
                 </div>
                 
-                <p><a href="./user/forgot-password">Forgot your password?</a></p>
+                <p><a href="/user/forgot-password">Forgot your password?</a></p>
                 
             </form>
         </div>
