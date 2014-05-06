@@ -11,13 +11,13 @@
 	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
         <ul id="sparks" class="list-actions list-unstyled list-inline">
             <li>
-                <a class="btn btn-default" href="/admin/users/group/create">Add New</a>
+                <a class="btn btn-default" href="./admin/users/group/create">Add New</a>
             </li>
         </ul>            	
 	</div>
 </div>
 
-<form id="list-form" action="/admin/users/groups" method="post">
+<form id="list-form" action="./admin/users/groups" method="post">
 
     <div class="no-padding">
     
@@ -58,7 +58,7 @@
                     <div class="input-group">
                         <select id="bulk-actions" name="bulk_action" class="form-control">
                             <option value="null">-Bulk Actions-</option>
-                            <option value="delete" data-action="/admin/users/groups/delete">Delete</option>
+                            <option value="delete" data-action="./admin/users/groups/delete">Delete</option>
                         </select>
                         <span class="input-group-btn">
                             <button class="btn btn-default bulk-actions" type="button" data-target="bulk-actions">Apply</button>
@@ -119,27 +119,27 @@
 	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
 	                </td>                
                     <td class="">
-                        <a href="/admin/users/group/edit/<?php echo $item->id; ?>">
+                        <a href="./admin/users/group/edit/<?php echo $item->id; ?>">
                             <?php echo $item->name; ?>
                         </a>
                     </td>
                     
                     <td class="text-center">
-                        <a class="btn btn-xs btn-tertiary" href="/admin/users/group/moveup/<?php echo $item->id; ?>">
+                        <a class="btn btn-xs btn-tertiary" href="./admin/users/group/moveup/<?php echo $item->id; ?>">
                             <i class="fa fa-chevron-up"></i>
                         </a>
                         &nbsp;
-                        <a class="btn btn-xs btn-tertiary" href="/admin/users/group/movedown/<?php echo $item->id; ?>">
+                        <a class="btn btn-xs btn-tertiary" href="./admin/users/group/movedown/<?php echo $item->id; ?>">
                             <i class="fa fa-chevron-down"></i>
                         </a>
                     </td>
                     
                     <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="/admin/users/group/edit/<?php echo $item->id; ?>">
+                        <a class="btn btn-xs btn-secondary" href="./admin/users/group/edit/<?php echo $item->id; ?>">
                             <i class="fa fa-pencil"></i>
                         </a>
 	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="/admin/users/group/delete/<?php echo $item->id; ?>">
+	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/users/group/delete/<?php echo $item->id; ?>">
 	                        <i class="fa fa-times"></i>
 	                    </a>
                     </td>

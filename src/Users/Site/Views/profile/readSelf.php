@@ -20,7 +20,7 @@
 					<div class="col-md-4 col-sm-5">
 
 						<div class="thumbnail">
-							<img src="/img/avatars/avatar-large-1.jpg" alt="Profile Picture" />
+							<img src="./img/avatars/avatar-large-1.jpg" alt="Profile Picture" />
 						</div> <!-- /.thumbnail -->
 
 						<br />
@@ -138,10 +138,10 @@
 							<div class="feed-content">
 								<div class="thumbnail" style="width: 375px">
 									<div class="thumbnail-view">
-		                        		<a class="thumbnail-view-hover ui-lightbox" href="/img/mockup.png">
+		                        		<a class="thumbnail-view-hover ui-lightbox" href="./img/mockup.png">
 		                        		</a>
 
-							            <img src="/img/mockup.png" style="width: 100%;" alt="Gallery Image" />
+							            <img src="./img/mockup.png" style="width: 100%;" alt="Gallery Image" />
 							        </div>
 
 								</div> <!-- /.thumbnail -->

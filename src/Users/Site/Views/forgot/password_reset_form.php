@@ -8,7 +8,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-4">
-            <form action="/user/reset-password" method="post" class="form" role="form">
+            <form action="./user/reset-password" method="post" class="form" role="form">
             
                 <div class="form-group">
                     <label>New Password</label>

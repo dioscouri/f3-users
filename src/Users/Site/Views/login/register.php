@@ -4,7 +4,7 @@
             <legend>
                 Register with your email address
             </legend>
-            <form action="/register" method="post" class="form" role="form">
+            <form action="./register" method="post" class="form" role="form">
                 <div class="form-group">
                     <label>Username</label>
                     <input class="form-control" name="username" placeholder="Username" value="<?php echo $flash->old('username'); ?>" type="text" required autofocus />

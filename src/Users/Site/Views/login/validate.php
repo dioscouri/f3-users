@@ -12,7 +12,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-4">
-            <form action="/login/validate" method="post" class="form" role="form">
+            <form action="./login/validate" method="post" class="form" role="form">
                 <div class="form-group">
                     <label>Token</label>
                     <input class="form-control" name="token" placeholder="Token from email" type="text" />

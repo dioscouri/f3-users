@@ -24,7 +24,7 @@
                         href="javascript:void(0);">Save & Close</a></li>
                 </ul>
             </div>
-            &nbsp; <a class="btn btn-default" href="/admin/users/groups">Cancel</a>
+            &nbsp; <a class="btn btn-default" href="./admin/users/groups">Cancel</a>
         </div>
 
     </div>

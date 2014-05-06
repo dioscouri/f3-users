@@ -4,7 +4,7 @@
     Complete Profile <small>Final Step</small>
 </h2>
 
-<form action="/login/completeProfile" method="post">
+<form action="./login/completeProfile" method="post">
 
     <div class="well well-sm">
         <div class="form-group">

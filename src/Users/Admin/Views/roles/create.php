@@ -22,7 +22,7 @@
                     </div>
 
                     &nbsp;
-                    <a class="btn btn-default" href="/admin/users/roles">Cancel</a>
+                    <a class="btn btn-default" href="./admin/users/roles">Cancel</a>
                 </div>
 
             </div>
