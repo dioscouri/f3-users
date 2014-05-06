@@ -42,9 +42,6 @@ class Role extends \Admin\Controllers\BaseAuth
 	
 	protected function displayCreate()
 	{
-	    $parents = $this->getModel()->getItems();
-	    \Base::instance()->set('parents', $parents );
-	    	    
 		$view = \Dsc\System::instance()->get('theme');
 		$view->event = $view->trigger( 'onDisplayAdminRoleEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
 		
@@ -53,9 +50,6 @@ class Role extends \Admin\Controllers\BaseAuth
 	
 	protected function displayEdit()
 	{
-	    $parents = $this->getModel()->getItems();
-	    \Base::instance()->set('parents', $parents );
-
 		$view = \Dsc\System::instance()->get('theme');
 		$view->event = $view->trigger( 'onDisplayAdminRoleEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
 				
