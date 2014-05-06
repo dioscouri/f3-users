@@ -96,14 +96,14 @@
 		<thead>
 			<tr>
 				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
-                <th data-sortable="name">Name</th>
+                <th data-sortable="title">Title</th>
                 <th data-sortable="ordering" class="col-sm-1 col-md-1 col-lg-1 text-center">Ordering</th>
                 <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 			<tr class="filter-row">
 				<th></th>
                 <th>
-                    <input placeholder="name" name="filter[name-contains]" value="<?php echo $state->get('filter.name-contains'); ?>" type="text" class="form-control input-sm">
+                    <input placeholder="title" name="filter[title]" value="<?php echo $state->get('filter.title'); ?>" type="text" class="form-control input-sm">
                 </th>
                 <th></th>
                 <th></th>
@@ -120,7 +120,7 @@
 	                </td>                
                     <td class="">
                         <a href="./admin/users/group/edit/<?php echo $item->id; ?>">
-                            <?php echo $item->name; ?>
+                            <?php echo $item->title; ?>
                         </a>
                     </td>
                     

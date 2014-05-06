@@ -33,41 +33,33 @@
     
     <!-- /.form-group -->
 
-	<?php if( $this->additional_tabs ) { ?>
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a href="#tab-basics" data-toggle="tab"> Basics </a>
-                </li>
-                <?php foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
-                <li>
-                    <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
-                </li>
-                <?php } ?>
-            </ul>
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tab-basics" data-toggle="tab"> Basics </a>
+        </li>
+        <?php foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
+        <li>
+            <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
+        </li>
+        <?php } ?>
+    </ul>
 
 
     <div class="tab-content">
 
         <div class="tab-pane active" id="tab-basics">
-	<?php } ?>
-		    <div class="form-group">
-		
-		        <label class="col-md-3">Name</label>
-		
-		        <div class="col-md-7">
-		            <input type="text" name="name" value="<?php echo $flash->old('name'); ?>" class="form-control" />
-		        </div>
-		        <!-- /.col -->
-		
-		    </div>
-	<?php if( $this->additional_tabs ) { ?>
+            
+            <?php echo $this->renderLayout('Users/Admin/Views::groups/fields_basics.php'); ?>
+
 		</div>
-		<?php	foreach ((array) $this->event->getArgument('content') as $key => $content ) { ?>
+		
+		<?php foreach ((array) $this->event->getArgument('content') as $key => $content ) { ?>
 	        <div class="tab-pane" id="tab-<?php echo $key; ?>">
 	            <?php echo $content; ?>
 	        </div>
-		<?php }
-	} ?>
+		<?php } ?>
+		
+    </div>
 
 </form>
 

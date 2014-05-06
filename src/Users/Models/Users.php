@@ -1,13 +1,8 @@
 <?php
 namespace Users\Models;
 
-class Users extends \Dsc\Mongo\Collection
+class Users extends \Dsc\Mongo\Collections\Taggable
 {
-    /**
-     * Default Document Structure
-     * 
-     * @var unknown
-     */
     public $username;
     public $password;
     public $first_name;
@@ -23,6 +18,13 @@ class Users extends \Dsc\Mongo\Collection
     public $last_visit = array();
     
     protected $__collection_name = 'users';
+    protected $__type = 'users';
+    
+    protected $__config = array(
+        'default_sort' => array(
+            'username' => 1
+        )
+    );
 
     protected function fetchConditions()
     {
@@ -190,7 +192,8 @@ class Users extends \Dsc\Mongo\Collection
                     $item = (new \Users\Models\Groups())->setState('filter.id', $id)->getItem();
                     $groups[] = array(
                         "id" => $item->id,
-                        "name" => $item->name
+                        "title" => $item->title,
+                        "slug" => $item->slug
                     );
                 }
             }

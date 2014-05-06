@@ -146,16 +146,7 @@
                         <?php echo $item->last_name; ?>
                     </td>
                     <td class="">
-                    <ul>
-                    <?php if(is_array($item->groups)) : ?> 
-                    <?php foreach ($item->groups as $group) : ?>
-                    <li id="<?=$group['id'];?>">
-                    <?=$group['name'];?>
-                    </li>
-                    <?php endforeach; ?>
-                    <?php endif; ?>
-                    </ul> 
-                        
+                        <?php echo implode(", ", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?>                        
                     </td>
                     <td class="text-center">
                         <a class="btn btn-xs btn-secondary" href="./admin/user/edit/<?php echo $item->id; ?>">
