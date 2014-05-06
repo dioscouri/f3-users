@@ -49,20 +49,21 @@
                 <div class="tab-pane active" id="tab-basics">
                 
                     <div class="form-group">
-                        <label class="col-md-3">Title</label>
-        
-                        <div class="col-md-7">
-                            <input type="text" name="title" value="<?php echo $flash->old('title'); ?>" class="form-control" />
-                        </div>
-                        <!-- /.col -->
-        
+                        <label>Title</label>
+                        <input type="text" name="title" value="<?php echo $flash->old('title'); ?>" class="form-control" />
+                    </div>
+                    <!-- /.form-group -->
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" name="description" value="<?php echo $flash->old('description'); ?>" class="form-control" />
                     </div>
                     <!-- /.form-group -->
                     
                     <div class="form-group">
                         <?php if (!empty($parents)) { ?>
-                        <label class="col-md-3">Parent</label>
-                        <div class="col-md-7"> 
+                        <label>Parent</label>
+                        <div> 
                             <select name="parent" class="form-control">
                                 <option value="null">None</option>
                                 <?php foreach ($parents as $parent) { ?>

@@ -5,10 +5,10 @@ class Role extends \Admin\Controllers\BaseAuth
 {
 	use \Dsc\Traits\Controllers\CrudItemCollection;
 	
-	protected $list_route = '/admin/roles';
-	protected $create_item_route = '/admin/role/create';
-	protected $get_item_route = '/admin/role/read/{id}';
-	protected $edit_item_route = '/admin/role/edit/{id}';
+	protected $list_route = '/admin/users/roles';
+	protected $create_item_route = '/admin/users/role/create';
+	protected $get_item_route = '/admin/users/role/read/{id}';
+	protected $edit_item_route = '/admin/users/role/edit/{id}';
 	
 	protected function getModel($name='Roles')
 	{

@@ -5,6 +5,11 @@ class Roles extends \Dsc\Mongo\Collections\Categories
 {
     protected $__collection_name = 'acl.roles';
     protected $__type = 'acl.role';
+    protected $__config = array(
+        'default_sort' => array(
+            'path' => 1
+        ),
+    );    
     
     protected function beforeSave()
     {

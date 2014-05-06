@@ -17,7 +17,7 @@
 	</div>
 </div>
 
-<form id="list-form" action="./admin/roles" method="post">
+<form id="list-form" action="./admin/users/roles" method="post">
 
     <div class="no-padding">
     
@@ -96,7 +96,7 @@
 		<thead>
 			<tr>
 				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
-                <th data-sortable="name">Name</th>
+                <th data-sortable="path">Name</th>
                 <th class="col-sm-1 col-md-1 col-lg-1"></th>
             </tr>
 		</thead>
@@ -113,6 +113,7 @@
                         <a href="./admin/users/role/edit/<?php echo $item->id; ?>">
                             <?php echo @str_repeat( "&ndash;", substr_count( @$item->path, "/" ) - 1 ) . " " . $item->title; ?>
                         </a>
+                        <p class="help-block"><?php echo $item->description; ?></p>
                     </td>
                     <td class="text-center">
                         <a class="btn btn-xs btn-secondary" href="./admin/users/role/edit/<?php echo $item->id; ?>">
