@@ -11,6 +11,26 @@ class Roles extends \Dsc\Mongo\Collections\Categories
         ),
     );    
     
+    protected function beforeValidate(){
+    	if( !empty( $this->set_permissions ) ) {
+    		$permissions = (array) $this->set_permissions;
+    		unset( $this->set_permissions );
+    		$acl = \Dsc\System::instance()->get('acl')->getAcl();
+    		
+    		foreach( $permissions as $resource => $actions ) {
+    			foreach( $actions as $action => $val ) {
+    				if( ((int)$val) == 1 ) {
+    					$acl->allow( $this->slug, $resource, $action );
+    				} else {
+    					$acl->deny( $this->slug, $resource, $action );
+    				}
+    			}
+    		}
+    	}
+    	
+    	return parent::beforeValidate();
+	}
+    
     protected function beforeSave()
     {
         unset($this->cursor);
@@ -21,9 +41,23 @@ class Roles extends \Dsc\Mongo\Collections\Categories
     public function getPermissions()
     {
         $permissions = array();
-    
-        // TODO Get the permissions for this group, as defined by the admin
-    
+        if( empty( $this->slug ) ){
+        	return $permissions;	
+        }
+        
+		$acl = \Dsc\System::instance()->get('acl');
+		$collection = \Dsc\System::instance()->get('mongo')->selectCollection('acl.access');
+		
+		$conditions = array(
+				'roles_name' => $this->slug,
+			);
+		
+        foreach($collection->find( $conditions ) as $row) {
+        	if( (int)$row['allowed'] ) {
+	    		$permissions []= new \Users\Lib\Acl\Permission($row['resource_name'], $row['action_name'], (int)$row['allowed'] );
+        	}
+    	}
+   
         return $permissions;
     }
 }

@@ -67,5 +67,39 @@ class Role extends \Admin\Controllers\BaseAuth
 		$f3->reroute( $route );
 	}
 	
+	
+	public function displayPermissions($flash){
+		$f3 = \Base::instance();
+		$acl = \Dsc\System::instance()->get('acl');
+		$resources = $acl->getAcl()->getResources();
+		
+		$resourceActions = array();
+		if( count( $resources ) ){
+			foreach( $resources as $res ) {
+				$res_name = $res->getName();
+				$resourceActions[$res_name] = $acl->getAcl()->getResourceActions( $res_name );
+			}
+		}
+
+		
+		$id = $this->inputfilter->clean( $flash->old('id'), 'alnum' );
+		$model = $this->getModel();
+		
+		if( empty( $id ) ) {
+			try {
+				$model = $model->getItem()->setState('filter.id', $id)->getItem();
+			} catch ( \Exception $e ) {
+			}
+		}
+		
+		$f3->set( 'acl', $acl );
+		$f3->set( 'resources', $resourceActions );
+		$f3->set( 'role', $flash->old('slug') );
+		$f3->set( 'permissions', $acl->getPermissions( $model ) );
+		
+		$view = \Dsc\System::instance()->get('theme');
+		return $view->renderView('Users/Admin/Views::roles/fields_permissions.php');
+	}
+
 	protected function displayRead() {}
 }

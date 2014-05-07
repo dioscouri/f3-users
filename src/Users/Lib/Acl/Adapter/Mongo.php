@@ -232,14 +232,32 @@ class Mongo extends \Users\Lib\Acl\Adapter implements \Users\Lib\Acl\AdapterInte
     public function getResources()
     {
         $resources = array();
-
         foreach ($this->getCollection('resources')->find() as $row) {
             $resources[] = new \Users\Lib\Acl\Resource($row['name'], $row['description']);
         }
-
+        
         return $resources;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Users\Lib\Acl\Resource[]
+     */
+    public function getResourceActions( $resource )
+    {
+    	$actions = array();
+    	$conditions = array(
+    			'resource_name' => $resource,
+    	);
+    	
+    	foreach ($this->getCollection('resourceActions')->find( $conditions ) as $row) {
+    		$actions []= new \Users\Lib\Acl\ResourceAction($row['resource_name'], $row['action_name']);
+    	}
+    
+    	return $actions;
+    }
+    
     /**
      * {@inheritdoc}
      *
@@ -494,13 +512,13 @@ class Mongo extends \Users\Lib\Acl\Adapter implements \Users\Lib\Acl\AdapterInte
         if (!$this->isRole($roleName)) {
             throw new \Exception('Role "' . $roleName . '" does not exist in the list');
         }
-
+        
         if (is_array($action)) {
             foreach ($action as $actionName) {
                 $this->insertOrUpdateAccess($roleName, $resourceName, $actionName, $access);
             }
         } else {
-            $this->insertOrUpdateAccess($roleName, $resourceName, $action, $access);
+        	$this->insertOrUpdateAccess($roleName, $resourceName, $action, $access);
         }
     }
 }

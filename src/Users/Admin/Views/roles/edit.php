@@ -37,6 +37,7 @@
                 <li>
                     <a href="#tab-permissions" data-toggle="tab"> Permissions </a>
                 </li>
+
                 <?php foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
                 <li>
                     <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
@@ -49,14 +50,13 @@
                 <div class="tab-pane active" id="tab-basics">
                 
                     <?php echo $this->renderLayout('Users/Admin/Views::roles/fields_basics.php'); ?>                
-                                 
                 </div>
                 <!-- /.tab-pane -->
                 
                 <div class="tab-pane" id="tab-permissions">
                 
-
-                
+                	<?php echo \Dsc\Request::internal('\Users\Admin\Controllers\Role->displayPermissions', array( 'flash' => $flash ) ); ?>
+                                
                 </div>
                 <!-- /.tab-pane -->
                 

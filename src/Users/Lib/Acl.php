@@ -118,7 +118,7 @@ class Acl extends \Dsc\Singleton
     {
         $permissions = array();
         foreach ($role->getPermissions() as $permission) {
-            $permissions[$permission->resource . '.' . $permission->action] = true;
+            $permissions[(string)$permission] = true;
         }
         return $permissions;
     }
@@ -180,7 +180,6 @@ class Acl extends \Dsc\Singleton
         
         foreach ($roles as $role) {
             $acl->addRole(new \Users\Lib\Acl\Role($role->slug));
-            
             // Grant permissions in "permissions" model
             foreach ($role->getPermissions() as $permission) {
                 $acl->allow($role->slug, $permission->resource, $permission->action);
@@ -189,7 +188,7 @@ class Acl extends \Dsc\Singleton
             // Always grant these permissions
             //$acl->allow($role->title, '\Whatever\The\Users\Controller', 'changePassword');
         }
-
+        
         return $acl;
     }
 }
