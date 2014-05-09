@@ -5,22 +5,30 @@ class Listener extends \Prefab
 {
     public function onSystemRebuildMenu( $event )
     {
-        if ($mapper = $event->getArgument('mapper')) 
-        {
-        	$mapper->reset();
-        	$mapper->priority = 30;
-            $mapper->id = 'fa-user';
-        	$mapper->title = 'Users';
-        	$mapper->route = '';
-        	$mapper->icon = 'fa fa-user';
-        	$mapper->children = array(
-        			json_decode(json_encode(array( 'title'=>'List', 'route'=>'/admin/users', 'icon'=>'fa fa-user' )))
-                    ,json_decode(json_encode(array( 'title'=>'Groups', 'route'=>'/admin/users/groups', 'icon'=>'fa fa-group' )))
-                    ,json_decode(json_encode(array( 'title'=>'Roles', 'route'=>'/admin/users/roles', 'icon'=>'fa fa-unlock' )))
-        	        ,json_decode(json_encode(array( 'title'=>'Settings', 'route'=>'/admin/users/settings', 'icon'=>'fa fa-cogs' )))
-           
-            );
-        	$mapper->save();
+		if ($model = $event->getArgument('model'))
+		{
+			$root = $event->getArgument( 'root' );
+			$users = clone $model;
+        		 
+			$users->insert(
+					array(
+						'type'	=> 'admin.nav',
+						'priority' => 50,
+						'title'	=> 'Users',
+						'icon'	=> 'fa fa-user',
+        				'is_root' => false,
+						'tree'	=> $root,
+						'base' => '/admin/users',
+					)
+				);
+        	
+			$children = array(
+        			array( 'title'=>'List', 'route'=>'/admin/users', 'icon'=>'fa fa-user' ),
+                    array( 'title'=>'Groups', 'route'=>'/admin/users/groups', 'icon'=>'fa fa-group' ),
+                    array( 'title'=>'Roles', 'route'=>'/admin/users/roles', 'icon'=>'fa fa-unlock' ),
+        	        array( 'title'=>'Settings', 'route'=>'/admin/users/settings', 'icon'=>'fa fa-cogs' ),
+			);
+       		$users->addChildrenItems( $children, $root, $model );
         	
         	\Dsc\System::instance()->addMessage('Users added its admin menu items.');
         }
