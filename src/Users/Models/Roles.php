@@ -11,21 +11,12 @@ class Roles extends \Dsc\Mongo\Collections\Categories
         ),
     );    
     
+    private $__list_permissions = array();
+    
     protected function beforeValidate(){
     	if( !empty( $this->set_permissions ) ) {
-    		$permissions = (array) $this->set_permissions;
+    		$this->__list_permissions = (array) $this->set_permissions;
     		unset( $this->set_permissions );
-    		$acl = \Dsc\System::instance()->get('acl')->getAcl();
-    		
-    		foreach( $permissions as $resource => $actions ) {
-    			foreach( $actions as $action => $val ) {
-    				if( ((int)$val) == 1 ) {
-    					$acl->allow( $this->slug, $resource, $action );
-    				} else {
-    					$acl->deny( $this->slug, $resource, $action );
-    				}
-    			}
-    		}
     	}
     	
     	return parent::beforeValidate();
@@ -36,6 +27,24 @@ class Roles extends \Dsc\Mongo\Collections\Categories
         unset($this->cursor);
         
         return parent::beforeSave();
+    }
+    
+    protected  function afterSave(){
+		if( !empty( $this->_list_permissions ) ) {
+			$acl = \Dsc\System::instance()->get('acl')->getAcl();
+			    	
+			foreach( $this->_list_permissions as $resource => $actions ) {
+				foreach( $actions as $action => $val ) {
+					if( ((int)$val) == 1 ) {
+						$acl->allow( $this->slug, $resource, $action );
+					} else {
+						$acl->deny( $this->slug, $resource, $action );
+					}
+				}
+			}
+		}
+		    		 
+		return parent::afterSave();
     }
     
     public function getPermissions()
