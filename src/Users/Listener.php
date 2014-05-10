@@ -28,7 +28,7 @@ class Listener extends \Prefab
                     array( 'title'=>'Roles', 'route'=>'/admin/users/roles', 'icon'=>'fa fa-unlock' ),
         	        array( 'title'=>'Settings', 'route'=>'/admin/users/settings', 'icon'=>'fa fa-cogs' ),
 			);
-       		$users->addChildrenItems( $children, $root, $model );
+       		$users->addChildrenItems( $children, $root );
         	
         	\Dsc\System::instance()->addMessage('Users added its admin menu items.');
         }
