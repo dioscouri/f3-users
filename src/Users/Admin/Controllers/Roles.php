@@ -3,6 +3,9 @@ namespace Users\Admin\Controllers;
 
 class Roles extends \Admin\Controllers\BaseAuth 
 {
+	use \Dsc\Traits\Controllers\AdminList;
+	protected $list_route = '/admin/users/roles';
+	
 	protected function getModel($name='Role')
 	{
 	    switch (strtolower($name)) 

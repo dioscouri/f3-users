@@ -3,7 +3,10 @@ namespace Users\Admin\Controllers;
 
 class Groups extends \Admin\Controllers\BaseAuth 
 {   
-    protected function getModel()
+	use \Dsc\Traits\Controllers\AdminList;
+	protected $list_route = '/admin/users/groups';
+	
+	protected function getModel()
     {
         $model = new \Users\Models\Groups;
         return $model;
