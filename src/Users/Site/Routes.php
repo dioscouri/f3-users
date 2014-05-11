@@ -15,100 +15,110 @@ class Routes extends \Dsc\Routes\Group
     {
         $f3 = \Base::instance();
         
-        $this->setDefaults( array(
+        $this->setDefaults(array(
             'namespace' => '\Users\Site\Controllers',
-            'url_prefix' => '' 
-        ) );
+            'url_prefix' => ''
+        ));
         
-        $this->add( '/login', 'GET', array(
+        $this->add('/login', 'GET', array(
             'controller' => 'Login',
-            'action' => 'index' 
-        ) );
+            'action' => 'index'
+        ));
         
-        $this->add( '/sign-in', 'GET', array(
+        $this->add('/sign-in', 'GET', array(
             'controller' => 'Login',
-            'action' => 'only' 
-        ) );
+            'action' => 'only'
+        ));
         
-        $this->add( '/login', 'POST', array(
+        $this->add('/login', 'POST', array(
             'controller' => 'Login',
-            'action' => 'auth' 
-        ) );
+            'action' => 'auth'
+        ));
         
-        $this->add( '/logout', 'GET|POST', array(
+        $this->add('/logout', 'GET|POST', array(
             'controller' => 'Login',
-            'action' => 'logout' 
-        ) );
+            'action' => 'logout'
+        ));
         
-        $this->add( '/register', 'GET', array(
+        $this->add('/register', 'GET', array(
             'controller' => 'Login',
-            'action' => 'register' 
-        ) );
+            'action' => 'register'
+        ));
         
-        $this->add( '/register', 'POST', array(
+        $this->add('/register', 'POST', array(
             'controller' => 'Login',
-            'action' => 'create' 
-        ) );
+            'action' => 'create'
+        ));
         
-        $this->add( '/login/social', 'GET|POST', array(
+        $this->add('/login/social', 'GET|POST', array(
             'controller' => 'Login',
-            'action' => 'social' 
-        ) );
-
-        $this->add( '/login/social/auth/@provider', 'GET|POST', array(
+            'action' => 'social'
+        ));
+        
+        $this->add('/login/social/auth/@provider', 'GET|POST', array(
             'controller' => 'Login',
-            'action' => 'provider' 
-        ) );
-
-        $this->add( '/login/completeProfile', 'GET', array(
+            'action' => 'provider'
+        ));
+        
+        $this->add('/login/completeProfile', 'GET', array(
             'controller' => 'Login',
             'action' => 'completeProfileForm'
-        ) );
+        ));
         
-        $this->add( '/login/completeProfile', 'POST', array(
+        $this->add('/login/completeProfile', 'POST', array(
             'controller' => 'Login',
             'action' => 'completeProfile'
-        ) );
-
-        $this->add( '/login/validate', 'GET', array(
+        ));
+        
+        $this->add('/login/validate', 'GET', array(
             'controller' => 'Login',
             'action' => 'validate'
-        ) );
+        ));
         
-        $f3->route( 'POST /login/validate', function ( $f3 )
+        $f3->route('POST /login/validate', function ($f3)
         {
-            $token = $f3->get( 'REQUEST.token' );
-            $f3->reroute( '/login/validate/token/' . $token );
-        } );        
+            $token = $f3->get('REQUEST.token');
+            $f3->reroute('/login/validate/token/' . $token);
+        });
         
-        $this->add( '/login/validate/token/@token', 'GET', array(
+        $this->add('/login/validate/token/@token', 'GET', array(
             'controller' => 'Login',
             'action' => 'validateToken'
-        ) );
+        ));
         
-        $this->add( '/user/forgot-password', 'GET', array(
+        $this->add('/user/forgot-password', 'GET', array(
             'controller' => 'Forgot',
             'action' => 'password'
-        ) );
+        ));
         
-        $this->add( '/user/forgot-password', 'POST', array(
+        $this->add('/user/forgot-password', 'POST', array(
             'controller' => 'Forgot',
             'action' => 'passwordFindEmail'
-        ) );
+        ));
         
-        $this->add( '/user/forgot-password/email', 'GET', array(
+        $this->add('/user/forgot-password/email', 'GET', array(
             'controller' => 'Forgot',
             'action' => 'passwordEmailSent'
-        ) );
+        ));
         
-        $this->add( '/user/reset-password/@token', 'GET', array(
+        $this->add('/user/reset-password/@token', 'GET', array(
             'controller' => 'Forgot',
             'action' => 'passwordReset'
-        ) );
+        ));
         
-        $this->add( '/user/reset-password', 'POST', array(
+        $this->add('/user/reset-password', 'POST', array(
             'controller' => 'Forgot',
             'action' => 'passwordResetSubmit'
-        ) );
+        ));
+        
+        $this->add('/user/change-password', 'GET', array(
+            'controller' => 'Change',
+            'action' => 'password'
+        ));
+        
+        $this->add('/user/change-password', 'POST', array(
+            'controller' => 'Change',
+            'action' => 'passwordSubmit'
+        ));
     }
 }
