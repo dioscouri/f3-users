@@ -95,6 +95,18 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         {
             $this->setCondition('forgot_password.token', new \MongoId((string) $filter_forgot_password_token));
         }
+
+        $filter_new_email = $this->getState('filter.new_email');
+        if (strlen($filter_new_email))
+        {
+            $this->setCondition('change_email.email', $filter_new_email);
+        }
+        
+        $filter_new_email_token = $this->getState('filter.new_email_token');
+        if (strlen($filter_new_email_token))
+        {
+            $this->setCondition('change_email.token', (string) $filter_new_email_token);
+        }
         
         return $this;
     }
@@ -371,6 +383,26 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $subject = 'Password reset notification'; // TODO Add this to config?
     
         $this->__sendEmailPasswordResetNotification = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
+    
+        return $this;
+    }
+    
+    /**
+     * Send an email to this user to verify ownership of a new email address 
+     *
+     * @return \Users\Models\Users
+     */
+    public function sendEmailChangeEmailConfirmation()
+    {
+        \Base::instance()->set('user', $this);
+        
+        $new_email = $this->{'change_email.email'}; 
+    
+        $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/verify_change_email.php' );
+        $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_text/verify_change_email.php' );
+        $subject = 'Please verify your email address'; // TODO Add this to config?
+    
+        $this->__sendEmailPasswordResetNotification = \Dsc\System::instance()->get('mailer')->send($new_email, $subject, array($html, $text) );
     
         return $this;
     }

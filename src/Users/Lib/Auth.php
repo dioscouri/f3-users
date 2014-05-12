@@ -331,7 +331,7 @@ class Auth extends \Dsc\Singleton
     }
     
     /**
-     * Returns the current identity
+     * Sets the current identity
      *
      * @return array
      */

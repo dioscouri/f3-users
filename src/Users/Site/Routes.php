@@ -120,5 +120,25 @@ class Routes extends \Dsc\Routes\Group
             'controller' => 'Change',
             'action' => 'passwordSubmit'
         ));
+        
+        $this->add('/user/change-email', 'GET', array(
+            'controller' => 'Change',
+            'action' => 'email'
+        ));
+        
+        $this->add('/user/change-email', 'POST', array(
+            'controller' => 'Change',
+            'action' => 'emailSubmit'
+        ));
+        
+        $this->add('/user/change-email/verify', 'GET', array(
+            'controller' => 'Change',
+            'action' => 'emailVerify'
+        ));
+        
+        $this->add('/user/change-email/confirm', 'GET|POST', array(
+            'controller' => 'Change',
+            'action' => 'emailConfirm'
+        ));
     }
 }

@@ -1,4 +1,11 @@
 <div class="container">
+    <ol class="breadcrumb">
+        <li>
+            <a href="./user">My Account</a>
+        </li>
+        <li class="active">Change Password</li>
+    </ol>
+    
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <legend>
@@ -19,7 +26,7 @@
                     <input class="form-control" name="confirm_new_password" placeholder="Confirm New Password" type="password" required />
                 </div>
                             
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Update password</button>
+                <button class="btn btn-lg btn-primary" type="submit">Update password</button>
                 
             </form>
         </div>

@@ -31,7 +31,7 @@ class Forgot extends \Dsc\Controller
         
         // create a forgot_password array, with a MongoId and a metastamp
         $user->forgot_password = array(
-        	'token' => new \MongoId,
+        	'token' => (string) new \MongoId,
             'created' => \Dsc\Mongo\Metastamp::getDate('now')
         );
         
