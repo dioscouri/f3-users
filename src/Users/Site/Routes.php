@@ -140,5 +140,10 @@ class Routes extends \Dsc\Routes\Group
             'controller' => 'Change',
             'action' => 'emailConfirm'
         ));
+        
+        $this->add('/user/social-profiles', 'GET', array(
+            'controller' => 'User',
+            'action' => 'socialProfiles'
+        ));
     }
 }

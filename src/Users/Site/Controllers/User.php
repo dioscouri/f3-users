@@ -66,4 +66,34 @@ class User extends Auth
     
         return $item;
     }
+    
+    /**
+     * Displays the logged-in user's list of linked social profiles
+     */
+    public function socialProfiles()
+    {
+        $f3 = \Base::instance();
+        
+        $identity = $this->getIdentity();
+        if (empty($identity->id))
+        {
+            $f3->reroute( '/login' );
+            return;
+        }
+        
+        if (!empty($identity->__safemode))
+        {
+            $user = $identity;
+        }
+        else
+        {
+            $model = $this->getModel()->setState( 'filter.id', $identity->id );
+            $user = $model->getItem();
+        }
+        
+        $f3->set('user', $user);
+        
+        $view = \Dsc\System::instance()->get('theme');
+        echo $view->render( 'Users/Site/Views::social/profiles.php' );        
+    }
 }
