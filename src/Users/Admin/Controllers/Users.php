@@ -34,10 +34,6 @@ class Users extends \Admin\Controllers\BaseAuth
         $paginated = $model->paginate();
         \Base::instance()->set('paginated', $paginated );
         
-        $model = $this->getModel('groups');
-        $groups = $model->getList();
-        \Base::instance()->set('groups', $groups );
-        
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render('Users/Admin/Views::users/list.php');
     }

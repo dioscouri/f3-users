@@ -22,7 +22,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     
     protected $__config = array(
         'default_sort' => array(
-            'username' => 1
+            'last_visit.time' => -1
         )
     );
 

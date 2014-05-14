@@ -11,7 +11,7 @@
 	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
         <ul id="sparks" class="list-actions list-unstyled list-inline">
             <li>
-                <a class="btn btn-default" href="./admin/user/create">Add New</a>
+                <a class="btn btn-success" href="./admin/user/create">Add New</a>
             </li>
         </ul>            	
 	</div>
@@ -23,19 +23,18 @@
     
         <div class="row">
             <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
-                <?php /* ?>
+
                 <ul class="list-filters list-unstyled list-inline">
                     <li>
-                        <a class="btn btn-link">Advanced Filtering</a>
+                        <select id="group_filter" name="filter[group]" class="form-control" onchange="this.form.submit();">
+                            <option value="">All Groups</option>
+                            <?php foreach (\Users\Models\Groups::find() as $group) : ?>
+                                <option <?php if($state->get('filter.group') == $group->id) { echo 'selected'; } ?> value="<?php echo $group->_id; ?>"><?php echo $group->name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </li>                
-                    <li>
-                        <a class="btn btn-link">Quicklink Filter</a>
-                    </li>
-                    <li>
-                        <a class="btn btn-link">Quicklink Filter</a>
-                    </li>                    
                 </ul>    
-                */ ?>
+
             </div>
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
                 <div class="form-group">
@@ -50,10 +49,41 @@
             </div>
         </div>
         
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <ul class="list-filters list-unstyled list-inline">
+                    <li>
+                        <select name="list[order]" class="form-control" onchange="this.form.submit();">
+                            <option value="last_visit.time" <?php if ($state->get('list.order') == 'last_visit.time') { echo "selected='selected'"; } ?>>Last Visit</option>
+                            <option value="metadata.created.time" <?php if ($state->get('list.order') == 'metadata.created.time') { echo "selected='selected'"; } ?>>Registered</option>
+                        </select>
+                    </li>
+                    <li>
+                        <select name="list[direction]" class="form-control" onchange="this.form.submit();">
+                            <option value="1" <?php if ($state->get('list.direction') == '1') { echo "selected='selected'"; } ?>>ASC</option>
+                            <option value="-1" <?php if ($state->get('list.direction') == '-1') { echo "selected='selected'"; } ?>>DESC</option>
+                        </select>                        
+                    </li>
+                </ul>            
+            </div>
+            
+            <div class="col-xs-12 col-sm-6">
+                <div class="text-align-right">
+                <ul class="list-filters list-unstyled list-inline">
+                    <li>
+                        <?php if (!empty($paginated->items)) { ?>
+                        <?php echo $paginated->getLimitBox( $state->get('list.limit') ); ?>
+                        <?php } ?>
+                    </li>                
+                </ul>    
+                </div>
+            </div>
+        </div>
+        
         <div class="widget-body-toolbar">    
     
             <div class="row">
-                <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3">
+                <div class="col-xs-12 col-sm-6 col-lg-3">
                     <span class="pagination">
                     <div class="input-group">
                         <select id="bulk-actions" name="bulk_action" class="form-control">
@@ -66,19 +96,10 @@
                     </div>
                     </span>
                 </div>    
-                <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
-                    <div class="row text-align-right">
-                        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <?php if (!empty($paginated->total_pages) && $paginated->total_pages > 1) { ?>
-                                <?php echo $paginated->serve(); ?>
-                            <?php } ?>
-                        </div>
-                        <?php if (!empty($paginated->items)) { ?>
-                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                            <span class="pagination">
-                            <?php echo $paginated->getLimitBox( $state->get('list.limit') ); ?>
-                            </span>
-                        </div>
+                <div class="col-xs-12 col-sm-6 col-lg-6 col-lg-offset-3">
+                    <div class="text-align-right">
+                        <?php if (!empty($paginated->total_pages) && $paginated->total_pages > 1) { ?>
+                            <?php echo $paginated->serve(); ?>
                         <?php } ?>
                     </div>            
                 </div>
@@ -87,92 +108,54 @@
         </div>
         <!-- /.widget-body-toolbar -->
         
-        <input type="hidden" name="list[order]" value="<?php echo $state->get('list.order'); ?>" />
-        <input type="hidden" name="list[direction]" value="<?php echo $state->get('list.direction'); ?>" />
-        
-        <div class="table-responsive datatable dt-wrapper dataTables_wrapper">
-        
-        <table class="table table-striped table-bordered table-hover table-highlight table-checkable">
-		<thead>
-			<tr>
-				<th class="col-sm-1 col-md-1 col-lg-1 checkbox-column"><input type="checkbox" class="icheck-input"></th>
-                <th data-sortable="username">Username</th>
-                <th data-sortable="email">Email</th>
-                <th>First Name</th>
-                <th data-sortable="last_name">Last Name</th>
-                <th>Groups</th>
-                <th class="col-sm-1 col-md-1 col-lg-1"></th>
-            </tr>
-			<tr class="filter-row">
-				<th></th>
-                <th>
-                    <input placeholder="Username" name="filter[username-contains]" value="<?php echo $state->get('filter.username-contains'); ?>" type="text" class="form-control input-sm">
-                </th>
-                <th>
-                    <input placeholder="Email" name="filter[email-contains]" value="<?php echo $state->get('filter.email-contains'); ?>" type="text" class="form-control input-sm">
-                </th>
-                <th></th>
-                <th></th>
-                <th><select  id="group_filter" name="filter[group]" class="form-control" >
-                <option value="">-Group Filter-</option>
-                <?php foreach (@$groups as $group) : ?>
-                <option <?php if($state->get('filter.group') == $group->id) { echo 'selected'; } ?> value="<?=$group->_id;?>"><?=$group->name;?></option>
-                <?php endforeach; ?>
-            </select></th>
-                <th><button class="btn " type="sumbit">Filter</button></th>
-            </tr>
-		</thead>
-		<tbody>    
-        
         <?php if (!empty($paginated->items)) { ?>
     
             <?php foreach($paginated->items as $item) { ?>
-                <tr>
-	                <td class="checkbox-column">
-	                    <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
-	                </td>                
-                    <td class="">
-                        <a href="./admin/user/edit/<?php echo $item->id; ?>">
-                            <?php echo $item->username; ?>
-                        </a>
-                    </td>
-                    <td class="">
-                        <?php echo $item->email; ?>
-                    </td>
-                    <td class="">
-                        <?php echo $item->first_name; ?>
-                    </td>
-                    <td class="">
-                        <?php echo $item->last_name; ?>
-                    </td>
-                    <td class="">
-                        <?php echo implode(", ", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?>                        
-                    </td>
-                    <td class="text-center">
-                        <a class="btn btn-xs btn-secondary" href="./admin/user/edit/<?php echo $item->id; ?>">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-	                    &nbsp;
-	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/delete/<?php echo $item->id; ?>">
-	                        <i class="fa fa-times"></i>
-	                    </a>
-                    </td>
-                </tr>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-2 col-md-1">
+                            <input type="checkbox" class="icheck-input" name="ids[]" value="<?php echo $item->id; ?>">
+                        </div>
+                        <div class="col-xs-10 col-md-4">
+                            <h4>
+                                <a href="./admin/user/edit/<?php echo $item->id; ?>">
+                                    <?php echo $item->fullName(); ?>
+                                </a>
+                            </h4>
+                            <div>
+                                <a href="./admin/user/edit/<?php echo $item->id; ?>">
+                                    <?php echo $item->email; ?>
+                                </a>
+                            </div>
+                            <div>
+                                <label>Username:</label> <?php echo $item->username; ?>
+                            </div>                            
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-2 col-md-6 col-md-offset-0">
+                            <div>
+                                <label>Last Visit:</label> <?php echo date( 'Y-m-d', $item->{'last_visit.time'} ); ?> 
+                            </div>
+                            <div>
+                                <label>Registered:</label> <?php echo date( 'Y-m-d', $item->{'metadata.created.time'} ); ?> 
+                            </div>
+                            <div>
+                                <?php echo implode(", ", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?>
+                            </div>                        
+                        </div>
+                        <div class="hidden-xs hidden-sm col-md-1">
+    	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/delete/<?php echo $item->id; ?>">
+    	                        <i class="fa fa-times"></i>
+    	                    </a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php } ?>
         
         <?php } else { ?>
-            <tr>
-            <td colspan="100">
                 <div class="">No items found.</div>
-            </td>
-            </tr>
         <?php } ?>
-
-        </tbody>
-        </table>
-    
-        </div>
-        <!-- /.table-responsive .datatable .dt-wrapper -->
         
         <div class="dt-row dt-bottom-row">
             <div class="row">
