@@ -21,6 +21,15 @@
                 </div>
                 <!-- /.form-group -->
                 */ ?>
+                
+                <div class="form-group">
+                    <label>Include Username in registration form?</label>
+                    <select name="general[registration][username]" class="form-control">
+                        <option value="1" <?php if ($flash->old('general.registration.username') == '1') { echo "selected='selected'"; } ?>>Yes</option>
+                        <option value="0" <?php if ($flash->old('general.registration.username') == '0') { echo "selected='selected'"; } ?>>No</option>                        
+                    </select>                
+                </div>
+                <!-- /.form-group -->
 
                 <div class="form-group">
                     <label>After registration:</label>
