@@ -24,9 +24,9 @@ class Routes extends \Dsc\Routes\Group
         $this->addCrudGroup( 'Users', 'User' );
         
         $this->addCrudGroup( 'Groups', 'Group', array(
-            'prefix_url' => '/users/groups' 
+            'url_prefix' => '/users/groups' 
         ), array(
-            'prefix_url' => '/users/group' 
+            'url_prefix' => '/users/group' 
         ) );
         
         $this->add( '/users/group/moveup/@id', 'GET', array(
@@ -48,9 +48,9 @@ class Routes extends \Dsc\Routes\Group
         ) );
         
         $this->addCrudGroup( 'Roles', 'Role', array(
-            'prefix_url' => '/users/roles' 
+            'url_prefix' => '/users/roles' 
         ), array(
-            'prefix_url' => '/users/role' 
+            'url_prefix' => '/users/role' 
         ) );
     }
 }
