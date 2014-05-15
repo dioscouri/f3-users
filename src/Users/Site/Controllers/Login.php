@@ -111,102 +111,75 @@ class Login extends \Dsc\Controller
             'new_password' => $this->input->get( 'new_password', null, 'string' ),
             'confirm_new_password' => $this->input->get( 'confirm_new_password', null, 'string' )            
         );
-        
-        $user = (new \Users\Models\Users)->bind($data);
-        
-        // Check if the email already exists and give a custom message if so
-        if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
-        {
-            if ((empty($user->id) || $user->id != $existing->id))
-            {
-                // This email is already registered
-                // Push the user back to the login page,
-                // and tell them that they must first sign-in using another method (the one they previously setup),
-                // then upon login, they can link this current social provider to their existing account
-                \Dsc\System::addMessage( 'This email is already registered.', 'error' );
-                
-                \Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
-                $flash = \Dsc\Flash::instance();
-                $flash->store($user->cast());
-                        
-                $f3->reroute( '/register' );
-        
-                return;
-            }
-        }
-        
-        try
-        {
-            // this will handle other validations, such as username uniqueness, etc
-            $user->save();
-        }
-        catch(\Exception $e)
-        {
-            \Dsc\System::addMessage( 'Save failed', 'error' );
-            \Dsc\System::addMessage( $e->getMessage(), 'error' );
-        
-            \Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
-            $flash = \Dsc\Flash::instance();
-            $flash->store($user->cast());
-        
-            $f3->reroute('/register');
-        
-            return;
-        }
-        
-        // if we have reached here, then all is right with the form
-        $flash = \Dsc\Flash::instance();
-        $flash->store(array());
-        
-        $settings = \Users\Models\Settings::fetch();
-        $registration_action = $settings->{'general.registration.action'};
-        switch ($registration_action)
-        {
-        	case "auto_login":
-        	    $user->active = true;
-        	    $user->save();
-        	    
-        	    \Dsc\System::instance()->get( 'auth' )->login( $user );
-        	    
-        	    $redirect = '/user';
-        	    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
-        	    {
-        	        $redirect = $custom_redirect;
-        	    }
-        	    \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
-        	     
-        	    break;
-        	case "auto_login_with_validation":
-        	    $user->active = false;
-        	    $user->save();
-        	            	    
-        	    \Dsc\System::instance()->get( 'auth' )->login( $user );
-        	    
-        	    $redirect = '/user';
-        	    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
-        	    {
-        	        $redirect = $custom_redirect;
-        	    }
-        	    \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        $registration_action = \Users\Models\Settings::fetch()->{'general.registration.action'};
 
-        	    // Send validation email
-        	    $user->sendEmailValidatingEmailAddress();
-        	    
-        	    break;
-        	default:
-        	    $user->active = false;
-        	    $user->save();
-        	            	    
-        	    $redirect = '/login/validate';
-        	    
-        	    // Send validation email
-                $user->sendEmailValidatingEmailAddress();
-        	    
-        	    break;
+        try{
+        	$user = (new \Users\Models\Users)->createNewUser( $data, $registration_action );
+        	
+        	if( empty( $user ) ){ // Email already exists
+        		// This email is already registered
+        		// Push the user back to the login page,
+        		// and tell them that they must first sign-in using another method (the one they previously setup),
+        		// then upon login, they can link this current social provider to their existing account
+        		\Dsc\System::addMessage( 'This email is already registered.', 'error' );
+        		
+        		\Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
+        		$flash = \Dsc\Flash::instance();
+        		$flash->store($data);
+        		
+        		$f3->reroute( '/register' );
+        	} else { // everything went OK
+        		// if we have reached here, then all is right with the form
+        		$flash = \Dsc\Flash::instance();
+        		$flash->store(array());
+
+        		switch ($registration_action)
+        		{
+        			case "auto_login":
+        				$redirect = '/user';
+        				if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+        				{
+        					$redirect = $custom_redirect;
+        				}
+        				\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        		
+        				break;
+        			case "auto_login_with_validation":
+        				$redirect = '/user';
+        				if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+        				{
+        					$redirect = $custom_redirect;
+        				}
+        				\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        		
+        				// Send validation email
+        				$user->sendEmailValidatingEmailAddress();
+        				 
+        				break;
+        			default:
+        				$redirect = '/login/validate';
+        				 
+        				// Send validation email
+        				$user->sendEmailValidatingEmailAddress();
+        				 
+        				break;
+        		}
+        		
+        		// redirect to the requested target, or the default if none requested
+        		\Base::instance()->reroute( $redirect );
+        	}
+        } catch( \Exception $e ){
+        	\Dsc\System::addMessage( 'Save failed', 'error' );
+        	\Dsc\System::addMessage( $e->getMessage(), 'error' );
+        	
+        	\Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
+        	$flash = \Dsc\Flash::instance();
+        	$flash->store($data);
+        	
+        	$f3->reroute('/register');
         }
-        
-        // redirect to the requested target, or the default if none requested
-        \Base::instance()->reroute( $redirect );
+
+    	return;
     }
 
     /**
@@ -430,12 +403,21 @@ class Login extends \Dsc\Controller
         $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
         $email = $this->input->get( 'email', null, 'string' );
         $username = $this->input->get( 'username', null, 'string' );
-        $response = -1;
         
         try{
-        	$response = (new \Users\Models\Users)->completeProfile($data, $email, $username );
+        	$user = (new \Users\Models\Users)->completeProfile($data, $email, $username );
         	
-        	if( $response == 0 ) { // everything is OK
+        	if( empty( $user ) ) { // email alreasy exists
+        		// This email is already registered
+        		// Push the user back to the login page,
+        		// and tell them that they must first sign-in using another method (the one they previously setup),
+        		// then upon login, they can link this current social provider to their existing account
+        		\Dsc\System::addMessage( 'This email is already registered.', 'error' );
+        		\Dsc\System::addMessage( 'Please login using the registered email address or with the other social profile that also uses this email address.', 'error' );
+        		\Dsc\System::addMessage( 'Once you are logged in, you may link additional social profiles to your account.', 'error' );
+        		
+        		$f3->reroute( '/login' );
+        	} else {
         		// if we have reached here, then all is right with the world.  login the user.
         		\Dsc\System::instance()->get( 'auth' )->login( $user );
         		
@@ -449,19 +431,6 @@ class Login extends \Dsc\Controller
         		}
         		\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
         		\Base::instance()->reroute( $redirect );
-        		
-        	} else { // email already exists
-        		// This email is already registered
-        		// Push the user back to the login page,
-        		// and tell them that they must first sign-in using another method (the one they previously setup),
-        		// then upon login, they can link this current social provider to their existing account
-        		\Dsc\System::addMessage( 'This email is already registered.', 'error' );
-        		\Dsc\System::addMessage( 'Please login using the registered email address or with the other social profile that also uses this email address.', 'error' );
-        		\Dsc\System::addMessage( 'Once you are logged in, you may link additional social profiles to your account.', 'error' );
-        		
-        		$f3->reroute( '/login' );
-        		
-        		return;
         	}
         } catch( \Exception $e ){
         	\Dsc\System::addMessage( 'Save failed', 'error' );
@@ -474,9 +443,8 @@ class Login extends \Dsc\Controller
         	$flash->store($data);
         	
         	$f3->reroute('/login/completeProfile');
-        	
-        	return;
         }
+       	return;
     }
     
     /**

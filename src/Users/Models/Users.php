@@ -488,6 +488,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
    		}
    		$user->active = true;
    		$user->save();
+   		return $user;
     }
     
 
@@ -496,7 +497,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      * 
      * @throws	\Exception
      * 
-     * @return Code of error (0 means everything went OK; 1 means email already exists;) 
+	 * @return	Returns User model
      */
     public function completeProfile($data, $email, $username ){
     	$user = (new \Users\Models\Users)->bind($data);
@@ -509,13 +510,69 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     	{
     		if ((empty($user->id) || $user->id != $existing->id))
     		{
-    			return 1;
+    			return null;
     		}
     	}
     	
    		// this will handle other validations, such as username uniqueness, etc
    		$user->save();
 
-   		return 0;
+   		return $user;
 	}
+	
+	/**
+	 * Creates the user
+	 * (target for the register form)
+	 * 
+	 * @return	Returns User model
+	 */
+	public function createNewUser($data, $registration_action = '' )
+	{
+		$f3 = \Base::instance();
+	
+		$user = (new \Users\Models\Users)->bind($data);
+	
+		// Check if the email already exists and give a custom message if so
+		if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
+		{
+			if ((empty($user->id) || $user->id != $existing->id))
+			{
+				return null;
+			}
+		}
+	
+		// this will handle other validations, such as username uniqueness, etc
+		$user->save();
+	
+		if( strlen( $registration_action ) == 0 ){
+			$registration_action = \Users\Models\Settings::fetch()->{'general.registration.action'};
+		}
+		switch ($registration_action)
+		{
+			case "auto_login":
+				$user->active = true;
+				$user->save();
+        		\Dsc\System::instance()->get( 'auth' )->login( $user );
+				
+        		break;
+			case "auto_login_with_validation":
+				$user->active = false;
+				$user->save();
+				\Dsc\System::instance()->get( 'auth' )->login( $user );
+				 
+				
+				// Send validation email
+				$user->sendEmailValidatingEmailAddress();				 
+				break;
+			default:
+				$user->active = false;
+				$user->save();
+
+				// Send validation email
+				$user->sendEmailValidatingEmailAddress();				 
+				break;
+		}
+		return $user;
+	}
+	
 }
