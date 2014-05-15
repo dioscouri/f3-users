@@ -52,5 +52,16 @@ class Settings extends \Dsc\Mongo\Collections\Settings
 		}
 		
 		return $result;
-	} 
+	}
+
+	public function enabledSocialProviders(){
+		
+		$providers = array();
+		foreach( (array) $this->{'social.providers'} as $network => $opts ) {
+			if( $this->isSocialLoginEnabled(strtolower( $network )) ) {
+				$providers []= strtolower( $network );
+			}
+		}
+		return $providers;
+	}
 }

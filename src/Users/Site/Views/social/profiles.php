@@ -1,12 +1,7 @@
 <?php 
 	// find out how many social account the user can link to
 	$settings = \Users\Models\Settings::fetch();
-	$providers = array();
-	foreach( (array) $settings->{'social.providers'} as $network => $opts ) {
-		if( $settings->isSocialLoginEnabled(strtolower( $network )) ) {
-			$providers []= strtolower( $network );
-		}
-	}
+	$providers = $settings->enabledSocialProviders();
 ?>
 
 <div class="container">

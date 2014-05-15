@@ -26,7 +26,10 @@
         </div>
         
         <?php 
-        if (class_exists('Hybrid_Auth')) 
+        $settings = \Users\Models\Settings::fetch();
+        $providers = $settings->enabledSocialProviders();
+        
+        if (class_exists('Hybrid_Auth') && count($providers)) 
         {
             ?>
             <div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-1">
