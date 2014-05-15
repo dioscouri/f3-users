@@ -145,5 +145,10 @@ class Routes extends \Dsc\Routes\Group
             'controller' => 'User',
             'action' => 'socialProfiles'
         ));
+
+        $this->add('/user/social/unlink/@provider', 'GET', array(
+        		'controller' => 'User',
+        		'action' => 'unlinkSocialProfile'
+        ));
     }
 }
