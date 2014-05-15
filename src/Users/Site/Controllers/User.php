@@ -96,4 +96,31 @@ class User extends Auth
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::social/profiles.php' );        
     }
+    
+    public function unlinkSocialProfile(){
+    	$f3 = \Base::instance();
+    	$provider = strtolower( $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' ) );
+    	 
+    	$identity = $this->getIdentity();
+    	if (empty($identity->id))
+    	{
+    		$f3->reroute( '/login' );
+    		return;
+    	}
+    	
+    	if (!empty($identity->__safemode))
+    	{
+    		$user = $identity;
+    	}
+    	else
+    	{
+    		$model = $this->getModel()->setState( 'filter.id', $identity->id );
+    		$user = $model->getItem();
+    	}
+    	
+    	$user->clear( 'social.'.$provider );
+    	$user->save();
+    	$f3->reroute( '/user/social-profiles' );
+    	return; 
+    }
 }

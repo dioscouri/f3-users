@@ -1,3 +1,14 @@
+<?php 
+	// find out how many social account the user can link to
+	$settings = \Users\Models\Settings::fetch();
+	$providers = array();
+	foreach( (array) $settings->{'social.providers'} as $network => $opts ) {
+		if( !empty( $opts['enabled'] ) && $opts['enabled'] == '1' ) {
+			$providers []= strtolower( $network );
+		}
+	}
+?>
+
 <div class="container">
     <ol class="breadcrumb">
         <li>
@@ -14,14 +25,49 @@
         </div>
     </div>
     <div class="row">
+    	<h3>Connected Accounts</h3>
+    	<?php if( empty( $user->social ) ) { ?>
         <div class="col-xs-12 col-sm-12 col-md-4">
-            <p>First display the list of the user's linked social profiles.</p>
+    		<p>Currently, you do not have any social profiles linked to your account.</p>
         </div>
+    	<?php } else  {
+        	foreach( $user->social as $network => $profile ) { 
+			// delete this network from list of networks to add link to
+			if( ( $pos = in_array( $network, $providers ) ) !== false ) {
+				unset( $providers[$pos] );
+			}
+
+			$profile_img = \Dsc\ArrayHelper::get($profile, 'profile.photoURL');
+			$name = \Dsc\ArrayHelper::get($profile, 'profile.displayName');
+			if( empty( $profile_img ) ) {
+				$profile_img = './minify/Users/Assets/images/empty_profile.png';
+			}
+		?>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+        	<h4><?php echo ucwords($network); ?></h4>
+        	<div style="text-align : center;">
+				<img src="<?php echo $profile_img; ?>" alt="<?php echo $name; ?>" class="img-rounded center-block" style="margin : 0 auto;" />
+				<div>
+					<a href="<?php echo \Dsc\ArrayHelper::get($profile, 'profile.profileURL'); ?>" target="_blank"><?php echo $name;?></a>
+					- <a href="./user/social/unlink/<?php echo $network; ?>" class="text-danger">Unlink</a>
+				</div>
+        	</div>
+        </div>        	
+       <?php
+        	}
+        }?>
     </div>
     
+    <?php if( !empty($providers ) ) { ?>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-4">
-            <p>Then display the list of available social profiles (the ones that are configured and enabled in the f3-users admin) that the user has not linked with their account.  Each option should be a clickable button so that the user can link those profiles to their account with one-click.</p>
+    	<h3>Link your profile with</h3>
+    	<div class="col-xs-12 col-sm-12 col-md-4">
+    	<ul>
+    		<?php foreach( $providers as $network ) { ?>
+    		<li><a href="./login/social/auth/<?php echo $network;?>"><?php echo ucwords( $network ); ?> profile</a></li>
+    		<?php } ?>
+    	</ul>
         </div>
     </div>
+    <?php } ?>
 </div>
