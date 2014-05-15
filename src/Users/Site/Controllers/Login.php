@@ -428,65 +428,55 @@ class Login extends \Dsc\Controller
         $f3 = \Base::instance();
         
         $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
-        $user = (new \Users\Models\Users)->bind($data);
-         
         $email = $this->input->get( 'email', null, 'string' );
-        $user->email = $email;
-
         $username = $this->input->get( 'username', null, 'string' );
-        $user->username = $username;
+        $response = -1;
         
-        // Check if the email already exists and give a custom message if so
-        if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
-        {
-            if ((empty($user->id) || $user->id != $existing->id))
-            {
-                // This email is already registered
-                // Push the user back to the login page,
-                // and tell them that they must first sign-in using another method (the one they previously setup),
-                // then upon login, they can link this current social provider to their existing account
-                \Dsc\System::addMessage( 'This email is already registered.', 'error' );
-                \Dsc\System::addMessage( 'Please login using the registered email address or with the other social profile that also uses this email address.', 'error' );
-                \Dsc\System::addMessage( 'Once you are logged in, you may link additional social profiles to your account.', 'error' );
-                
-                $f3->reroute( '/login' );
-                
-                return;
-            }
+        try{
+        	$response = (new \Users\Models\Users)->completeProfile($data, $email, $username );
+        	
+        	if( $response == 0 ) { // everything is OK
+        		// if we have reached here, then all is right with the world.  login the user.
+        		\Dsc\System::instance()->get( 'auth' )->login( $user );
+        		
+        		\Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );
+        		
+        		// redirect to the requested target, or the default if none requested
+        		$redirect = '/user';
+        		if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
+        		{
+        			$redirect = $custom_redirect;
+        		}
+        		\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        		\Base::instance()->reroute( $redirect );
+        		
+        	} else { // email already exists
+        		// This email is already registered
+        		// Push the user back to the login page,
+        		// and tell them that they must first sign-in using another method (the one they previously setup),
+        		// then upon login, they can link this current social provider to their existing account
+        		\Dsc\System::addMessage( 'This email is already registered.', 'error' );
+        		\Dsc\System::addMessage( 'Please login using the registered email address or with the other social profile that also uses this email address.', 'error' );
+        		\Dsc\System::addMessage( 'Once you are logged in, you may link additional social profiles to your account.', 'error' );
+        		
+        		$f3->reroute( '/login' );
+        		
+        		return;
+        	}
+        } catch( \Exception $e ){
+        	\Dsc\System::addMessage( 'Save failed', 'error' );
+        	\Dsc\System::addMessage( $e->getMessage(), 'error' );
+        	
+        	\Dsc\System::instance()->setUserState('users.site.login.complete_profile.flash_filled', true);
+        	$flash = \Dsc\Flash::instance();
+        	$data['username'] = $username;
+        	$data['email'] = $mail;
+        	$flash->store($data);
+        	
+        	$f3->reroute('/login/completeProfile');
+        	
+        	return;
         }
-        
-        try 
-        {
-            // this will handle other validations, such as username uniqueness, etc
-            $user->save();
-        } 
-        catch(\Exception $e) 
-        {
-            \Dsc\System::addMessage( 'Save failed', 'error' );
-            \Dsc\System::addMessage( $e->getMessage(), 'error' );
-
-            \Dsc\System::instance()->setUserState('users.site.login.complete_profile.flash_filled', true);
-            $flash = \Dsc\Flash::instance();
-            $flash->store($user->cast());
-            
-            $f3->reroute('/login/completeProfile');
-            
-            return;
-        }
-
-        // if we have reached here, then all is right with the world.  login the user.
-        \Dsc\System::instance()->get( 'auth' )->login( $user );
-        
-        \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', array() );
-
-        // redirect to the requested target, or the default if none requested
-        $redirect = '/user';
-        if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
-        {
-            $redirect = $custom_redirect;
-        }
-        \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
-        \Base::instance()->reroute( $redirect );
     }
     
     /**
@@ -508,26 +498,14 @@ class Login extends \Dsc\Controller
         $f3 = \Base::instance();
         $token = $this->inputfilter->clean( $f3->get('PARAMS.token'), 'alnum' );
         
-        try {
-            
-            $user = (new \Users\Models\Users)->setState('filter.id', $token)->getItem();
-            if (empty($user->id) || $token != (string) $user->id) 
-            {
-            	throw new \Exception( 'Invalid Token' );
-            }
-            $user->active = true;
-            $user->save();
-            
-        } catch (\Exception $e) {
-
-            \Dsc\System::addMessage( 'Email validation failed.  Please confirm the token and try again.', 'error' );
-            \Dsc\System::addMessage( $e->getMessage(), 'error' );
-            \Base::instance()->reroute( '/login/validate' );
-            return;            
+        try{
+        	(new \Users\Models\Users)->validateLoginToken( $token );
+        	\Dsc\System::addMessage( 'Thank you for validating your email address. You may now login.' );
+        	\Base::instance()->reroute( '/login' );
+        } catch( \Exception $e ){
+        	\Dsc\System::addMessage( 'Email validation failed.  Please confirm the token and try again.', 'error' );
+        	\Dsc\System::addMessage( $e->getMessage(), 'error' );
+        	\Base::instance()->reroute( '/login/validate' );
         }
-
-        // redirect to login
-        \Dsc\System::addMessage( 'Thank you for validating your email address. You may now login.' );
-        \Base::instance()->reroute( '/login' );
     }
 }

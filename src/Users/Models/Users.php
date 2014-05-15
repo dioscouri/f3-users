@@ -25,6 +25,12 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             'last_visit.time' => -1
         )
     );
+        
+    private $__default_response = array(
+    		'code' => -1,
+    		'error' => null,
+    );
+    
 
     protected function fetchConditions()
     {
@@ -467,4 +473,49 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         
         return $this->save(); 
     }
+
+    /**
+     * Validates a token, usually from clicking on a link in an email
+     *
+     *@throws \Exception
+     */
+    public function validateLoginToken( $token )
+    {
+   		$user = (new static())->setState('filter.id', $token)->getItem();
+   		if (empty($user->id) || $token != (string) $user->id)
+   		{
+   			throw new \Exception( 'Invalid Token' );
+   		}
+   		$user->active = true;
+   		$user->save();
+    }
+    
+
+    /**
+     * Complets user profile
+     * 
+     * @throws	\Exception
+     * 
+     * @return Code of error (0 means everything went OK; 1 means email already exists;) 
+     */
+    public function completeProfile($data, $email, $username ){
+    	$user = (new \Users\Models\Users)->bind($data);
+    	$user->email = $email;
+    	$user->username = $username;
+    	
+    	
+    	// Check if the email already exists and give a custom message if so
+    	if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
+    	{
+    		if ((empty($user->id) || $user->id != $existing->id))
+    		{
+    			return 1;
+    		}
+    	}
+    	
+   		// this will handle other validations, such as username uniqueness, etc
+   		$user->save();
+
+   		return 0;
+	}
 }
