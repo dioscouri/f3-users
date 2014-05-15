@@ -279,7 +279,7 @@ class Login extends \Dsc\Controller
                 $user = (new \Users\Models\Users)->setState( 'filter.email', $user_profile->email )->getItem();
                 if (!empty($user->id))
                 {
-                    $user->set( 'social.' . $provider . 'profile', (array) $adapter->getUserProfile() );
+                    $user->set( 'social.' . $provider . '.profile', (array) $adapter->getUserProfile() );
                     $user->save();
                     
                     \Dsc\System::instance()->get( 'auth' )->login( $user );

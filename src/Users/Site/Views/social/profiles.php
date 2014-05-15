@@ -58,7 +58,9 @@
         }?>
     </div>
     
-    <?php if( !empty($providers ) ) { ?>
+    <?php if( !empty($providers ) ) { 
+    	\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', '/user/social-profiles' );
+    	?>
     <div class="row">
     	<h3>Link your profile with</h3>
     	<div class="col-xs-12 col-sm-12 col-md-4">
