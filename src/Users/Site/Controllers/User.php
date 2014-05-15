@@ -74,6 +74,11 @@ class User extends Auth
     {
         $f3 = \Base::instance();
         
+        if( !class_exists( 'Hybrid_Auth' ) ) { // no social logins are supported
+        	$f3->reroute( '/' );
+        	return;
+        }
+        
         $identity = $this->getIdentity();
         if (empty($identity->id))
         {

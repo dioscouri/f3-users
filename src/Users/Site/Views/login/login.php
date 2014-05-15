@@ -30,7 +30,6 @@
         {
             ?>
             <div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-1">
-            <?php // TODO Only display this if there is a properly configured, enabled Provider ?>
             <legend>
                 or with a social profile
             </legend>

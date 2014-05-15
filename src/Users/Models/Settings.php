@@ -13,4 +13,44 @@ class Settings extends \Dsc\Mongo\Collections\Settings
     public $social = array();
     
     protected $__type = 'users.settings';
+
+	public function isSocialLoginEnabled( $provider ) {
+		if (!class_exists('Hybrid_Auth')){ // no social profiles are allowed unless there is Hybrid Auth
+			return false;
+		}
+
+		$result = false;
+		switch( $provider ){
+			case 'facebook':
+				{
+					$result = $this->{'social.providers.Facebook.enabled'} && 
+								$this->{'social.providers.Facebook.keys.id'} &&
+								$this->{'social.providers.Facebook.keys.secret'};
+					break;
+				}
+			case 'twitter':
+				{
+					$result = $this->{'social.providers.Twitter.enabled'} &&
+								$this->{'social.providers.Twitter.keys.key'} &&
+								$this->{'social.providers.Twitter.keys.secret'};
+					break;
+				}
+			case 'linkedin':
+				{
+					$result = $this->{'social.providers.Linkedin.enabled'} &&
+								$this->{'social.providers.Linkedin.keys.id'} &&
+								$this->{'social.providers.Linkedin.keys.secret'};
+					break;
+				}
+			case 'google':
+				{
+					$result = $this->{'social.providers.Google.enabled'} &&
+								$this->{'social.providers.Google.keys.id'} &&
+								$this->{'social.providers.Google.keys.secret'};
+					break;
+				}
+		}
+		
+		return $result;
+	} 
 }

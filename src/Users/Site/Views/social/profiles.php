@@ -3,7 +3,7 @@
 	$settings = \Users\Models\Settings::fetch();
 	$providers = array();
 	foreach( (array) $settings->{'social.providers'} as $network => $opts ) {
-		if( !empty( $opts['enabled'] ) && $opts['enabled'] == '1' ) {
+		if( $settings->isSocialLoginEnabled(strtolower( $network )) ) {
 			$providers []= strtolower( $network );
 		}
 	}
