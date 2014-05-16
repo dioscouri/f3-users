@@ -27,9 +27,7 @@
         
         <?php 
         $settings = \Users\Models\Settings::fetch();
-        $providers = $settings->enabledSocialProviders();
-        
-        if (class_exists('Hybrid_Auth') && count($providers)) 
+        if ($settings->isSocialLoginEnabled()) 
         {
             ?>
             <div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-1">
