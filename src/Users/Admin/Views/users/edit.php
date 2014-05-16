@@ -37,6 +37,9 @@
                 <li>
                     <a href="#tab-groups" data-toggle="tab"> Groups </a>
                 </li>
+                <li>
+                    <a href="#tab-social" data-toggle="tab"> Social </a>
+                </li>                
                 <?php foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
                 <li>
                     <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
@@ -175,6 +178,13 @@
                     
                     <?php } ?>
                 
+                </div>
+                <!-- /.tab-pane -->
+                
+                <div class="tab-pane" id="tab-social">
+                
+                    <?php echo \Dsc\Debug::dump( $flash->old('social') ); ?>
+                    
                 </div>
                 <!-- /.tab-pane -->
                 
