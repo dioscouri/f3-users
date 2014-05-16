@@ -25,12 +25,8 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             'last_visit.time' => -1
         )
     );
-        
-    private $__default_response = array(
-    		'code' => -1,
-    		'error' => null,
-    );
-    
+
+    const E_EMAIL_EXISTS = 1;
 
     protected function fetchConditions()
     {
@@ -418,7 +414,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      * 
      * @return	Either link to the image, or an empty string
      */
-    public function getProfilePicture()
+    public function profilePicture()
     {
     	$img = null;
     	
@@ -476,79 +472,56 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 
     /**
      * Validates a token, usually from clicking on a link in an email
-     *
-     *@throws \Exception
+     * and activates the resulting user
+     * 
+     * @throws \Exception
      */
-    public function validateLoginToken( $token )
+    public static function validateLoginToken( $token )
     {
-   		$user = (new static())->setState('filter.id', $token)->getItem();
+   		$user = (new static)->setState('filter.id', $token)->getItem();
    		if (empty($user->id) || $token != (string) $user->id)
    		{
    			throw new \Exception( 'Invalid Token' );
    		}
+   		
    		$user->active = true;
-   		$user->save();
-   		return $user;
+   		
+   		return $user->save();
     }
     
-
-    /**
-     * Complets user profile
-     * 
-     * @throws	\Exception
-     * 
-	 * @return	Returns User model
-     */
-    public function completeProfile($data, $email, $username ){
-    	$user = (new \Users\Models\Users)->bind($data);
-    	$user->email = $email;
-    	$user->username = $username;
-    	
-    	
-    	// Check if the email already exists and give a custom message if so
-    	if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
-    	{
-    		if ((empty($user->id) || $user->id != $existing->id))
-    		{
-    			return null;
-    		}
-    	}
-    	
-   		// this will handle other validations, such as username uniqueness, etc
-   		$user->save();
-
-   		return $user;
-	}
-	
 	/**
 	 * Creates the user
 	 * (target for the register form)
 	 * 
-	 * @return	Returns User model
+	 * @throws \Exception
+	 * 
+	 * @return	\Users\Models\Users
 	 */
-	public function createNewUser($data, $registration_action = '' )
+	public static function createNewUser($data, $registration_action=null )
 	{
-		$f3 = \Base::instance();
-	
-		$user = (new \Users\Models\Users)->bind($data);
+		$user = (new static)->bind($data);
 	
 		// Check if the email already exists and give a custom message if so
 		if (!empty($user->email) && $existing = $user->emailExists( $user->email ))
 		{
 			if ((empty($user->id) || $user->id != $existing->id))
 			{
-				return null;
+				throw new \Exception( 'This email is already registered', static::E_EMAIL_EXISTS );
 			}
 		}
 	
-		// this will handle other validations, such as username uniqueness, etc
-		$user->save();
-	
-		if( strlen( $registration_action ) == 0 ){
+		if (empty($registration_action))
+		{
 			$registration_action = \Users\Models\Settings::fetch()->{'general.registration.action'};
 		}
+
+		// $user->save() will handle other validations, such as username uniqueness, etc
+		// and throws an exception if validation/save fails		
 		switch ($registration_action)
 		{
+		    case "none":
+		        $user->save();
+		        break;		    
 			case "auto_login":
 				$user->active = true;
 				$user->save();
@@ -558,20 +531,18 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 			case "auto_login_with_validation":
 				$user->active = false;
 				$user->save();
-				\Dsc\System::instance()->get( 'auth' )->login( $user );
-				 
-				
-				// Send validation email
-				$user->sendEmailValidatingEmailAddress();				 
+				\Dsc\System::instance()->get( 'auth' )->login( $user );				
+				$user->sendEmailValidatingEmailAddress();
+								 
 				break;
 			default:
 				$user->active = false;
 				$user->save();
-
-				// Send validation email
-				$user->sendEmailValidatingEmailAddress();				 
+				$user->sendEmailValidatingEmailAddress();
+								 
 				break;
 		}
+		
 		return $user;
 	}
 	
