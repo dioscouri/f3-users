@@ -12,59 +12,74 @@
         <li class="active">Social Profiles</li>
     </ol>
     
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <legend>
-                Social Profiles
-            </legend>
-        </div>
-    </div>
-    <div class="row">
-    	<h3>Connected Accounts</h3>
-    	<?php if( empty( $user->social ) ) { ?>
-        <div class="col-xs-12 col-sm-12 col-md-4">
-    		<p>Currently, you do not have any social profiles linked to your account.</p>
-        </div>
-    	<?php } else  {
-        	foreach( $user->social as $network => $profile ) { 
-			// delete this network from list of networks to add link to
-			if( ( $pos = in_array( $network, $providers ) ) !== false ) {
-				unset( $providers[$pos] );
-			}
-
-			$profile_img = \Dsc\ArrayHelper::get($profile, 'profile.photoURL');
-			$name = \Dsc\ArrayHelper::get($profile, 'profile.displayName');
-			if( empty( $profile_img ) ) {
-				$profile_img = './minify/Users/Assets/images/empty_profile.png';
-			}
-		?>
-        <div class="col-xs-12 col-sm-12 col-md-4">
-        	<h4><?php echo ucwords($network); ?></h4>
-        	<div style="text-align : center;">
-				<img src="<?php echo $profile_img; ?>" alt="<?php echo $name; ?>" class="img-rounded center-block" style="margin : 0 auto;" />
-				<div>
-					<a href="<?php echo \Dsc\ArrayHelper::get($profile, 'profile.profileURL'); ?>" target="_blank"><?php echo $name;?></a>
-					- <a href="./user/social/unlink/<?php echo $network; ?>" class="text-danger">Unlink</a>
-				</div>
-        	</div>
-        </div>        	
-       <?php
-        	}
-        }?>
-    </div>
+    <legend>
+        Social Profiles
+    </legend>
     
-    <?php if( !empty($providers ) ) { 
+    <h3>Connected Accounts</h3>
+    
+	<?php if (empty( $user->social )) { ?>
+		<p>Currently, you do not have any social profiles linked to your account.</p>        
+	<?php } ?>
+    	
+	<?php $n=0; $count=count($user->social); 
+	foreach( (array) $user->social as $network => $profile ) 
+	{  
+		// delete this network from list of networks to add link to
+		if( ( $pos = in_array( $network, $providers ) ) !== false ) {
+			unset( $providers[$pos] );
+		}
+
+		$profile_img = \Dsc\ArrayHelper::get($profile, 'profile.photoURL');
+		$name = \Dsc\ArrayHelper::get($profile, 'profile.displayName');
+		
+		if( empty( $profile_img ) ) {
+			$profile_img = './minify/Users/Assets/images/empty_profile.png';
+		}
+        ?>
+        
+        <?php if ($n == 0 || ($n % 4 == 0)) { ?><div class="row"><?php } ?>
+                
+        <div class="col-xs-6 col-sm-6 col-md-3">
+            
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <?php echo ucwords($network); ?>
+                    
+                    <a class="btn btn-xs btn-danger pull-right" data-bootbox="confirm" href="./user/social/unlink/<?php echo $network; ?>">
+                        <i class="fa fa-times"></i>
+                    </a>                                        
+                </div>
+                <div class="panel-body">
+                    <p><img src="<?php echo $profile_img; ?>" alt="<?php echo $name; ?>" class="img-responsive" /></p>
+                    <a href="<?php echo \Dsc\ArrayHelper::get($profile, 'profile.profileURL'); ?>" target="_blank"><?php echo $name;?></a>
+                </div>
+            </div>
+    
+        </div>
+                    
+        <?php $n++; if (($n % 4 == 0) || $n==$count) { ?></div><?php } ?>
+        <?php 
+	} 
+    ?>
+    
+    <?php if( !empty($providers ) ) {
+        // TODO Set this AFTER clicking the link, if possible.  When it's here, this hijacks all successive login redirects  
     	\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', '/user/social-profiles' );
     	?>
-    <div class="row">
+
     	<h3>Link your profile with</h3>
-    	<div class="col-xs-12 col-sm-12 col-md-4">
-    	<ul>
+    	<div class="social-login-providers">
+    	
     		<?php foreach( $providers as $network ) { ?>
-    		<li><a href="./login/social/auth/<?php echo $network;?>"><?php echo ucwords( $network ); ?> profile</a></li>
+            <div class="form-group">
+                <a href="./login/social/auth/<?php echo $network; ?>" class="btn btn-<?php echo $network; ?> btn-default">
+                <i class="fa fa-<?php echo $network; ?>"></i> <span><?php echo ucwords( $network ); ?></span>
+                </a>
+            </div>    		
     		<?php } ?>
-    	</ul>
-        </div>
-    </div>
+    	
+    	</div>
     <?php } ?>
+    
 </div>
