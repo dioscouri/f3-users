@@ -66,9 +66,6 @@ class Login extends \Dsc\Controller
      */
     public function auth()
     {
-        /*
-         * Let $this->auth->check() set the error, in case we want to pass social logins through this auth method $username_input = $this->input->getAlnum('login-username'); $password_input = $this->input->getString('login-password'); if (empty($username_input) || empty($password_input)) { \Dsc\System::instance()->addMessage('Login failed - Incomplete Form', 'error'); \Base::instance()->reroute("/login"); return; }
-         */
         $redirect = '/user';
         if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
         {
@@ -176,10 +173,12 @@ class Login extends \Dsc\Controller
         }
         catch ( \Exception $e )
         {
-            \Dsc\System::addMessage( 'Login failed', 'error' );
+            \Dsc\System::addMessage( 'Social Login failed', 'error' );
             \Dsc\System::addMessage( $e->getMessage(), 'error' );
-            // TODO add support for a custom reroute target 
-            \Base::instance()->reroute( "/login" );
+
+            $custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'social_login.failure.redirect' );
+            $redirect = $custom_redirect ? $custom_redirect : '/login';
+            \Base::instance()->reroute( $redirect );
         }
     }
 

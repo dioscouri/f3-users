@@ -5,6 +5,8 @@ class Prefixed extends \Dsc\Routes\Group
 {
     public function initialize()
     {
+        $f3 = \Base::instance();
+        
         $this->setDefaults(array(
             'namespace' => '\Users\Site\Controllers',
             'url_prefix' => '/user'
@@ -83,11 +85,6 @@ class Prefixed extends \Dsc\Routes\Group
         $this->add('/social/unlink/@provider', 'GET', array(
             'controller' => 'User',
             'action' => 'unlinkSocialProfile'
-        ));
-        
-        $this->add('/social/link', 'GET', array(
-            'controller' => 'User',
-            'action' => 'linkSocialProfileEndpoint'
         ));
         
         $this->add('/social/link/@provider', 'GET', array(

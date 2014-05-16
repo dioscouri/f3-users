@@ -169,8 +169,11 @@ class User extends Auth
         $hybridauth_config = \Users\Models\Settings::fetch();
         $config = (array) $hybridauth_config->{'social'};
         
-        // set custom endpoint for linking on existing users
-        $config['base_url'] = $f3->get('SCHEME') . '://' . $f3->get('HOST') . $f3->get('BASE') . '/user/social/link';
+        \Dsc\System::instance()->get( 'session' )->set( 'social_login.failure.redirect', '/user/social-profiles' );
+        
+        if (empty($config['base_url'])) {
+            $config['base_url'] = $f3->get('SCHEME') . '://' . $f3->get('HOST') . $f3->get('BASE') . '/login/social';
+        }
         
         $custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' );
         
@@ -269,26 +272,5 @@ class User extends Auth
         \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
         $f3->reroute( $redirect );
                 
-    }
-    
-    public function linkSocialProfileEndpoint()
-    {
-        $settings = \Users\Models\Settings::fetch();
-        if (!$settings->isSocialLoginEnabled())
-        {
-            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
-            \Base::instance()->reroute( "/user" );
-        }
-                
-        try
-        {
-            \Hybrid_Endpoint::process();
-        }
-        catch ( \Exception $e )
-        {
-            \Dsc\System::addMessage( 'Linking failed.', 'error' );
-            \Dsc\System::addMessage( $e->getMessage(), 'error' );
-            \Base::instance()->reroute( "/user/social-profiles" );
-        }
     }
 }
