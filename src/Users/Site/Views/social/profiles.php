@@ -69,7 +69,7 @@
     	
     		<?php foreach( $unlinked as $network ) { ?>
             <div class="form-group">
-                <a href="./login/social/auth/<?php echo $network; ?>" class="btn btn-<?php echo $network; ?> btn-default">
+                <a href="./user/social/link/<?php echo $network; ?>" class="btn btn-<?php echo $network; ?> btn-default">
                 <i class="fa fa-<?php echo $network; ?>"></i> <span><?php echo ucwords( $network ); ?></span>
                 </a>
             </div>    		

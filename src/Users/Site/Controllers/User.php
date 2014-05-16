@@ -105,6 +105,7 @@ class User extends Auth
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/user" );
         }
                 
@@ -145,16 +146,33 @@ class User extends Auth
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/user" );
         }
                 
         $f3 = \Base::instance();
+        
+        $user = $this->getIdentity();
+        if (empty($user->id) || !empty($user->__safemode))
+        {
+            $f3->reroute( '/user' );
+            return;
+        }
+        
         $provider = $f3->get( 'PARAMS.provider' );
+        if (!$settings->isSocialLoginEnabled($provider))
+        {
+            \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
+            \Base::instance()->reroute( "/user" );
+        }
+        
         $hybridauth_config = \Users\Models\Settings::fetch();
         $config = (array) $hybridauth_config->{'social'};
         
         // set custom endpoint for linking on existing users
         $config['base_url'] = $f3->get('SCHEME') . '://' . $f3->get('HOST') . $f3->get('BASE') . '/user/social/link';
+        
+        $custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' );
         
         try
         {
@@ -167,84 +185,27 @@ class User extends Auth
             // grab the user profile
             $user_profile = $adapter->getUserProfile();
         
-            // 1 - try to lookup the user based on the profile.identifier
-            // if found, log them in to our system and redirect to their profile page
-            $model = new \Users\Models\Users;
+            // OK, we have the social identity.  
+            // Let's make sure it's unique in our system
             $filter = 'social.' . $provider . '.profile.identifier';
-            $user = $model->setCondition( $filter, $user_profile->identifier )->getItem();
-            if (! empty( $user->id ))
+            $found = (new \Users\Models\Users)->setCondition( $filter, $user_profile->identifier )->getItem();            
+            if (!empty( $found->id ) && (string) $found->id != (string) $user->id)
             {
-                \Dsc\System::instance()->get( 'auth' )->login( $user );
-        
+                // errrrr, only allow a social ID to be linked to one account at a time
+                \Dsc\System::addMessage( 'This social profile is already registered with us.', 'error' );
+                        
                 // redirect to the requested target, or the default if none requested
-                $redirect = '/user';
-                if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
-                {
-                    $redirect = $custom_redirect;
-                }
+                $redirect = $custom_redirect ? $custom_redirect : '/user';
                 \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
                 \Base::instance()->reroute( $redirect );
+                return;
             }
-        
-            // 2 - check if the user email we got from the provider already exists in our database ( for this example the email is UNIQUE for each user )
-            if ($user_profile->email)
-            {
-                // 3 - if the email address returned by the provider does exist in our database,
-                // then authenticate with that user
-                $user = (new \Users\Models\Users)->setState( 'filter.email', $user_profile->email )->getItem();
-                if (!empty($user->id))
-                {
-                    $user->set( 'social.' . $provider . '.profile', (array) $adapter->getUserProfile() );
-                    $user->save();
-        
-                    \Dsc\System::instance()->get( 'auth' )->login( $user );
-        
-                    // redirect to the requested target, or the default if none requested
-                    $redirect = '/user';
-                    if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
-                    {
-                        $redirect = $custom_redirect;
-                    }
-                    \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
-                    \Base::instance()->reroute( $redirect );
-                }
-        
-                // email doesn't exist in our database
-                else
-                {
-                     
-                }
-            }
-        
-            // email not provided by provider
-            else
-            {
-                 
-            }
-        
-            // 4 - if social profile id does not exist in our database and email is not in use, then we are creating a new user
-            // so first let's prepare the data
-            $data = array();
-            $data['social'][$provider]['profile'] = (array) $adapter->getUserProfile();
-            $data['social'][$provider]['access_token'] = (array) $adapter->getAccessToken();
-            $data['email'] = $user_profile->email;
-            $data['first_name'] = $user_profile->firstName;
-            $data['last_name'] = $user_profile->lastName;
-            $data['username'] = \Users\Models\Users::usernameFromString( $user_profile->displayName );
-        
-            // if last name is empty, try to extract last name from first name field
-            if (empty($user_profile->lastName) && !empty($user_profile->firstName) && strrpos($user_profile->firstName, ' ') !== false )
-            {
-                $pieces = explode(' ', $user_profile->firstName, 2);
-                $data['first_name'] = $pieces[0];
-                $data['last_name'] = $pieces[1];
-            }
-        
-            // put the data array into the session, and bind the array to a Users\Models\Users object on the flip side
-            \Dsc\System::instance()->get('session')->set('users.incomplete_provider_data', $data );
-        
-            // Now push the user to a "complete your profile" form prepopulated with data from the provider identity
-            $f3->reroute( '/login/completeProfile' );
+            
+            // add the social id to the user
+            $user->set( 'social.' . $provider . '.profile', (array) $adapter->getUserProfile() );
+            $user->set( 'social.' . $provider . '.access_token', (array) $adapter->getAccessToken() );
+            
+            $user->save();
         
         }
         catch ( \Exception $e )
@@ -296,15 +257,29 @@ class User extends Auth
                 $error = $user_error;
             }
         
-            \Dsc\System::addMessage( 'Login failed', 'error' );
+            \Dsc\System::addMessage( 'Linking failed', 'error' );
             \Dsc\System::addMessage( $error, 'error' );
         
-            $f3->reroute( '/login' );
+            $redirect = $custom_redirect ? $custom_redirect : '/user';
+            $f3->reroute( $redirect );
         }
+        
+        // redirect to the requested target, or the default if none requested
+        $redirect = $custom_redirect ? $custom_redirect : '/user';
+        \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+        $f3->reroute( $redirect );
+                
     }
     
     public function linkSocialProfileEndpoint()
     {
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->isSocialLoginEnabled())
+        {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
+            \Base::instance()->reroute( "/user" );
+        }
+                
         try
         {
             \Hybrid_Endpoint::process();

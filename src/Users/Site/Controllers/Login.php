@@ -166,6 +166,7 @@ class Login extends \Dsc\Controller
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled()) 
         {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );
         }
         
@@ -190,11 +191,18 @@ class Login extends \Dsc\Controller
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );
         }
                 
         $f3 = \Base::instance();
         $provider = $f3->get( 'PARAMS.provider' );
+        if (!$settings->isSocialLoginEnabled($provider))
+        {
+            \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
+            \Base::instance()->reroute( "/login" );
+        }        
+        
         $hybridauth_config = \Users\Models\Settings::fetch();
         $config = (array) $hybridauth_config->{'social'};
         
@@ -241,6 +249,7 @@ class Login extends \Dsc\Controller
                 if (!empty($user->id))
                 {
                     $user->set( 'social.' . $provider . '.profile', (array) $adapter->getUserProfile() );
+                    $user->set( 'social.' . $provider . '.access_token', (array) $adapter->getAccessToken() );
                     $user->save();
                     
                     \Dsc\System::instance()->get( 'auth' )->login( $user );
@@ -357,6 +366,7 @@ class Login extends \Dsc\Controller
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );
         }
                 
@@ -395,6 +405,7 @@ class Login extends \Dsc\Controller
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
+            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );
         }
                 
