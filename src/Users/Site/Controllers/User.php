@@ -92,8 +92,9 @@ class User extends Auth
         }
         else
         {
-            $model = $this->getModel()->setState( 'filter.id', $identity->id );
-            $user = $model->getItem();
+            // can't view other user's linked social profiles
+            $f3->reroute( '/user' );
+            return;
         }
         
         $f3->set('user', $user);
@@ -102,7 +103,8 @@ class User extends Auth
         echo $view->render( 'Users/Site/Views::social/profiles.php' );        
     }
     
-    public function unlinkSocialProfile(){
+    public function unlinkSocialProfile()
+    {
     	$f3 = \Base::instance();
     	$provider = strtolower( $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' ) );
     	 

@@ -139,9 +139,26 @@
                             <div>
                                 <label>Registered:</label> <?php echo date( 'Y-m-d', $item->{'metadata.created.time'} ); ?> 
                             </div>
+                            <?php if ($item->groups) { ?>
                             <div>
-                                <?php echo implode(", ", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?>
-                            </div>                        
+                                <label>Groups:</label> <?php echo implode(", ", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?>
+                            </div>
+                            <?php } ?>
+                            <?php if ($item->role) { ?>
+                            <div>
+                                <label>Role:</label> <?php echo $item->role ? $item->role : 'None'; ?>
+                            </div>
+                            <?php } ?>
+                            <?php
+                            // TODO This is silly.  Push this into a \Users\Models\Users method 
+                            $keys = array(); 
+                            foreach ((array) $item->{'social'} as $key=>$object) { $keys[] = $key; }
+                            if (!empty($keys)) {  
+                            ?>
+                            <div>
+                                <label>Linked Social Profiles:</label> <?php echo implode(", ", $keys); ?>
+                            </div>
+                            <?php } ?>
                         </div>
                         <div class="hidden-xs hidden-sm col-md-1">
     	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/delete/<?php echo $item->id; ?>">
