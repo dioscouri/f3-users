@@ -141,12 +141,12 @@
                             </div>
                             <?php if ($item->groups) { ?>
                             <div>
-                                <label>Groups:</label> <?php echo implode(", ", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?>
+                                <label>Groups:</label> <span class='label label-default'><?php echo implode("</span> <span class='label label-default'>", \Joomla\Utilities\ArrayHelper::getColumn( (array) $item->groups, 'title' ) ); ?></span>
                             </div>
                             <?php } ?>
                             <?php if ($item->role) { ?>
                             <div>
-                                <label>Role:</label> <?php echo $item->role ? $item->role : 'None'; ?>
+                                <label>Role:</label> <span class='label label-info'><?php echo $item->role ? $item->role : 'None'; ?></span>
                             </div>
                             <?php } ?>
                             <?php
@@ -156,7 +156,7 @@
                             if (!empty($keys)) {  
                             ?>
                             <div>
-                                <label>Linked Social Profiles:</label> <?php echo implode(", ", $keys); ?>
+                                <label>Linked Social Profiles:</label> <span class='label label-success'><?php echo implode("</span> <span class='label label-success'>", $keys); ?></span>
                             </div>
                             <?php } ?>
                         </div>
