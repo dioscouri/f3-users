@@ -183,7 +183,7 @@
                 
                 <div class="tab-pane" id="tab-social">
                 
-                    <?php echo \Dsc\Debug::dump( $flash->old('social') ); ?>
+                    <?php echo $this->renderView('Users/Admin/Views::users/social.php'); ?>
                     
                 </div>
                 <!-- /.tab-pane -->
