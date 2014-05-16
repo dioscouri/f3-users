@@ -2,6 +2,7 @@
 	// find out how many social account the user can link to
 	$settings = \Users\Models\Settings::fetch();
 	$providers = $settings->enabledSocialProviders();
+	$unlinked = $user->unlinkedSocialProfiles();
 ?>
 
 <div class="container">
@@ -25,11 +26,6 @@
 	<?php $n=0; $count=count($user->social); 
 	foreach( (array) $user->social as $network => $profile ) 
 	{  
-		// delete this network from list of networks to add link to
-		if( ( $pos = in_array( $network, $providers ) ) !== false ) {
-			unset( $providers[$pos] );
-		}
-
 		$profile_img = \Dsc\ArrayHelper::get($profile, 'profile.photoURL');
 		$name = \Dsc\ArrayHelper::get($profile, 'profile.displayName');
 		
@@ -63,7 +59,7 @@
 	} 
     ?>
     
-    <?php if( !empty($providers ) ) {
+    <?php if( !empty($unlinked) ) {
         // TODO Set this AFTER clicking the link, if possible.  When it's here, this hijacks all successive login redirects  
     	\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', '/user/social-profiles' );
     	?>
@@ -71,7 +67,7 @@
     	<h3>Link your profile with</h3>
     	<div class="social-login-providers">
     	
-    		<?php foreach( $providers as $network ) { ?>
+    		<?php foreach( $unlinked as $network ) { ?>
             <div class="form-group">
                 <a href="./login/social/auth/<?php echo $network; ?>" class="btn btn-<?php echo $network; ?> btn-default">
                 <i class="fa fa-<?php echo $network; ?>"></i> <span><?php echo ucwords( $network ); ?></span>

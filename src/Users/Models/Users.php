@@ -546,4 +546,24 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 		return $user;
 	}
 	
+	public function unlinkedSocialProfiles()
+	{
+	    $settings = \Users\Models\Settings::fetch();
+	    $providers = $settings->enabledSocialProviders();
+	    
+	    if (empty($this->social)) {
+	    	return $providers;
+	    }
+	    
+	    foreach ($this->social as $network=>$id) 
+	    {
+	        $key = array_search($network, $providers);
+	        if ($key !== false) {
+	            unset($providers[$key]);
+	        }	    	
+	    }
+	    
+	    return $providers;
+	} 
+	
 }
