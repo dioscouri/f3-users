@@ -1,16 +1,9 @@
 <?php
 namespace Users\Site;
 
-/**
- * Group class is used to keep track of a group of routes with similar aspects (the same controller, the same f3-app and etc)
- */
 class Routes extends \Dsc\Routes\Group
 {
 
-    /**
-     * Initializes all routes for this group
-     * NOTE: This method should be overriden by every group
-     */
     public function initialize()
     {
         $f3 = \Base::instance();
@@ -84,71 +77,6 @@ class Routes extends \Dsc\Routes\Group
         $this->add('/login/validate/token/@token', 'GET', array(
             'controller' => 'Login',
             'action' => 'validateToken'
-        ));
-        
-        $this->add('/user/forgot-password', 'GET', array(
-            'controller' => 'Forgot',
-            'action' => 'password'
-        ));
-        
-        $this->add('/user/forgot-password', 'POST', array(
-            'controller' => 'Forgot',
-            'action' => 'passwordFindEmail'
-        ));
-        
-        $this->add('/user/forgot-password/email', 'GET', array(
-            'controller' => 'Forgot',
-            'action' => 'passwordEmailSent'
-        ));
-        
-        $this->add('/user/reset-password/@token', 'GET', array(
-            'controller' => 'Forgot',
-            'action' => 'passwordReset'
-        ));
-        
-        $this->add('/user/reset-password', 'POST', array(
-            'controller' => 'Forgot',
-            'action' => 'passwordResetSubmit'
-        ));
-        
-        $this->add('/user/change-password', 'GET', array(
-            'controller' => 'Change',
-            'action' => 'password'
-        ));
-        
-        $this->add('/user/change-password', 'POST', array(
-            'controller' => 'Change',
-            'action' => 'passwordSubmit'
-        ));
-        
-        $this->add('/user/change-email', 'GET', array(
-            'controller' => 'Change',
-            'action' => 'email'
-        ));
-        
-        $this->add('/user/change-email', 'POST', array(
-            'controller' => 'Change',
-            'action' => 'emailSubmit'
-        ));
-        
-        $this->add('/user/change-email/verify', 'GET', array(
-            'controller' => 'Change',
-            'action' => 'emailVerify'
-        ));
-        
-        $this->add('/user/change-email/confirm', 'GET|POST', array(
-            'controller' => 'Change',
-            'action' => 'emailConfirm'
-        ));
-        
-        $this->add('/user/social-profiles', 'GET', array(
-            'controller' => 'User',
-            'action' => 'socialProfiles'
-        ));
-
-        $this->add('/user/social/unlink/@provider', 'GET', array(
-        		'controller' => 'User',
-        		'action' => 'unlinkSocialProfile'
         ));
     }
 }

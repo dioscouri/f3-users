@@ -1,31 +1,98 @@
 <?php
 namespace Users\Site\Routes;
 
-/**
- * Group class is used to keep track of a group of routes with similar aspects (the same controller, the same f3-app and etc)
- */
 class Prefixed extends \Dsc\Routes\Group
 {
-
-    /**
-     * Initializes all routes for this group
-     * NOTE: This method should be overriden by every group
-     */
     public function initialize()
     {
-        $this->setDefaults( array(
+        $this->setDefaults(array(
             'namespace' => '\Users\Site\Controllers',
-            'url_prefix' => '/user' 
-        ) );
+            'url_prefix' => '/user'
+        ));
         
-        $this->add( '', 'GET', array(
+        $this->add('', 'GET', array(
             'controller' => 'User',
-            'action' => 'readSelf' 
-        ) );
+            'action' => 'readSelf'
+        ));
         
-        $this->add( '/@id', 'GET', array(
+        $this->add('/@id', 'GET', array(
             'controller' => 'User',
-            'action' => 'read' 
-        ) );
+            'action' => 'read'
+        ));
+        
+        $this->add('/forgot-password', 'GET', array(
+            'controller' => 'Forgot',
+            'action' => 'password'
+        ));
+        
+        $this->add('/forgot-password', 'POST', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordFindEmail'
+        ));
+        
+        $this->add('/forgot-password/email', 'GET', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordEmailSent'
+        ));
+        
+        $this->add('/reset-password/@token', 'GET', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordReset'
+        ));
+        
+        $this->add('/reset-password', 'POST', array(
+            'controller' => 'Forgot',
+            'action' => 'passwordResetSubmit'
+        ));
+        
+        $this->add('/change-password', 'GET', array(
+            'controller' => 'Change',
+            'action' => 'password'
+        ));
+        
+        $this->add('/change-password', 'POST', array(
+            'controller' => 'Change',
+            'action' => 'passwordSubmit'
+        ));
+        
+        $this->add('/change-email', 'GET', array(
+            'controller' => 'Change',
+            'action' => 'email'
+        ));
+        
+        $this->add('/change-email', 'POST', array(
+            'controller' => 'Change',
+            'action' => 'emailSubmit'
+        ));
+        
+        $this->add('/change-email/verify', 'GET', array(
+            'controller' => 'Change',
+            'action' => 'emailVerify'
+        ));
+        
+        $this->add('/change-email/confirm', 'GET|POST', array(
+            'controller' => 'Change',
+            'action' => 'emailConfirm'
+        ));
+        
+        $this->add('/social-profiles', 'GET', array(
+            'controller' => 'User',
+            'action' => 'socialProfiles'
+        ));
+        
+        $this->add('/social/unlink/@provider', 'GET', array(
+            'controller' => 'User',
+            'action' => 'unlinkSocialProfile'
+        ));
+        
+        $this->add('/social/link', 'GET', array(
+            'controller' => 'User',
+            'action' => 'linkSocialProfileEndpoint'
+        ));
+        
+        $this->add('/social/link/@provider', 'GET', array(
+            'controller' => 'User',
+            'action' => 'linkSocialProfile'
+        ));
     }
 }

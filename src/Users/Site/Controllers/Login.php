@@ -163,6 +163,12 @@ class Login extends \Dsc\Controller
      */
     public function social()
     {
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->isSocialLoginEnabled()) 
+        {
+            \Base::instance()->reroute( "/login" );
+        }
+        
         try
         {
             \Hybrid_Endpoint::process();
@@ -171,6 +177,7 @@ class Login extends \Dsc\Controller
         {
             \Dsc\System::addMessage( 'Login failed', 'error' );
             \Dsc\System::addMessage( $e->getMessage(), 'error' );
+            // TODO add support for a custom reroute target 
             \Base::instance()->reroute( "/login" );
         }
     }
@@ -180,6 +187,12 @@ class Login extends \Dsc\Controller
      */
     public function provider()
     {
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->isSocialLoginEnabled())
+        {
+            \Base::instance()->reroute( "/login" );
+        }
+                
         $f3 = \Base::instance();
         $provider = $f3->get( 'PARAMS.provider' );
         $hybridauth_config = \Users\Models\Settings::fetch();
@@ -341,6 +354,12 @@ class Login extends \Dsc\Controller
      */
     public function completeProfileForm()
     {
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->isSocialLoginEnabled())
+        {
+            \Base::instance()->reroute( "/login" );
+        }
+                
         $f3 = \Base::instance();
         
         $identity = $this->getIdentity();
@@ -373,6 +392,12 @@ class Login extends \Dsc\Controller
      */
     public function completeProfile()
     {
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->isSocialLoginEnabled())
+        {
+            \Base::instance()->reroute( "/login" );
+        }
+                
         $f3 = \Base::instance();
         
         try 
