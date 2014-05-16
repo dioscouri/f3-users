@@ -192,6 +192,12 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 
     protected function beforeSave()
     {
+        $googleProfilePhoto = $this->{'social.google.profile.photoURL'};
+        if (strlen($googleProfilePhoto) && strpos($googleProfilePhoto, 'sz=50') !== false) 
+        {
+            $this->{'social.google.profile.photoURL'} = str_replace('sz=50', '', $googleProfilePhoto);
+        }
+        
         if (! empty($this->groups))
         {
             $groups = array();
