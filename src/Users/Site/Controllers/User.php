@@ -88,15 +88,11 @@ class User extends Auth
         
         if (!empty($identity->__safemode))
         {
-            $user = $identity;
-        }
-        else
-        {
-            // can't view other user's linked social profiles
             $f3->reroute( '/user' );
-            return;
+            return;            
         }
         
+        $user = $identity;
         $f3->set('user', $user);
         
         $view = \Dsc\System::instance()->get('theme');
