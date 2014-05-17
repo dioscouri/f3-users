@@ -47,7 +47,6 @@ class User extends \Admin\Controllers\BaseAuth
 	protected function displayCreate()
 	{
 		$f3 = \Base::instance();
-		$f3->set('pagetitle', 'Create User');
 
 		$model = $this->getModel('groups');
         $groups = $model->getList();
@@ -55,6 +54,8 @@ class User extends \Admin\Controllers\BaseAuth
 
 		$view = \Dsc\System::instance()->get('theme');
 		$view->event = $view->trigger( 'onDisplayAdminUserEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
+
+		$this->app->set('meta.title', 'Create User');
 		
 		echo $view->render('Users/Admin/Views::users/create.php');
 	}
@@ -62,7 +63,6 @@ class User extends \Admin\Controllers\BaseAuth
 	protected function displayEdit()
 	{
 		$f3 = \Base::instance();
-		$f3->set('pagetitle', 'Edit User');
 		
 		$model = $this->getModel('groups');
         $groups = $model->getList();
@@ -70,7 +70,9 @@ class User extends \Admin\Controllers\BaseAuth
 
 		$view = \Dsc\System::instance()->get('theme');
 		$view->event = $view->trigger( 'onDisplayAdminUserEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
-				
+		
+		$this->app->set('meta.title', 'Edit User');
+						
 		echo $view->render('Users/Admin/Views::users/edit.php');
 	}
 	

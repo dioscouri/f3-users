@@ -21,6 +21,8 @@ class Groups extends \Admin\Controllers\BaseAuth
         $paginated = $model->paginate();
         \Base::instance()->set('paginated', $paginated );
     
+        $this->app->set('meta.title', 'User Groups');
+        
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render('Users/Admin/Views::groups/list.php');
     }
