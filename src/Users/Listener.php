@@ -43,7 +43,7 @@ class Listener extends \Prefab
                     'icon' => 'fa fa-cogs'
                 )
             );
-            $users->addChildrenItems($children, $root);
+            $users->addChildren($children, $root);
             
             \Dsc\System::instance()->addMessage('Users added its admin menu items.');
         }
