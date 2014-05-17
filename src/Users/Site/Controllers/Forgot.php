@@ -8,6 +8,8 @@ class Forgot extends \Dsc\Controller
      */
     public function password()
     {
+        $this->app->set('meta.title', 'Forgot Password');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::forgot/password_email_form.php' );
     }
@@ -47,6 +49,8 @@ class Forgot extends \Dsc\Controller
      */
     public function passwordEmailSent()
     {
+        $this->app->set('meta.title', 'Email Sent | Forgot Password');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::forgot/password_email_sent.php' );
     }
@@ -87,6 +91,8 @@ class Forgot extends \Dsc\Controller
         
         // store the user->id in the session so we know who we're updating at form submission
         \Dsc\System::instance()->get( 'session' )->set( 'user.forgot_password.id', (string) $user->id );
+        
+        $this->app->set('meta.title', 'Reset Password');
         
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::forgot/password_reset_form.php' );

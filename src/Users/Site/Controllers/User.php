@@ -10,6 +10,8 @@ class User extends Auth
         $user = $this->getItem();
         $f3->set('user', $user);
         
+        $this->app->set('meta.title', $user->fullName() . ' | Profile');
+        
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::profile/read.php' );
     }
@@ -36,6 +38,8 @@ class User extends Auth
         }
 
         $f3->set('user', $user);
+        
+        $this->app->set('meta.title', 'My Profile | My Account');
             
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::profile/readSelf.php' );
@@ -95,6 +99,8 @@ class User extends Auth
         
         $user = $identity;
         $f3->set('user', $user);
+        
+        $this->app->set('meta.title', 'Linked Social Profiles | My Account');
         
         $view = \Dsc\System::instance()->get('theme');
         echo $view->render( 'Users/Site/Views::social/profiles.php' );        

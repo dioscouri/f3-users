@@ -5,6 +5,8 @@ class Change extends \Users\Site\Controllers\Auth
 {
     public function password()
     {
+        $this->app->set('meta.title', 'Change Password');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::change/password.php' );
     }
@@ -48,6 +50,8 @@ class Change extends \Users\Site\Controllers\Auth
     
     public function email()
     {
+        $this->app->set('meta.title', 'Change Email Address');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::change/email.php' );
     }
@@ -107,6 +111,8 @@ class Change extends \Users\Site\Controllers\Auth
     
     public function emailVerify()
     {
+        $this->app->set('meta.title', 'Verify Email Address');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::change/email_verify.php' );    
     }

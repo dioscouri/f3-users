@@ -15,6 +15,8 @@ class Login extends \Dsc\Controller
             $f3->reroute( '/user' );
         }
         
+        $this->app->set('meta.title', 'Log In');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::login/dual.php' );
     }
@@ -29,6 +31,8 @@ class Login extends \Dsc\Controller
         {
             $f3->reroute( '/user' );
         }
+        
+        $this->app->set('meta.title', 'Log In');
         
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::login/login.php' );
@@ -47,6 +51,8 @@ class Login extends \Dsc\Controller
         
         $flash = \Dsc\Flash::instance();
         $f3->set('flash', $flash );
+        
+        $this->app->set('meta.title', 'Register');
         
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::login/register.php' );
@@ -391,6 +397,8 @@ class Login extends \Dsc\Controller
         
         // TODO If the profile is complete, redirect to /user
         \Base::instance()->set('model', $user);
+        
+        $this->app->set('meta.title', 'Complete Profile | Login');
     
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->renderTheme( 'Users/Site/Views::login/complete_profile.php' );
@@ -479,6 +487,8 @@ class Login extends \Dsc\Controller
      */
     public function validate()
     {
+        $this->app->set('meta.title', 'Validate Email Address | Login');
+        
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::login/validate.php' );
     }
