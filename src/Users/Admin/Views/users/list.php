@@ -33,7 +33,18 @@
                             <?php endforeach; ?>
                         </select>
                     </li>                
-                </ul>    
+                    <li>
+                        <select id="social_filter" name="filter[social-profile]" class="form-control" onchange="this.form.submit();">
+                            <option value="">All Social Profiles</option>
+                            <?php 
+                            	$providers = \Users\Models\Settings::fetch()->enabledSocialProviders();
+                            	
+                            	foreach ( (array)$providers as $network) : ?>
+                                <option <?php if($state->get('filter.social-profile') == $network ) { echo 'selected'; } ?> value="<?php echo $network; ?>"><?php echo ucwords( $network ); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>                
+				</ul>    
 
             </div>
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
@@ -150,9 +161,7 @@
                             </div>
                             <?php } ?>
                             <?php
-                            // TODO This is silly.  Push this into a \Users\Models\Users method 
-                            $keys = array(); 
-                            foreach ((array) $item->{'social'} as $key=>$object) { $keys[] = $key; }
+                            $keys = array_keys( (array) $item->{'social'} ); 
                             if (!empty($keys)) {  
                             ?>
                             <div>

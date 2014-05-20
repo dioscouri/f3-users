@@ -110,6 +110,13 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             $this->setCondition('change_email.token', (string) $filter_new_email_token);
         }
         
+        $filter_social_profile = $this->getState('filter.social-profile');
+        if (strlen($filter_social_profile))
+        {
+        	$this->setCondition('social.'.strtolower($filter_social_profile), array( '$exists' => true ) );
+        }
+        
+        
         return $this;
     }
 
@@ -571,5 +578,4 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	    
 	    return $providers;
 	} 
-	
 }
