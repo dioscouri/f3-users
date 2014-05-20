@@ -8,7 +8,7 @@ class Login extends \Dsc\Controller
      * Displays a dual login/register form
      */
     public function index( $f3 )
-    {
+    {    	
         $identity = $this->getIdentity();
         if (! empty( $identity->id ))
         {
@@ -43,6 +43,11 @@ class Login extends \Dsc\Controller
      */
     public function register( $f3 )
     {
+    	// check, if front-end registration is enabled
+    	if( \Users\Models\Settings::fetch()->{'general.registration.enabled' } == '0' ){
+    		$f3->reroute( '/user' );
+    	}
+    	 
         $identity = $this->getIdentity();
         if (! empty( $identity->id ))
         {
@@ -105,6 +110,10 @@ class Login extends \Dsc\Controller
     public function create()
     {
         $f3 = \Base::instance();
+        // check, if front-end registration is enabled
+        if( \Users\Models\Settings::fetch()->{'general.registration.enabled' } == '0' ){
+        	$f3->reroute( '/login' );
+        }
         
         $data = array(
         	'email' => trim( strtolower( $this->input->get( 'email', null, 'string' ) ) ),
@@ -198,6 +207,11 @@ class Login extends \Dsc\Controller
         {
             \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );
+        }
+        
+        // check, if front-end registration is enabled
+        if( $settings->{'general.registration.enabled' } == '0' ){
+        	\Base::instance()->reroute( '/login' );
         }
                 
         $f3 = \Base::instance();
@@ -368,7 +382,7 @@ class Login extends \Dsc\Controller
      */
     public function completeProfileForm()
     {
-        $settings = \Users\Models\Settings::fetch();
+        $settings = \Users\Models\Settings::fetch();        
         if (!$settings->isSocialLoginEnabled())
         {
             \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
@@ -410,6 +424,11 @@ class Login extends \Dsc\Controller
     public function completeProfile()
     {
         $settings = \Users\Models\Settings::fetch();
+        // check, if front-end registration is enabled
+        if( $settings->{'general.registration.enabled' } == '0' ){
+        	$f3->reroute( '/login' );
+        }
+        
         if (!$settings->isSocialLoginEnabled())
         {
             \Dsc\System::addMessage( 'Social login is not supported.', 'error' );

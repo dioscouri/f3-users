@@ -11,7 +11,6 @@
 
             <div class="col-md-10">
 
-                <?php /* ?>
                 <div class="form-group">
                     <label>Enabled?</label>
                     <select name="general[registration][enabled]" class="form-control">
@@ -20,7 +19,7 @@
                     </select>                
                 </div>
                 <!-- /.form-group -->
-                */ ?>
+                
                 
                 <div class="form-group">
                     <label>Include Username in registration form?</label>
