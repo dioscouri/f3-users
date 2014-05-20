@@ -24,22 +24,22 @@ class Listener extends \Prefab
             $children = array(
                 array(
                     'title' => 'List',
-                    'route' => '/admin/users',
+                    'route' => './admin/users',
                     'icon' => 'fa fa-user'
                 ),
                 array(
                     'title' => 'Groups',
-                    'route' => '/admin/users/groups',
+                    'route' => './admin/users/groups',
                     'icon' => 'fa fa-group'
                 ),
                 array(
                     'title' => 'Roles',
-                    'route' => '/admin/users/roles',
+                    'route' => './admin/users/roles',
                     'icon' => 'fa fa-unlock'
                 ),
                 array(
                     'title' => 'Settings',
-                    'route' => '/admin/users/settings',
+                    'route' => './admin/users/settings',
                     'icon' => 'fa fa-cogs'
                 )
             );
