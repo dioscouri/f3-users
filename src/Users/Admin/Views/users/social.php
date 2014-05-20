@@ -15,7 +15,7 @@ if( empty( $profile_img ) ) {
                     <img src="<?php echo $profile_img; ?>" alt="<?php echo $name; ?>" class="img-responsive" />
 			</div>
 			<div class="col-xs-12 col-ms-12 col-md-9">
-				<a href="" target="_blank" title="<?php echo $name.' on '.ucwords( $network ); ?>">
+				<a href="<?php echo $profile['profile']['profileURL']; ?>" target="_blank" title="<?php echo $name.' on '.ucwords( $network ); ?>">
 					<legend><?php echo $name; ?></legend>
 				</a>
 				<div class="row">
