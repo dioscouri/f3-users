@@ -62,6 +62,16 @@ class Prefixed extends \Dsc\Routes\Group
             'action' => 'email'
         ));
         
+        $this->add('/change-basic', 'GET', array(
+        		'controller' => 'Change',
+        		'action' => 'basicInfo'
+        ));
+
+        $this->add('/change-basic', 'POST', array(
+        		'controller' => 'Change',
+        		'action' => 'basicInfoSubmit'
+        ));
+        
         $this->add('/change-email', 'POST', array(
             'controller' => 'Change',
             'action' => 'emailSubmit'

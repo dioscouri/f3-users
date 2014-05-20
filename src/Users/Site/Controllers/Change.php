@@ -166,4 +166,66 @@ class Change extends \Users\Site\Controllers\Auth
         \Dsc\System::addMessage( 'Email changed.' );
         \Base::instance()->reroute( '/user' );
     }
+    
+    public function basicInfo()
+    {
+        $identity = $this->getIdentity();
+        if ( empty( $identity->id ))
+        {
+            $this->app->reroute( '/user' );
+        }
+        
+    	$this->app->set('meta.title', 'Change Basic Information');
+    	
+    	$view = \Dsc\System::instance()->get( 'theme' );
+    	$this->app->set( 'identity', $identity );
+    	echo $view->render( 'Users/Site/Views::change/basic.php' );
+    }
+    
+    public function basicInfoSubmit()
+    {
+    	$identity = $this->getIdentity();
+    	if ( empty( $identity->id ))
+    	{
+    		$this->app->reroute( '/user' );
+    	}
+    	$first_name = $this->input->get( 'first_name', null, 'string' );
+    	$last_name = $this->input->get( 'last_name', null, 'string' );
+    	$username = $this->input->get( 'username', null, 'alnum' );
+    	 
+    	
+    	try
+    	{
+    	    if( empty( $username ) ) {
+    			throw new \Exception( 'Your username is required' );
+    		}
+    		
+    		if( empty( $first_name ) ) {
+    			throw new \Exception( 'Your first name is required' );
+    		}
+    		
+    		if( empty( $last_name ) ) {
+    			throw new \Exception( 'Your last name is required' );
+    		}
+    		
+    		$user = (new \Users\Models\Users)->setState('filter.username', $username)->getItem();
+    		if (!empty($user->id) && ((string)$user->id != (string)$identity->id) )
+    		{
+    			throw new \Exception( 'This username is already taken' );
+    		}
+    		
+    		$identity->first_name = $first_name;
+    		$identity->last_name = $last_name;
+    		$identity->username = $username;
+    		$identity->save();    	
+    	} catch( \Exception $e ) {
+            
+    		\Dsc\System::addMessage( 'Change basic information has failed.', 'error' );
+            \Dsc\System::addMessage( $e->getMessage(), 'error' );
+            \Base::instance()->reroute( '/user/change-basic' );
+    		return;
+    	}
+        \Dsc\System::addMessage( 'Basic information changed.' );
+        \Base::instance()->reroute( '/user' );
+    }
 }
