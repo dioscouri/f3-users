@@ -196,6 +196,7 @@ class Auth extends \Dsc\Singleton
             \Dsc\System::instance()->get('session')->destroy();
         } else {
             $this->remove();
+            \Dsc\System::instance()->get('session')->removeAppSpace();
         }
         
         // Trigger plugin event for after logout
