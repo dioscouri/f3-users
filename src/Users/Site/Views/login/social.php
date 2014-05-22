@@ -50,4 +50,12 @@
 </div>
 <?php } ?>
 
+<?php if ($settings->isSocialLoginEnabled('paypalopenid') ) { ?>
+<div class="form-group">
+    <a href="./login/social/auth/PaypalOpenID" class="btn btn-paypal btn-default">
+    <i class="fa fa-paypal"></i> <span>Paypal</span>
+    </a>
+</div>
+<?php } ?>
+
 </div>
