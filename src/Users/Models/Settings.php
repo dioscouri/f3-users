@@ -71,7 +71,9 @@ class Settings extends \Dsc\Mongo\Collections\Settings
         
         $this->set('social.providers.GitHub.wrapper.path', \Base::instance()->get('PATH_ROOT') . 'vendor/hybridauth/hybridauth/additional-providers/hybridauth-github/Providers/GitHub.php' );
         $this->set('social.providers.GitHub.wrapper.class', 'Hybrid_Providers_GitHub');
-            
+        $this->set('social.providers.PaypalOpenID.wrapper.path', \Base::instance()->get('PATH_ROOT') . 'vendor/hybridauth/hybridauth/additional-providers/hybridauth-paypal-openid/Providers/PaypalOpenID.php' );
+        $this->set('social.providers.PaypalOpenID.wrapper.class', 'Hybrid_Providers_PaypalOpenID');
+        
         return $this;
     }
 
