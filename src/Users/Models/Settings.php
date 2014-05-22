@@ -12,9 +12,68 @@ class Settings extends \Dsc\Mongo\Collections\Settings
         )
     );
 
-    public $social = array();
+    public $social = array(
+    	'providers' => array(
+    	    'Facebook' => array(
+                'enabled' => 0,
+    	        'keys' => array(
+    	    	    'id' => null,
+    	            'secret' => null
+    	        )
+    	    ),
+    	    'Twitter' => array(
+    	        'enabled' => 0,
+    	        'keys' => array(
+    	            'key' => null,
+    	            'secret' => null
+    	        )
+    	    ),    	    
+    	    'Google' => array(
+    	        'enabled' => 0,
+    	        'keys' => array(
+    	            'id' => null,
+    	            'secret' => null
+    	        )
+    	    ),    	    
+    	    'LinkedIn' => array(
+    	        'enabled' => 0,
+    	        'keys' => array(
+    	            'key' => null,
+    	            'secret' => null
+    	        )
+    	    ),   
+    	    'GitHub' => array(
+    	        'enabled' => 0,
+    	        'keys' => array(
+    	            'id' => null,
+    	            'secret' => null
+    	        ),
+    	        'wrapper' => array(
+    	        	'path' => null,
+    	            'class' => null
+    	        )
+    	    ),
+    	    'PaypalOpenID' => array(
+    	        'enabled' => 0,
+    	        'keys' => array(
+    	            'id' => null,
+    	            'secret' => null
+    	        )
+    	    ),    	    
+        )
+    );
 
     protected $__type = 'users.settings';
+
+    public function __construct( $source = array(), $options = array() )
+    {
+        parent::__construct( $source, $options );
+        
+        $this->set('social.providers.GitHub.wrapper.path', \Base::instance()->get('PATH_ROOT') . 'vendor/hybridauth/hybridauth/additional-providers/hybridauth-github/Providers/GitHub.php' );
+        $this->set('social.providers.GitHub.wrapper.class', 'Hybrid_Providers_GitHub');
+            
+        return $this;
+    }
 
     public function isSocialLoginEnabled($provider=null)
     {

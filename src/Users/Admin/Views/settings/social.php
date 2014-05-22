@@ -1,6 +1,11 @@
 <div class="row">
     <div class="col-md-12">
 
+        <div class="alert alert-info">
+        When registering your applications with each provider, the Callback URL will use the following format:
+        <p><?php $f3 = \Base::instance(); echo $f3->get('SCHEME') . '://' . $f3->get('HOST') . $f3->get('BASE') . '/login/social?hauth.done={provider}'; ?></p>
+        </div>
+        
         <div class="row">
             <div class="col-md-2">
 
