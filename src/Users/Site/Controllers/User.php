@@ -116,7 +116,7 @@ class User extends Auth
         }
                 
     	$f3 = \Base::instance();
-    	$provider = strtolower( $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' ) );
+    	$provider = $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' );
     	 
     	$identity = $this->getIdentity();
     	if (empty($identity->id))
@@ -152,10 +152,10 @@ class User extends Auth
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
-            \Dsc\System::addMessage( 'Social login is not supported.', 'error' );
+        	\Dsc\System::addMessage( 'Social login is not supported.', 'error' );
             \Base::instance()->reroute( "/user" );
         }
-                
+        
         $f3 = \Base::instance();
         
         $user = $this->getIdentity();
@@ -166,7 +166,7 @@ class User extends Auth
         }
         
         $provider = $f3->get( 'PARAMS.provider' );
-        if (!$settings->isSocialLoginEnabled($provider))
+        if (!$settings->isSocialLoginEnabled(strtolower($provider)))
         {
             \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
             \Base::instance()->reroute( "/user" );
@@ -187,10 +187,9 @@ class User extends Auth
         {
             // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new \Hybrid_Auth( $config );
-        
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate( $provider );
-        
+            
             // grab the user profile
             $user_profile = $adapter->getUserProfile();
         

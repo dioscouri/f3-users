@@ -216,7 +216,7 @@ class Login extends \Dsc\Controller
                 
         $f3 = \Base::instance();
         $provider = $f3->get( 'PARAMS.provider' );
-        if (!$settings->isSocialLoginEnabled($provider))
+        if (!$settings->isSocialLoginEnabled(strtolower($provider)))
         {
             \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );

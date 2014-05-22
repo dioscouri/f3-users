@@ -34,18 +34,26 @@ class Settings extends \Dsc\Mongo\Collections\Settings
                 $result = $this->{'social.providers.Twitter.enabled'} && $this->{'social.providers.Twitter.keys.key'} && $this->{'social.providers.Twitter.keys.secret'};
                 break;
             case 'linkedin':
-                $result = $this->{'social.providers.Linkedin.enabled'} && $this->{'social.providers.Linkedin.keys.id'} && $this->{'social.providers.Linkedin.keys.secret'};
+                $result = $this->{'social.providers.LinkedIn.enabled'} && $this->{'social.providers.LinkedIn.keys.key'} && $this->{'social.providers.LinkedIn.keys.secret'};
                 break;
             case 'google':
                 $result = $this->{'social.providers.Google.enabled'} && $this->{'social.providers.Google.keys.id'} && $this->{'social.providers.Google.keys.secret'};
                 break;
-            default:
+            case 'github':
+                $result = $this->{'social.providers.GitHub.enabled'} && $this->{'social.providers.GitHub.keys.id'} && $this->{'social.providers.GitHub.keys.secret'};
+                break;
+            case 'paypalopenid':
+                $result = $this->{'social.providers.PaypalOpenID.enabled'} && $this->{'social.providers.PaypalOpenID.keys.id'} && $this->{'social.providers.PaypalOpenID.keys.secret'};
+                break;
+            case null:
                 // are ANY of the social providers enabled?
                 $enabled = $this->enabledSocialProviders();
                 if (!empty($enabled)) {
                 	$result = true;
                 }
                 break;
+            default: // unknown provider should be ignored otherwise login page falls into infinite loop apparently
+            	break;
         }
         
         return $result;
@@ -58,7 +66,7 @@ class Settings extends \Dsc\Mongo\Collections\Settings
         {
             if ($this->isSocialLoginEnabled(strtolower($network)))
             {
-                $providers[] = strtolower($network);
+            	$providers[] = $network;
             }
         }
         return $providers;

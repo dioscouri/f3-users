@@ -28,8 +28,24 @@
 
 <?php if ($settings->isSocialLoginEnabled('linkedin') ) { ?>
 <div class="form-group">
-    <a href="./login/social/auth/linkedin" class="btn btn-linkedin btn-default">
+    <a href="./login/social/auth/LinkedIn" class="btn btn-linkedin btn-default">
     <i class="fa fa-linkedin"></i> <span>LinkedIn</span>
+    </a>
+</div>
+<?php } ?>
+
+<?php if ($settings->isSocialLoginEnabled('github') ) { ?>
+<div class="form-group">
+    <a href="./login/social/auth/GitHub" class="btn btn-github btn-default">
+    <i class="fa fa-github"></i> <span>GitHub</span>
+    </a>
+</div>
+<?php } ?>
+
+<?php if ($settings->isSocialLoginEnabled('instagram') ) { ?>
+<div class="form-group">
+    <a href="./login/social/auth/Instagram" class="btn btn-instagram btn-default">
+    <i class="fa fa-instagram"></i> <span>Instagram</span>
     </a>
 </div>
 <?php } ?>

@@ -40,7 +40,7 @@
             
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <?php echo ucwords($network); ?>
+                    <?php echo $network; ?>
                     
                     <a class="btn btn-xs btn-danger pull-right" data-bootbox="confirm" href="./user/social/unlink/<?php echo $network; ?>">
                         <i class="fa fa-times"></i>
@@ -69,8 +69,8 @@
     	
     		<?php foreach( $unlinked as $network ) { ?>
             <div class="form-group">
-                <a href="./user/social/link/<?php echo $network; ?>" class="btn btn-<?php echo $network; ?> btn-default">
-                <i class="fa fa-<?php echo $network; ?>"></i> <span><?php echo ucwords( $network ); ?></span>
+                <a href="./user/social/link/<?php echo $network; ?>" class="btn btn-<?php echo strtolower($network); ?> btn-default">
+                <i class="fa fa-<?php echo strtolower($network); ?>"></i> <span><?php echo $network; ?></span>
                 </a>
             </div>    		
     		<?php } ?>
