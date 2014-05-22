@@ -113,7 +113,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $filter_social_profile = $this->getState('filter.social-profile');
         if (strlen($filter_social_profile))
         {
-        	$this->setCondition('social.'.strtolower($filter_social_profile), array( '$exists' => true ) );
+        	$this->setCondition('social.'.$filter_social_profile, array( '$exists' => true ) );
         }
         
         

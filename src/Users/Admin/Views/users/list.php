@@ -40,7 +40,7 @@
                             	$providers = \Users\Models\Settings::fetch()->enabledSocialProviders();
                             	
                             	foreach ( (array)$providers as $network) : ?>
-                                <option <?php if($state->get('filter.social-profile') == $network ) { echo 'selected'; } ?> value="<?php echo $network; ?>"><?php echo ucwords( $network ); ?></option>
+                                <option <?php if($state->get('filter.social-profile') == $network ) { echo 'selected'; } ?> value="<?php echo $network; ?>"><?php echo $network; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </li>                
