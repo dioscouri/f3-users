@@ -1,4 +1,5 @@
 <?php $settings = \Users\Models\Settings::fetch(); ?>
+<?php $flash = \Dsc\Flash::instance(); ?>
 
 <div class="container">
     <div class="row">
