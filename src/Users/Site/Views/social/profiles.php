@@ -13,9 +13,12 @@
         <li class="active">Social Profiles</li>
     </ol>
     
-    <legend>
+    <legend class="clearfix">
         Social Profiles
+        <div class="pull-right"><a class="btn btn-link" href="./user">Cancel</a></div>
     </legend>
+    
+    <p class="help-block">Link your social profiles and enjoy one-click logins.</p>
     
     <h3>Connected Accounts</h3>
     

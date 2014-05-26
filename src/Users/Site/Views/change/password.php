@@ -27,6 +27,7 @@
                 </div>
                             
                 <button class="btn btn-lg btn-primary" type="submit">Update password</button>
+                <a class="btn btn-link" href="./user">Cancel</a>
                 
             </form>
         </div>

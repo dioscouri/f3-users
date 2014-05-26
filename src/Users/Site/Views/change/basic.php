@@ -26,7 +26,9 @@
                     <label>Your Last Name</label>
                     <input class="form-control" name="last_name" placeholder="<?php echo $identity->{'last_name'}; ?>" value="<?php echo $identity->{'last_name'}; ?>" type="text" required />
                 </div>
+                
                 <button class="btn btn-lg btn-primary" type="submit">Submit</button>
+                <a class="btn btn-link" href="./user">Cancel</a>
                 
             </form>
         </div>
