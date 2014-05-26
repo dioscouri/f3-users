@@ -2,8 +2,30 @@
 <?php $flash = \Dsc\Flash::instance(); ?>
 
 <div class="container">
+    <?php 
+    $settings = \Users\Models\Settings::fetch();
+    if ($settings->isSocialLoginEnabled()) 
+    {
+        ?>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+            <legend>
+                Register with a social profile
+            </legend>
+                        
+            <?php echo $this->renderLayout('Users/Site/Views::login/social.php'); ?>
+            
+            <p>&nbsp;</p>
+            
+            </div>
+        </div>
+        <?php  
+    } 
+    ?>
+        
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-4">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+        
             <legend>
                 Register with your email address
             </legend>
@@ -46,24 +68,13 @@
                     <input class="form-control" name="confirm_new_password" placeholder="Confirm New Password" type="password" required />
                 </div>
                  
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary" type="submit">Register</button>
+                    <a class="btn btn-link" href="./sign-in">Already have an account?</a>
+                </div>
             </form>
+            
         </div>
         
-        <?php 
-        if (class_exists('Hybrid_Auth')) 
-        {
-            ?>
-            <div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-1">
-            <?php // TODO Only display this if there is a properly configured, enabled Provider ?>
-            <legend>
-                or with a social profile
-            </legend>
-                        
-            <?php echo $this->renderLayout('Users/Site/Views::login/social.php'); ?>
-            </div>
-            <?php  
-        } 
-        ?>        
     </div>
 </div>

@@ -8,6 +8,7 @@ class Settings extends \Dsc\Mongo\Collections\Settings
         'registration' => array(
             'enabled' => 1,
             'username' => 1,
+            'dual' => 0,
             'action' => 'email_validation'
         )
     );

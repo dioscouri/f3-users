@@ -20,7 +20,6 @@
                 </div>
                 <!-- /.form-group -->
                 
-                
                 <div class="form-group">
                     <label>Include Username in registration form?</label>
                     <select name="general[registration][username]" class="form-control">
@@ -29,6 +28,20 @@
                     </select>                
                 </div>
                 <!-- /.form-group -->
+                
+                <div class="form-group">
+                    <label>Enable the combined login/registration view?</label>
+                    <select name="general[registration][dual]" class="form-control">
+                        <option value="0" <?php if ($flash->old('general.registration.dual') == '0') { echo "selected='selected'"; } ?>>No</option>
+                        <option value="1" <?php if ($flash->old('general.registration.dual') == '1') { echo "selected='selected'"; } ?>>Yes</option>                                                
+                    </select>
+                </div>
+                <!-- /.form-group -->
+                <div class="alert alert-info">
+                    <p>If enabled, use this as your login form: <a target="_blank" href="./login">/login</a></p>
+                    <p>If disabled, /login will automatically redirect to <a target="_blank" href="./sign-in">/sign-in</a> and you should use <a target="_blank" href="./register">/register</a> for registration.</p>
+                    
+                </div>
 
                 <div class="form-group">
                     <label>After registration:</label>

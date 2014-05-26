@@ -15,6 +15,12 @@ class Login extends \Dsc\Controller
             $f3->reroute( '/user' );
         }
         
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->{'general.registration.dual'}) 
+        {
+            $f3->reroute( '/sign-in' );
+        }
+        
         $this->app->set('meta.title', 'Log In');
         
         $view = \Dsc\System::instance()->get( 'theme' );
