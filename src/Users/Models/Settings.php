@@ -61,7 +61,18 @@ class Settings extends \Dsc\Mongo\Collections\Settings
     	            'secret' => null
     	        )
     	    ),    	    
-        )
+    	    'Instagram' => array(
+    	        'enabled' => 0,
+    	        'keys' => array(
+    	            'id' => null,
+    	            'secret' => null
+    	        ),
+    	        'wrapper' => array(
+    	        	'path' => null,
+    	            'class' => null
+    	        )
+    	    ),
+    	 )
     );
 
     protected $__type = 'users.settings';
@@ -74,6 +85,8 @@ class Settings extends \Dsc\Mongo\Collections\Settings
         $this->set('social.providers.GitHub.wrapper.class', 'Hybrid_Providers_GitHub');
         $this->set('social.providers.PaypalOpenID.wrapper.path', \Base::instance()->get('PATH_ROOT') . 'vendor/hybridauth/hybridauth/additional-providers/hybridauth-paypal-openid/Providers/PaypalOpenID.php' );
         $this->set('social.providers.PaypalOpenID.wrapper.class', 'Hybrid_Providers_PaypalOpenID');
+        $this->set('social.providers.Instagram.wrapper.path', \Base::instance()->get('PATH_ROOT') . 'vendor/hybridauth/hybridauth/additional-providers/hybridauth-instagram/Providers/Instagram.php' );
+        $this->set('social.providers.Instagram.wrapper.class', 'Hybrid_Providers_Instagram');
         
         return $this;
     }
@@ -106,6 +119,9 @@ class Settings extends \Dsc\Mongo\Collections\Settings
                 break;
             case 'paypalopenid':
                 $result = $this->{'social.providers.PaypalOpenID.enabled'} && $this->{'social.providers.PaypalOpenID.keys.id'} && $this->{'social.providers.PaypalOpenID.keys.secret'};
+                break;
+            case 'instagram':
+                $result = $this->{'social.providers.Instagram.enabled'} && $this->{'social.providers.Instagram.keys.id'} && $this->{'social.providers.Instagram.keys.secret'};
                 break;
             case null:
                 // are ANY of the social providers enabled?
