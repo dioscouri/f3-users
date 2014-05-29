@@ -33,6 +33,7 @@ class Auth extends \Dsc\Singleton
         $safemode_id = \Base::instance()->get('safemode.id');
         
         $regex = '/^[0-9a-z]{24}$/';
+
         if (preg_match($regex, (string) $safemode_id))
         {
             $safemode_id = new \MongoId($safemode_id);
@@ -44,10 +45,16 @@ class Auth extends \Dsc\Singleton
         
         if ($safemode_enabled && ($username_input === $safemode_user || $username_input === $safemode_email))
         {
+
             if (password_verify($password_input, $safemode_password))
             {
-                $user = new \Users\Models\Users;
-                $user->id = $safemode_id;
+
+                //Load safemode user from collection
+                $user = (new \Users\Models\Users)->setCondition('email',$safemode_email)->getItem();
+                if(!$user->id){
+                    $user = new \Users\Models\Users;
+                    $user->id = $safemode_id; 
+                }
                 $user->username = $safemode_user;
                 $user->first_name = $safemode_user;
                 $user->password = $safemode_password;
@@ -57,10 +64,12 @@ class Auth extends \Dsc\Singleton
                     $role = 'root';
                 }
                 $user->role = $role;
-                $user->__safemode = true;
+                $user->__safemode = true;  
+                
         
                 $this->setIdentity( $user );
                 $identity = $user;
+
             }
         }
 
@@ -113,6 +122,7 @@ class Auth extends \Dsc\Singleton
         
         // after triggering Auth Listeners, check if identity has been set.
         $identity = $this->getIdentity();
+
         if (!empty($identity->id))
         {
             // If so, login has been successful, so trigger Login Listeners
@@ -166,8 +176,9 @@ class Auth extends \Dsc\Singleton
         try {
             $user->setLastVisit();
         } catch (\Exception $e) {
-        	
+        	echo $e->getMessage(); die();
         }
+       
         
         $event = new \Joomla\Event\Event( 'afterUserLogin' );
         $event->addArgument('identity', $user);
