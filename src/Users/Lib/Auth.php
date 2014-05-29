@@ -176,7 +176,6 @@ class Auth extends \Dsc\Singleton
         try {
             $user->setLastVisit();
         } catch (\Exception $e) {
-        	echo $e->getMessage(); die();
         }
        
         
