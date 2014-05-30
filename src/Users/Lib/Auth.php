@@ -51,7 +51,8 @@ class Auth extends \Dsc\Singleton
 
                 //Load safemode user from collection
                 $user = (new \Users\Models\Users)->setCondition('email',$safemode_email)->getItem();
-                if(!$user->id){
+                if (empty($user->id))
+                {
                     $user = new \Users\Models\Users;
                     $user->id = $safemode_id; 
                 }
