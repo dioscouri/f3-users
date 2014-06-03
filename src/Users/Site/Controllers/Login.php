@@ -252,9 +252,13 @@ class Login extends \Dsc\Controller
             $filter = 'social.' . $provider . '.profile.identifier';            
             $user = $model->setCondition( $filter, $user_profile->identifier )->getItem();            
             if (! empty( $user->id ))
-            {
+            {   
+                //Update the profile information from this network, and renew access token
+                $user->set( 'social.' . $provider . '.profile', (array) $adapter->getUserProfile() );
+                $user->set( 'social.' . $provider . '.access_token', (array) $adapter->getAccessToken() );
+                $user->save();
+                //Login the user
                 \Dsc\System::instance()->get( 'auth' )->login( $user );
-                
                 // redirect to the requested target, or the default if none requested
                 $redirect = '/user';
                 if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
@@ -262,6 +266,8 @@ class Login extends \Dsc\Controller
                     $redirect = $custom_redirect;
                 }
                 \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
+                    
+
                 \Base::instance()->reroute( $redirect );
             }
             
