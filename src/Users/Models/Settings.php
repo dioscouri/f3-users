@@ -133,7 +133,6 @@ class Settings extends \Dsc\Mongo\Collections\Settings
             default: 
         $event = \Dsc\System::instance()->trigger('onLoginProviderEnabled', array('provider' => $provider, 'result'=>null ));
         $result = $event->getArgument('result');    
-     echo $result;     
                 break;
         }
         
