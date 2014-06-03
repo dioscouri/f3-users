@@ -246,7 +246,6 @@ class Login extends \Dsc\Controller
              
             // grab the user profile
             $user_profile = $adapter->getUserProfile();
-            var_dump($user_profile);die();
             // 1 - try to lookup the user based on the profile.identifier
             // if found, log them in to our system and redirect to their profile page
             $model = new \Users\Models\Users;
