@@ -231,6 +231,7 @@ class Login extends \Dsc\Controller
         $hybridauth_config = \Users\Models\Settings::fetch();
         $config = (array) $hybridauth_config->{'social'};
         
+     
         if (empty($config['base_url'])) {
             $config['base_url'] = $f3->get('SCHEME') . '://' . $f3->get('HOST') . $f3->get('BASE') . '/login/social';
         }
@@ -239,13 +240,12 @@ class Login extends \Dsc\Controller
         {
             // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new \Hybrid_Auth( $config );
-            
+           
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate( $provider );
-            
+             
             // grab the user profile
             $user_profile = $adapter->getUserProfile();
-            
             // 1 - try to lookup the user based on the profile.identifier
             // if found, log them in to our system and redirect to their profile page
             $model = new \Users\Models\Users;
