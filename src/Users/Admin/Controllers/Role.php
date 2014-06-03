@@ -84,11 +84,12 @@ class Role extends \Admin\Controllers\BaseAuth
         $f3->reroute($route);
     }
 
-    public function displayPermissions($flash)
+    public function displayPermissions()
     {
         $f3 = \Base::instance();
         $acl = \Dsc\System::instance()->get('acl');
         $resources = $acl->getAcl()->getResources();
+        $flash = \Dsc\System::instance()->get('flash');
         
         $resourceActions = array();
         if (count($resources))

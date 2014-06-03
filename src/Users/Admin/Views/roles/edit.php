@@ -55,7 +55,7 @@
                 
                 <div class="tab-pane" id="tab-permissions">
                 
-                	<?php echo \Dsc\Request::internal('\Users\Admin\Controllers\Role->displayPermissions', array( 'flash' => $flash ) ); ?>
+                	<?php echo \Dsc\Request::internal('\Users\Admin\Controllers\Role->displayPermissions' ); ?>
                                 
                 </div>
                 <!-- /.tab-pane -->

@@ -179,7 +179,7 @@ class Acl extends \Dsc\Singleton
         $acl->addRole(new \Users\Lib\Acl\Role('identified'));
         
         foreach ($roles as $role) {
-            $acl->addRole(new \Users\Lib\Acl\Role($role->slug));
+            $acl->addRole(new \Users\Lib\Acl\Role($role->title));
             // Grant permissions in "permissions" model
             foreach ($role->getPermissions() as $permission) {
                 $acl->allow($role->slug, $permission->resource, $permission->action);
