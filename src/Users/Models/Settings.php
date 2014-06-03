@@ -130,8 +130,11 @@ class Settings extends \Dsc\Mongo\Collections\Settings
                 	$result = true;
                 }
                 break;
-            default: // unknown provider should be ignored otherwise login page falls into infinite loop apparently
-            	break;
+            default: 
+        $event = \Dsc\System::instance()->trigger('onLoginProviderEnabled', array('provider' => $provider, 'result'=>null ));
+        $result = $event->getArgument('result');    
+     echo $result;     
+                break;
         }
         
         return $result;

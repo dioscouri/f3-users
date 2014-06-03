@@ -205,7 +205,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             $this->{'social.google.profile.photoURL'} = str_replace('sz=50', '', $googleProfilePhoto);
         }
         
-        if (! empty($this->groups))
+        if (!empty($this->groups))
         {
             $groups = array();
             foreach ($this->groups as $key => $id)
