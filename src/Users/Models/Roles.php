@@ -30,10 +30,10 @@ class Roles extends \Dsc\Mongo\Collections\Categories
     }
     
     protected  function afterSave(){
-    	if( !empty( $this->_list_permissions ) ) {
+    	if( count( $this->__list_permissions ) ) {
 			$acl = \Dsc\System::instance()->get('acl')->getAcl();
-			    	
-			foreach( $this->_list_permissions as $resource => $actions ) {
+			
+			foreach( $this->__list_permissions as $resource => $actions ) {
 				foreach( $actions as $action => $val ) {
 					if( ((int)$val) == 1 ) {
 						$acl->allow( $this->slug, $resource, $action );
@@ -43,7 +43,7 @@ class Roles extends \Dsc\Mongo\Collections\Categories
 				}
 			}
 		}
-		    		 
+		
 		return parent::afterSave();
     }
     
