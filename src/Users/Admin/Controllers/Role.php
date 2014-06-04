@@ -102,7 +102,6 @@ class Role extends \Admin\Controllers\BaseAuth
         }
         $id = (string)$this->inputfilter->clean($flash->old('_id'), 'alnum');
         
-        echo (string)$id;
         $model = $this->getModel();
         $item = null;
         if (empty($id))
