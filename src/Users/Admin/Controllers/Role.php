@@ -15,10 +15,11 @@ class Role extends \Admin\Controllers\BaseAuth
 
     protected function getModel($name = 'Roles')
     {
+    	$model = null;
         switch (strtolower($name))
         {
             default:
-                $model = new \Users\Models\Roles();
+                $model = new \Users\Models\Roles;
                 break;
         }
         
@@ -84,12 +85,11 @@ class Role extends \Admin\Controllers\BaseAuth
         $f3->reroute($route);
     }
 
-    public function displayPermissions()
+    public function displayPermissions( $flash )
     {
         $f3 = \Base::instance();
         $acl = \Dsc\System::instance()->get('acl');
         $resources = $acl->getAcl()->getResources();
-        $flash = \Dsc\System::instance()->get('flash');
         
         $resourceActions = array();
         if (count($resources))
@@ -100,26 +100,29 @@ class Role extends \Admin\Controllers\BaseAuth
                 $resourceActions[$res_name] = $acl->getAcl()->getResourceActions($res_name);
             }
         }
+        $id = (string)$this->inputfilter->clean($flash->old('_id'), 'alnum');
         
-        $id = $this->inputfilter->clean($flash->old('id'), 'alnum');
+        echo (string)$id;
         $model = $this->getModel();
-        
+        $item = null;
         if (empty($id))
         {
+        	$item = $model;
+        } else {
             try
             {
-                $model = $model->getItem()
-                    ->setState('filter.id', $id)
-                    ->getItem();
+                $item = $model->setState('filter.id', $id)->getItem();
             }
             catch (\Exception $e)
-            {}
+            {
+            	return;
+            }
         }
         
         $f3->set('acl', $acl);
         $f3->set('resources', $resourceActions);
         $f3->set('role', $flash->old('slug'));
-        $f3->set('permissions', $acl->getPermissions($model));
+        $f3->set('permissions', $acl->getPermissions($item));
         
         $view = \Dsc\System::instance()->get('theme');
         return $view->renderView('Users/Admin/Views::roles/fields_permissions.php');
