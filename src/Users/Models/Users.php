@@ -527,7 +527,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 		{
 			$registration_action = \Users\Models\Settings::fetch()->{'general.registration.action'};
 		}
-
+        
 		// $user->save() will handle other validations, such as username uniqueness, etc
 		// and throws an exception if validation/save fails		
 		switch ($registration_action)

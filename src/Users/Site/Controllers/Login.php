@@ -451,13 +451,12 @@ class Login extends \Dsc\Controller
         
         try 
         {
-            $registration_action = \Users\Models\Settings::fetch()->{'general.registration.action'};
             
             $data = \Dsc\System::instance()->get('session')->get('users.incomplete_provider_data' );
             $data['email'] = $this->input->get( 'email', null, 'string' );
             $data['username'] = $this->input->get( 'username', null, 'string' );
             
-            $user = \Users\Models\Users::createNewUser($data, $registration_action);
+            $user = \Users\Models\Users::createNewUser($data, 'auto_login');
             
             // social login should always login the user if successful,
             // so login the user if they aren't already logged in
