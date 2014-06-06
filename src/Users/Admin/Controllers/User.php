@@ -57,6 +57,19 @@ class User extends \Admin\Controllers\BaseAuth
 
 		$this->app->set('meta.title', 'Create User');
 		
+		$user = $this->getIdentity();
+		$canModityRole = false;
+		if( $user->role == 'root' ){
+			$canModityRole = true;
+			$roles = (new \Users\Models\Roles)->populateState()->getList();
+					foreach( $roles as $key => $role ){
+				$roles[$key] = array( 'value' => $role->slug, 'text' => $role->title );
+			}
+			$this->app->set( 'roles', $roles );
+		}
+		
+		$this->app->set( 'canModifyRole', $canModityRole );
+		
 		echo $view->render('Users/Admin/Views::users/create.php');
 	}
 	
@@ -72,7 +85,18 @@ class User extends \Admin\Controllers\BaseAuth
 		$view->event = $view->trigger( 'onDisplayAdminUserEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
 		
 		$this->app->set('meta.title', 'Edit User');
-						
+		$user = $this->getIdentity();
+		$canModityRole = false;
+		if( $user->role == 'root' ){
+			$canModityRole = true;
+			$roles = (new \Users\Models\Roles)->populateState()->getList();
+			foreach( $roles as $key => $role ){
+				$roles[$key] = array( 'value' => $role->slug, 'text' => $role->title );
+			}
+			$this->app->set( 'roles', $roles );
+		}
+		$this->app->set( 'canModifyRole', $canModityRole );
+		
 		echo $view->render('Users/Admin/Views::users/edit.php');
 	}
 	
