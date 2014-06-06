@@ -61,7 +61,7 @@ class User extends \Admin\Controllers\BaseAuth
 		$canModityRole = false;
 		if( $user->role == 'root' ){
 			$canModityRole = true;
-			$roles = (new \Users\Models\Roles)->populateState()->getList();
+			$roles = (new \Users\Models\Roles)->getList();
 					foreach( $roles as $key => $role ){
 				$roles[$key] = array( 'value' => $role->slug, 'text' => $role->title );
 			}
@@ -89,7 +89,7 @@ class User extends \Admin\Controllers\BaseAuth
 		$canModityRole = false;
 		if( $user->role == 'root' ){
 			$canModityRole = true;
-			$roles = (new \Users\Models\Roles)->populateState()->getList();
+			$roles = (new \Users\Models\Roles)->getList();
 			foreach( $roles as $key => $role ){
 				$roles[$key] = array( 'value' => $role->slug, 'text' => $role->title );
 			}
