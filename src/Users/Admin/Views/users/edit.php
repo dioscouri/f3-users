@@ -121,7 +121,24 @@
         
                     </div>
                     <!-- /.form-group -->
-                                 
+                    
+                    <?php if( $canModifyRole ) { ?>
+                    <div class="form-group">
+        
+                        <label class="col-md-3">Role</label>
+                        <div class="col-md-7">
+						<select name="role" data-select='1' class="form-control">
+                            <?php 
+                            	echo \Dsc\Html\Select::options($roles, $flash->old('role'));
+                            ?>
+						</select>
+                        </div>
+                        <!-- /.col -->
+        
+                    </div>
+                    <!-- /.form-group -->
+                    <?php } ?>
+                    
                 </div>
                 <!-- /.tab-pane -->
                 

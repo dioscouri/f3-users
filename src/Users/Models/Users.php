@@ -140,6 +140,18 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         unset($this->new_password);
         unset($this->confirm_new_password);
         
+        $user = \Dsc\System::instance()->get('auth')->getIdentity();
+        
+        if( $user->role != 'root' ){ // do not allow to change user role unless the current user is in root group
+        	$old_role = 'unidentified';
+        	if( !empty( $this->id )){
+        		$old_user = (new \Users\Models\Users )->setState( 'filter.id', $this->id )->getItem();
+        		$old_role = $old_user->role;
+        	}
+        	$this->role = $old_role;
+        }
+        
+        
         if (empty($this->password))
         {
             $this->__auto_password = $this->generateRandomString(10); // save this for later emailing to the user, if necessary
@@ -527,7 +539,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 		{
 			$registration_action = \Users\Models\Settings::fetch()->{'general.registration.action'};
 		}
-
+        
 		// $user->save() will handle other validations, such as username uniqueness, etc
 		// and throws an exception if validation/save fails		
 		switch ($registration_action)
