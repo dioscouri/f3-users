@@ -51,6 +51,8 @@
                     <?php echo $this->renderView('Users/Admin/Views::users/fields_basics.php'); ?>
                     
                     <?php echo $this->renderView('Users/Admin/Views::users/fields_groups.php'); ?>
+                    
+                    <?php echo $this->renderView('Users/Admin/Views::users/fields_admin_tags.php'); ?>
                                                      
                 </div>
                 <!-- /.tab-pane -->
