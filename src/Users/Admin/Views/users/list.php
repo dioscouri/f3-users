@@ -163,7 +163,7 @@
                         <div class="input-group">
                             <select id="bulk-actions" name="bulk_action" class="form-control">
                                 <option value="null">-Bulk Actions-</option>
-                                <option value="delete" data-action="./admin/shop/customer/delete">Delete</option>
+                                <option value="delete" data-action="./admin/users/delete">Delete</option>
                             </select>
                             <span class="input-group-btn">
                                 <button class="btn btn-default bulk-actions" type="button" data-target="bulk-actions">Apply</button>
@@ -271,7 +271,7 @@
                     </div>
                     <div class="hidden-xs hidden-sm col-md-2">
                         <span class="pull-right">
-    	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/shop/customer/delete/<?php echo $item->id; ?>">
+    	                    <a class="btn btn-xs btn-danger" data-bootbox="confirm" href="./admin/user/delete/<?php echo $item->id; ?>">
     	                        <i class="fa fa-times"></i>
     	                    </a>
 	                    </span>
