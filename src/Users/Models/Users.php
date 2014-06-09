@@ -117,7 +117,95 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         	$this->setCondition('social.'.$filter_social_profile, array( '$exists' => true ) );
         }
         
+        $filter_admin_tags = (array) $this->getState('filter.admin_tags');
+        if (!empty($filter_admin_tags))
+        {
+            $filter_admin_tags = array_filter( array_values( $filter_admin_tags ), function( $var ) {return !empty( trim($var) ); } );
+            
+            if (!empty($filter_admin_tags)) {
+                if( count( $filter_admin_tags ) == 1 && $filter_admin_tags[0] == '--' ) {
+                    
+                    if (!$and = $this->getCondition('$and'))
+                    {
+                        $and = array();
+                    }
+                    
+                    $and[] = array(
+                        '$or' => array(
+                            array(
+                                'admin_tags' => null
+                            ),
+                            array(
+                                'admin_tags' => array(
+                                    '$size' => 0
+                                )
+                            )
+                        )
+                    );
+                    
+                    $this->setCondition('$and', $and);
+                    
+                } else {
+                    $this->setCondition('admin_tags', array( '$in' => $filter_admin_tags ) );
+                }
+                 
+            }            
+        }
         
+        $filter_last_visit_after = $this->getState('filter.last_visit_after');
+        if (strlen($filter_last_visit_after))
+        {
+            $filter_last_visit_after = strtotime($filter_last_visit_after);
+        
+            // add $and conditions to the query stack
+            if (!$and = $this->getCondition('$and'))
+            {
+                $and = array();
+            }
+        
+            $and[] = array(
+                '$or' => array(
+                    array(
+                        'last_visit.time' => null
+                    ),
+                    array(
+                        'last_visit.time' => array(
+                            '$gte' => $filter_last_visit_after
+                        )
+                    )
+                )
+            );
+        
+            $this->setCondition('$and', $and);
+        }
+        
+        $filter_last_visit_before = $this->getState('filter.last_visit_before');
+        if (strlen($filter_last_visit_before))
+        {
+            $filter_last_visit_before = strtotime($filter_last_visit_before);
+        
+            // add $and conditions to the query stack
+            if (!$and = $this->getCondition('$and'))
+            {
+                $and = array();
+            }
+        
+            $and[] = array(
+                '$or' => array(
+                    array(
+                        'last_visit.time' => 0
+                    ),                    
+                    array(
+                        'last_visit.time' => array(
+                            '$lte' => $filter_last_visit_before
+                        )
+                    )
+                )
+            );
+        
+            $this->setCondition('$and', $and);
+        }        
+                
         return $this;
     }
 
