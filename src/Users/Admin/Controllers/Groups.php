@@ -55,4 +55,18 @@ class Groups extends \Admin\Controllers\BaseAuth
         ) ) );
     
     }
+    
+    public function forSelection()
+    {
+        $term = $this->input->get('q', null, 'default');
+        $key =  new \MongoRegex('/'. $term .'/i');
+        $results = \Users\Models\Groups::forSelection(array('title'=>$key));
+    
+        $response = new \stdClass;
+        $response->more = false;
+        $response->term = $term;
+        $response->results = $results;
+    
+        return $this->outputJson($response);
+    }    
 }

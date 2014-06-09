@@ -16,6 +16,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     public $groups = array();
     public $photo;
     public $last_visit = array();
+    public $admin_tags = array();
     
     protected $__collection_name = 'users';
     protected $__type = 'users';
@@ -237,6 +238,39 @@ class Users extends \Dsc\Mongo\Collections\Taggable
                 }
             }
             $this->groups = $groups;
+        }
+        
+        if (!empty($this->__groups))
+        {
+            if (is_string($this->__groups)) {
+                $this->__groups = \Base::instance()->split( $this->__groups );
+            }            
+            
+            $groups = array();
+            foreach ($this->__groups as $key => $id)
+            {
+                $item = (new \Users\Models\Groups())->setState('filter.id', $id)->getItem();
+                $groups[] = array(
+                    "id" => $item->id,
+                    "title" => $item->title,
+                    "slug" => $item->slug
+                );
+            }
+            $this->groups = $groups;
+        }
+        
+        if (!empty($this->admin_tags) && !is_array($this->admin_tags))
+        {
+            $this->admin_tags = trim($this->admin_tags);
+            if (!empty($this->admin_tags)) {
+                $this->admin_tags = array_map(function($el){
+                    return strtolower($el);
+                }, \Base::instance()->split( (string) $this->admin_tags ));
+            }
+        }
+        elseif(empty($this->admin_tags) && !is_array($this->admin_tags))
+        {
+            $this->admin_tags = array();
         }
         
         return parent::beforeSave();
@@ -590,4 +624,18 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	    
 	    return $providers;
 	} 
+	
+	/**
+	 *
+	 * @param array $types
+	 * @return unknown
+	 */
+	public static function distinctAdminTags($query=array())
+	{
+	    $model = new static();
+	    $distinct = $model->collection()->distinct("admin_tags", $query);
+	    $distinct = array_values( array_filter( $distinct ) );
+	
+	    return $distinct;
+	}
 }

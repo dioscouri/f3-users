@@ -4,6 +4,7 @@ namespace Users\Models;
 class Groups extends \Dsc\Mongo\Collections\Describable 
 {
     use \Dsc\Traits\Models\OrderableCollection;
+    use \Dsc\Traits\Models\ForSelection;
     
     protected $__collection_name = 'users.groups';
     protected $__type = 'users.groups';

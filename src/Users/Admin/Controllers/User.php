@@ -85,6 +85,7 @@ class User extends \Admin\Controllers\BaseAuth
 		$view->event = $view->trigger( 'onDisplayAdminUserEdit', array( 'item' => $this->getItem(), 'tabs' => array(), 'content' => array() ) );
 		
 		$this->app->set('meta.title', 'Edit User');
+		
 		$user = $this->getIdentity();
 		$canModityRole = false;
 		if( $user->role == 'root' ){

@@ -35,11 +35,11 @@
                     <a href="#tab-basics" data-toggle="tab"> Basics </a>
                 </li>
                 <li>
-                    <a href="#tab-groups" data-toggle="tab"> Groups </a>
+                    <a href="#tab-social" data-toggle="tab"> Social </a>
                 </li>
                 <li>
-                    <a href="#tab-social" data-toggle="tab"> Social </a>
-                </li>                
+                    <a href="#tab-preferences" data-toggle="tab"> Preferences </a>
+                </li>
                 <?php foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
                 <li>
                     <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
@@ -51,156 +51,25 @@
 
                 <div class="tab-pane active" id="tab-basics">
                 
-                    <div class="form-group">
-                        <label class="col-md-3">Username</label>
-        
-                        <div class="col-md-7">
-                            <input type="text" name="username" value="<?php echo $flash->old('username'); ?>" class="form-control" />
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
-        
-                    <div class="form-group">
-        
-                        <label class="col-md-3">First Name</label>
-        
-                        <div class="col-md-7">
-                            <input type="text" name="first_name" value="<?php echo $flash->old('first_name'); ?>" class="form-control" />
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
-        
-                    <div class="form-group">
-        
-                        <label class="col-md-3">Last Name</label>
-        
-                        <div class="col-md-7">
-                            <input type="text" name="last_name" value="<?php echo $flash->old('last_name'); ?>" class="form-control" />
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
-        
-                    <div class="form-group">
-        
-                        <label class="col-md-3">Email Address</label>
-        
-                        <div class="col-md-7">
-                            <input type="text" name="email" value="<?php echo $flash->old('email'); ?>" class="form-control" />
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
+                    <?php echo $this->renderView('Users/Admin/Views::users/fields_basics.php'); ?>
                     
-                    <div class="form-group">
-        
-                        <label class="col-md-3">New Password</label>
-        
-                        <div class="col-md-7">
-                            <input type="password" name="new_password" class="form-control" autocomplete="off" />
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
+                    <?php echo $this->renderView('Users/Admin/Views::users/fields_groups.php'); ?>
                     
-                    <div class="form-group">
-        
-                        <label class="col-md-3">Confirm New Password</label>
-        
-                        <div class="col-md-7">
-                            <input type="password" name="confirm_new_password" class="form-control" autocomplete="off" />
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
+                    <?php echo $this->renderView('Users/Admin/Views::users/fields_admin_tags.php'); ?>
                     
-                    <?php if( $canModifyRole ) { ?>
-                    <div class="form-group">
-        
-                        <label class="col-md-3">Role</label>
-                        <div class="col-md-7">
-						<select name="role" data-select='1' class="form-control">
-                            <?php 
-                            	echo \Dsc\Html\Select::options($roles, $flash->old('role'));
-                            ?>
-						</select>
-                        </div>
-                        <!-- /.col -->
-        
-                    </div>
-                    <!-- /.form-group -->
-                    <?php } ?>
-                    
-                </div>
-                <!-- /.tab-pane -->
-                
-                <div class="tab-pane" id="tab-groups">
-                
-                    <?php if (!empty($groups)) { ?>
-        
-                    <div class="portlet">
-        
-                        <div class="portlet-header">
-        
-                            <h3>Groups</h3>
-        
-                        </div>
-                        <!-- /.portlet-header -->
-        
-                        <div class="">
-                            <div id="groups" class="list-group">
-                                <div id="groups-checkboxes">
-                                <?php echo $this->renderLayout('Users/Admin/Views::groups/checkboxes.php'); ?>
-                                </div>
-                                <script>
-                                    Dsc.refreshCategories = function(r) {
-                                        console.log('trying to get groups');
-                                        var form_data = new Array();
-                                        jQuery.merge( form_data, jQuery('#groups-checkboxes').find(':input').serializeArray() );
-                                        jQuery.merge( form_data, [{ name: "groups_ids[]", value: r.result._id['$id'] }] );
-        
-                                        var request = jQuery.ajax({
-                                            type: 'post', 
-                                            url: './admin/users/groups/checkboxes',
-                                            data: form_data
-        
-                                        }).done(function(data){
-                                            var lr = jQuery.parseJSON( JSON.stringify(data), false);
-                                            if (lr.result) {
-                                                 console.log(lr.result);
-                                                jQuery('#groups-checkboxes').html(lr.result);
-                                                App.initICheck();
-                                            }
-                                        });
-                                    }
-                                    </script>
-        
-                            </div>
-                        </div>
-                        <!-- /.portlet-content -->
-        
-                    </div>
-                    
-                    <?php } else { ?>
-                    
-                        No groups exist.  Please create one first.
-                    
-                    <?php } ?>
-                
                 </div>
                 <!-- /.tab-pane -->
                 
                 <div class="tab-pane" id="tab-social">
                 
                     <?php echo $this->renderView('Users/Admin/Views::users/social.php'); ?>
+                    
+                </div>
+                <!-- /.tab-pane -->
+                
+                <div class="tab-pane" id="tab-preferences">
+                
+                    <?php echo $this->renderView('Users/Admin/Views::users/fields_user_tags.php'); ?>
                     
                 </div>
                 <!-- /.tab-pane -->

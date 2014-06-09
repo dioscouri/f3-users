@@ -29,6 +29,11 @@ class Routes extends \Dsc\Routes\Group
             'url_prefix' => '/users/group' 
         ) );
         
+        $this->add('/users/groups/forSelection [ajax]', 'GET|POST', array(
+            'controller' => 'Groups',
+            'action' => 'forSelection'
+        ));        
+        
         $this->add( '/users/group/moveup/@id', 'GET', array(
             'controller' => 'Group',
             'action' => 'moveUp' 
