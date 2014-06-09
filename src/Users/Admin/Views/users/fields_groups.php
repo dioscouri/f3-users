@@ -11,7 +11,7 @@
         <div class="form-group">
             <label>Search...</label>
             <div class="input-group">
-                <input id="groups" name="__groups" value="<?php echo implode(",", (array) \Dsc\ArrayHelper::getColumn( $flash->old('groups'), 'id' ) ); ?>" type="text" class="form-control" /> 
+                <input id="groups" name="__groups" value="<?php echo implode(",", (array) \Dsc\ArrayHelper::getColumn( (array) $flash->old('groups'), 'id' ) ); ?>" type="text" class="form-control" /> 
             </div>       
         </div>
         <!-- /.form-group -->
@@ -43,7 +43,7 @@ jQuery(document).ready(function() {
         }
         <?php if ($flash->old('groups')) { ?>
         , initSelection : function (element, callback) {
-            var data = <?php echo json_encode( \Users\Models\Groups::forSelection( array('_id'=>array('$in'=>array_map( function($input){ return new \MongoId($input); }, \Dsc\ArrayHelper::getColumn( $flash->old('groups'), 'id' ) ) ) ) ) ); ?>;
+            var data = <?php echo json_encode( \Users\Models\Groups::forSelection( array('_id'=>array('$in'=>array_map( function($input){ return new \MongoId($input); }, \Dsc\ArrayHelper::getColumn( (array) $flash->old('groups'), 'id' ) ) ) ) ) ); ?>;
             callback(data);            
         }
         <?php } ?>
