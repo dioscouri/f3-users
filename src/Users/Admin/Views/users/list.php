@@ -32,7 +32,7 @@
                     <select id="group_filter" name="filter[group]" class="form-control" onchange="this.form.submit();">
                         <option value="">All Groups</option>
                         <?php foreach (\Users\Models\Groups::find() as $group) : ?>
-                            <option <?php if($state->get('filter.group') == $group->id) { echo 'selected'; } ?> value="<?php echo $group->_id; ?>"><?php echo $group->name; ?></option>
+                            <option <?php if($state->get('filter.group') == $group->id) { echo 'selected'; } ?> value="<?php echo $group->_id; ?>"><?php echo $group->title; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </li>

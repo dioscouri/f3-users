@@ -306,28 +306,6 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             $this->{'social.google.profile.photoURL'} = str_replace('sz=50', '', $googleProfilePhoto);
         }
         
-        if (!empty($this->groups))
-        {
-            $groups = array();
-            foreach ($this->groups as $key => $id)
-            {
-                if (is_array($id))
-                {
-                    $groups[] = $id;
-                }
-                elseif (is_string($id))
-                {
-                    $item = (new \Users\Models\Groups())->setState('filter.id', $id)->getItem();
-                    $groups[] = array(
-                        "id" => $item->id,
-                        "title" => $item->title,
-                        "slug" => $item->slug
-                    );
-                }
-            }
-            $this->groups = $groups;
-        }
-        
         if (!empty($this->__groups))
         {
             if (is_string($this->__groups)) {
@@ -345,6 +323,43 @@ class Users extends \Dsc\Mongo\Collections\Taggable
                 );
             }
             $this->groups = $groups;
+        }
+        
+        // ensure that groups are unique
+        if (!empty($this->groups))
+        {
+            $groups = array();
+            foreach ($this->groups as $key => $id)
+            {
+                if (is_array($id))
+                {
+                    if (!empty($id['id'])) 
+                    {
+                        $group_id = $id['id'];
+                        if (!array_key_exists((string) $group_id, $groups)) 
+                        {
+                            $groups[(string) $group_id] = $id;
+                        }
+                    }
+                }
+                elseif (is_string($id))
+                {
+                    if (!array_key_exists((string) $id, $groups))
+                    {
+                        $item = (new \Users\Models\Groups())->setState('filter.id', $id)->getItem();
+                        if (!empty($item->id)) 
+                        {
+                            $groups[(string) $item->id] = array(
+                                "id" => $item->id,
+                                "title" => $item->title,
+                                "slug" => $item->slug
+                            );
+                        }
+                    }                    
+                }
+            }
+            
+            $this->groups = array_values($groups);
         }
         
         if (!empty($this->admin_tags) && !is_array($this->admin_tags))
@@ -604,6 +619,56 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         ))->getItems();
     
         return $list;
+    }
+    
+    /**
+     * Adds the user to a group.
+     * 
+     * @param unknown $id
+     */
+    public function addToGroups(array $ids, $save=true)
+    {
+        foreach ($ids as $id) 
+        {
+            $this->groups[] = (string) $id;
+        }        
+        
+        if ($save) {
+            return $this->save();
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Remove the user from a group.
+     *
+     * @param unknown $id
+     */
+    public function removeFromGroups(array $ids, $save=true)
+    {
+        $found = false;
+        
+        foreach ($ids as $id) 
+        {
+            foreach ($this->groups as $key=>$group)
+            {
+                if ($group_id = \Dsc\ArrayHelper::get($group, 'id'))
+                {
+                    if ((string) $id == (string) $group_id)
+                    {
+                        unset($this->groups[$key]);
+                        $found = true;
+                    }
+                }
+            }        	
+        }
+   
+        if ($found && $save) {
+            return $this->save();        
+        }
+        
+        return $this;
     }
     
     /**
