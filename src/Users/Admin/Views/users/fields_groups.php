@@ -10,9 +10,7 @@
 
         <div class="form-group">
             <label>Search...</label>
-            <div class="input-group">
-                <input id="groups" name="__groups" value="<?php echo implode(",", (array) \Dsc\ArrayHelper::getColumn( (array) $flash->old('groups'), 'id' ) ); ?>" type="text" class="form-control" /> 
-            </div>       
+            <input id="groups" name="__groups" value="<?php echo implode(",", (array) \Dsc\ArrayHelper::getColumn( (array) $flash->old('groups'), 'id' ) ); ?>" type="text" class="form-control" />       
         </div>
         <!-- /.form-group -->
     
