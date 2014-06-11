@@ -133,7 +133,7 @@ class Auth extends \Dsc\Singleton
         }
         
         // otherwise, login failed
-        throw new \Exception('Invalid login');
+        throw new \Exception('Invalid login credentials.  Please try again.');
         
         /*
         // Check if the user exists
