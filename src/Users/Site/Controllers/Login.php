@@ -491,7 +491,7 @@ class Login extends \Dsc\Controller
             	    
             	    \Dsc\System::instance()->setUserState('users.site.login.complete_profile.flash_filled', true);
             	    $flash = \Dsc\Flash::instance();
-            	    $flash->store($user->cast());
+            	    $flash->store($data);
             	    
             	    $f3->reroute('/login/completeProfile');
             	     
