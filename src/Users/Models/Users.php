@@ -96,7 +96,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $filter_forgot_password_token = $this->getState('filter.forgot_password.token');
         if (strlen($filter_forgot_password_token))
         {
-            $this->setCondition('forgot_password.token', new \MongoId((string) $filter_forgot_password_token));
+            $this->setCondition('forgot_password.token', (string) $filter_forgot_password_token);
         }
 
         $filter_new_email = $this->getState('filter.new_email');
