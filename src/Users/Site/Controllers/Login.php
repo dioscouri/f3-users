@@ -97,7 +97,6 @@ class Login extends \Dsc\Controller
         }
         catch ( \Exception $e )
         {
-            \Dsc\System::addMessage( 'Login failed', 'error' );
             \Dsc\System::addMessage( $e->getMessage(), 'error' );
             \Base::instance()->reroute( "/login" );
             return;
