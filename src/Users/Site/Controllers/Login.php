@@ -162,7 +162,6 @@ class Login extends \Dsc\Controller
         } 
         catch( \Exception $e )
         {
-        	\Dsc\System::addMessage( 'Registration failed.', 'error' );
         	\Dsc\System::addMessage( $e->getMessage(), 'error' );
         	
         	\Dsc\System::instance()->setUserState('users.site.register.flash_filled', true);
