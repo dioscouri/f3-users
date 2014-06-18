@@ -219,8 +219,10 @@ class Login extends \Dsc\Controller
         }
                 
         $f3 = \Base::instance();
-        $provider = $f3->get( 'PARAMS.provider' );
-        if (!$settings->isSocialLoginEnabled(strtolower($provider)))
+        
+        // IMPORTANT: lowercase should always be used in all keys
+        $provider = strtolower( $f3->get( 'PARAMS.provider' ) );
+        if (!$settings->isSocialLoginEnabled($provider))
         {
             \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
             \Base::instance()->reroute( "/login" );
