@@ -116,7 +116,7 @@ class User extends Auth
         }
                 
     	$f3 = \Base::instance();
-    	$provider = $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' );
+    	$provider = strtolower( $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' ) );
     	 
     	$identity = $this->getIdentity();
     	if (empty($identity->id))
@@ -165,8 +165,8 @@ class User extends Auth
             return;
         }
         
-        $provider = $f3->get( 'PARAMS.provider' );
-        if (!$settings->isSocialLoginEnabled(strtolower($provider)))
+        $provider = strtolower( $f3->get( 'PARAMS.provider' ) );
+        if (!$settings->isSocialLoginEnabled($provider))
         {
             \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
             \Base::instance()->reroute( "/user" );
