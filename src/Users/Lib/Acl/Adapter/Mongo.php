@@ -122,7 +122,7 @@ class Mongo extends \Users\Lib\Acl\Adapter implements \Users\Lib\Acl\AdapterInte
         if ($roleName == '*') {
         	return true;
         }
-        return $this->getCollection('roles')->count(array('title' => $roleName)) > 0;
+        return $this->getCollection('roles')->count(array('slug' => $roleName)) > 0;
     }
 
     /**
