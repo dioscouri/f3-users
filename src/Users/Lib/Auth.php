@@ -314,7 +314,7 @@ class Auth extends \Dsc\Singleton
         if (empty($user->active)) {
             $user->sendEmailValidatingEmailAddress();
             $this->remove();
-            throw new \Exception('This account is inactive because the email address has not been verified.  Please check your email for further instructions.');
+            throw new \Exception("You haven't verified your email address yet.  Please check your email for further instructions.");
         }
         
         if (!empty($user->banned)) {
