@@ -313,14 +313,17 @@ class Auth extends \Dsc\Singleton
     {
         if (empty($user->active)) {
             $user->sendEmailValidatingEmailAddress();
+            $this->remove();
             throw new \Exception('This account is inactive because the email address has not been verified.  Please check your email for further instructions.');
         }
         
         if (!empty($user->banned)) {
+            $this->remove();
             throw new \Exception('The user is banned');
         }
         
         if (!empty($user->suspended)) {
+            $this->remove();
             throw new \Exception('The user is suspended');
         }
     }
