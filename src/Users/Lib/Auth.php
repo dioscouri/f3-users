@@ -312,7 +312,8 @@ class Auth extends \Dsc\Singleton
     public function checkUserFlags(\Users\Models\Users $user)
     {
         if (empty($user->active)) {
-            throw new \Exception('This account is inactive because the email address has not been verified.');
+            $user->sendEmailValidatingEmailAddress();
+            throw new \Exception('This account is inactive because the email address has not been verified.  Please check your email for further instructions.');
         }
         
         if (!empty($user->banned)) {

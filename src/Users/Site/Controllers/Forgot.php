@@ -79,6 +79,9 @@ class Forgot extends \Dsc\Controller
 
             // ok, token is valid, so lets delete it
             $user->forgot_password = array();
+            // we also know that the email is valid
+            $user->active = true;
+                        
             $user->save();
             
         } catch (\Exception $e) {

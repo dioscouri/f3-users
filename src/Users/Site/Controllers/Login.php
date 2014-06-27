@@ -554,4 +554,44 @@ class Login extends \Dsc\Controller
         	$f3->reroute( '/login/validate' );
         }
     }
+    
+    /**
+     * Display a static page requesting email address
+     * so we can send them a validation email
+     * 
+     */
+    public function validateEmail()
+    {
+        $this->app->set('meta.title', 'Validate Email Address | Login');
+    
+        $view = \Dsc\System::instance()->get( 'theme' );
+        echo $view->render( 'Users/Site/Views::login/validate_email_form.php' );
+    }
+    
+    /**
+     * 
+     * @throws \Exception
+     */
+    public function validateEmailSubmit()
+    {
+        $email = $this->input->get( 'email', null, 'string' );
+        
+        try 
+        {
+            $user = (new \Users\Models\Users)->setState('filter.email', $email)->getItem();
+            if (empty($user->id))
+            {
+                throw new \Exception;
+            }
+            
+            $user->sendEmailValidatingEmailAddress();
+            $this->app->reroute( '/login/validate' );
+        }
+         
+        catch ( \Exception $e ) 
+        {
+            \Dsc\System::addMessage( 'Unrecognized email address.', 'error' );
+            $this->app->reroute( '/login/validate-email' );
+        }
+    }
 }

@@ -20,7 +20,7 @@
                     <input class="form-control" name="confirm_new_password" placeholder="Confirm New Password" type="password" required />
                 </div>
                             
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                <button class="btn btn-lg btn-primary" type="submit">Submit</button>
                 
             </form>
         </div>

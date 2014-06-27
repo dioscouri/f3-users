@@ -78,5 +78,15 @@ class Routes extends \Dsc\Routes\Group
             'controller' => 'Login',
             'action' => 'validateToken'
         ));
+        
+        $this->add('/login/validate-email', 'GET', array(
+            'controller' => 'Login',
+            'action' => 'validateEmail'
+        ));
+
+        $this->add('/login/validate-email', 'POST', array(
+            'controller' => 'Login',
+            'action' => 'validateEmailSubmit'
+        ));
     }
 }
