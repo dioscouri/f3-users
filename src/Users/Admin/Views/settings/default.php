@@ -17,6 +17,9 @@
                 <li>
                     <a href="#tab-social" data-toggle="tab"> Social Logins </a>
                 </li>
+                <li>
+                    <a href="#tab-rememberme" data-toggle="tab"> Remember Me  </a>
+                </li>
                 <?php if (!empty($this->event)) { foreach ((array) $this->event->getArgument('tabs') as $key => $title ) { ?>
                 <li>
                     <a href="#tab-<?php echo $key; ?>" data-toggle="tab"> <?php echo $title; ?> </a>
@@ -51,6 +54,12 @@
                         <?php 
                     }
                     ?>
+                </div>
+                
+                 <div class="tab-pane fade in active" id="tab-rememberme">
+                
+                    <?php echo $this->renderLayout('Users/Admin/Views::settings/cookies.php'); ?>
+
                 </div>
 
                 <?php if (!empty($this->event)) { foreach ((array) $this->event->getArgument('content') as $key => $content ) { ?>
