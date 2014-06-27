@@ -126,6 +126,9 @@ class Auth extends \Dsc\Singleton
 
         if (!empty($identity->id))
         {
+            // Check if the user was flagged
+            $this->checkUserFlags( $identity );
+                        
             // If so, login has been successful, so trigger Login Listeners
             $this->login( $identity );
             
@@ -308,19 +311,17 @@ class Auth extends \Dsc\Singleton
      */
     public function checkUserFlags(\Users\Models\Users $user)
     {
-        /*
-        if ($user->active != 'Y') {
-            throw new \Exception('The user is inactive');
+        if (empty($user->active)) {
+            throw new \Exception('This account is inactive because the email address has not been verified.');
         }
-
-        if ($user->banned != 'N') {
+        
+        if (!empty($user->banned)) {
             throw new \Exception('The user is banned');
         }
-
-        if ($user->suspended != 'N') {
+        
+        if (!empty($user->suspended)) {
             throw new \Exception('The user is suspended');
         }
-        */
     }
 
     /**
