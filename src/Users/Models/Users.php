@@ -802,9 +802,9 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	    $item = new \Search\Models\Item(array(
 	        'url' => './admin/user/edit/' . $this->id,
 	        'title' => $this->fullName(),
-	        'subtitle' => '',
+	        'subtitle' => $this->email,
 	        'image' => $image,
-	        'summary' => $this->email,
+	        'summary' => $this->username,
 	        'datetime' => 'Last Visited: ' . date('Y-m-d', $this->{'last_visit.time'} )
 	    ));
 	
