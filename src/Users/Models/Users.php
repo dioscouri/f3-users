@@ -805,7 +805,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	        'subtitle' => '',
 	        'image' => $image,
 	        'summary' => $this->email,
-	        'datetime' => $this->{'last_visit.local'}
+	        'datetime' => 'Last Visited: ' . date('Y-m-d', $this->{'last_visit.time'} )
 	    ));
 	
 	    return $item;
