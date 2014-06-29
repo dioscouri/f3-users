@@ -791,4 +791,23 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	
 	    return $distinct;
 	}
+	
+	/**
+	 * Converts this to a search item, used in the search template when displaying each search result
+	 */
+	public function toAdminSearchItem()
+	{
+	    $image = $this->profilePicture();
+	
+	    $item = new \Search\Models\Item(array(
+	        'url' => './admin/user/edit/' . $this->id,
+	        'title' => $this->fullName(),
+	        'subtitle' => '',
+	        'image' => $image,
+	        'summary' => $this->email,
+	        'datetime' => $this->{'last_visit.local'}
+	    ));
+	
+	    return $item;
+	}	
 }

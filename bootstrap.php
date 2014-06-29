@@ -16,5 +16,12 @@ class UsersBootstrap extends \Dsc\Bootstrap
     	// add the media files to the minifier
     	\Minify\Factory::registerPath( $this->dir . "/src/" );
     }
+    
+    protected function preAdmin()
+    {
+        \Search\Factory::registerSource( new \Search\Models\Source( array(
+            'id'=>'users', 'title'=>'Users', 'class'=>'\Users\Models\Users'
+        ) ) );
+    }
 }
 $app = new UsersBootstrap();
