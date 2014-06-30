@@ -672,6 +672,56 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     }
     
     /**
+     * Adds the user to a group.
+     *
+     * @param unknown $id
+     */
+    public function addToGroupsBySlugs(array $slugs, $save=true)
+    {
+        $ids = array();
+        foreach ($slugs as $slug)
+        {
+            $group = (new \Users\Models\Groups())->setState('filter.slug', $slug)->getItem();
+            if (!empty($group->id))
+            {
+                $ids[] = $group->id;
+            }
+        }
+        
+        if (empty($ids)) 
+        {
+            return $this;
+        }
+    
+        return $this->addToGroups($ids, $save);
+    }
+    
+    /**
+     * Remove the user from a group.
+     *
+     * @param unknown $id
+     */
+    public function removeFromGroupsBySlugs(array $slugs, $save=true)
+    {
+        $ids = array();
+        foreach ($slugs as $slug)
+        {
+            $group = (new \Users\Models\Groups())->setState('filter.slug', $slug)->getItem();
+            if (!empty($group->id))
+            {
+                $ids[] = $group->id;
+            }
+        }
+        
+        if (empty($ids))
+        {
+            return $this;
+        }
+        
+        return $this->removeFromGroups($ids, $save);
+    }    
+    
+    /**
      * 
      * @return \Users\Models\Users
      */
