@@ -58,6 +58,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $filter_username = $this->getState('filter.username', null, 'alnum');
         if (strlen($filter_username))
         {
+            $filter_username = strtolower($filter_username);
             $this->setCondition('username', $filter_username);
         }
         
@@ -71,6 +72,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $filter_email = $this->getState('filter.email');
         if (strlen($filter_email))
         {
+            $filter_email = strtolower($filter_email);
             $this->setCondition('email', $filter_email);
         }
         
@@ -239,7 +241,6 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         	}
         	$this->role = $old_role;
         }
-        
         
         if (empty($this->password))
         {
@@ -492,7 +493,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      */
     public static function usernameFromString( $string ) 
     {
-        $username = \Dsc\System::instance()->inputfilter->clean($string, 'ALNUM');
+        $username = strtolower( \Dsc\System::instance()->inputfilter->clean($string, 'ALNUM') );
         
         return $username;
     }
