@@ -256,9 +256,15 @@ class Login extends \Dsc\Controller
                 //Update the profile information from this network, and renew access token
                 $user->set( 'social.' . $provider . '.profile', (array) $adapter->getUserProfile() );
                 $user->set( 'social.' . $provider . '.access_token', (array) $adapter->getAccessToken() );
+                
                 $user->save();
+                
                 //Login the user
                 \Dsc\System::instance()->get( 'auth' )->login( $user );
+                
+                // check the user's flags (active/suspended/banned)
+                \Dsc\System::instance()->get( 'auth' )->checkUserFlags( $user );
+                
                 // redirect to the requested target, or the default if none requested
                 $redirect = '/user';
                 if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' ))
@@ -335,7 +341,7 @@ class Login extends \Dsc\Controller
         }
         catch ( \Exception $e )
         {
-            $user_error = null;
+            $user_error = $e->getMessage();
             
             switch ($e->getCode())
             {
@@ -456,7 +462,8 @@ class Login extends \Dsc\Controller
             $data['email'] = $this->input->get( 'email', null, 'string' );
             $data['username'] = $this->input->get( 'username', null, 'string' );
             
-            $user = \Users\Models\Users::createNewUser($data, 'auto_login');
+            // we just got an email from a customer, so we need to verify it
+            $user = \Users\Models\Users::createNewUser($data, 'auto_login_with_validation');
             
             // social login should always login the user if successful,
             // so login the user if they aren't already logged in
