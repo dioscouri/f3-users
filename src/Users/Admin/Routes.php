@@ -23,6 +23,11 @@ class Routes extends \Dsc\Routes\Group
         
         $this->addCrudGroup( 'Users', 'User' );
         
+        $this->add( '/user/reverify/@id', 'GET', array(
+            'controller' => 'User',
+            'action' => 'reverify'
+        ) );        
+        
         $this->addCrudGroup( 'Groups', 'Group', array(
             'url_prefix' => '/users/groups' 
         ), array(

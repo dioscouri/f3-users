@@ -8,6 +8,10 @@
             <div class="clearfix">
 
                 <div class="pull-right">
+                
+                    <a class="btn btn-warning" href="./admin/user/reverify/<?php echo $item->id; ?>">Resend Verification Email</a>
+                    &nbsp;
+                    
                     <div class="btn-group">
                         <button type="submit" class="btn btn-primary">Save</button>
                         <input id="primarySubmit" type="hidden" value="save_edit" name="submitType" />

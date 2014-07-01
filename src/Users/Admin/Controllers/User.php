@@ -113,4 +113,32 @@ class User extends \Admin\Controllers\BaseAuth
 	}
 	
 	protected function displayRead() {}
+	
+	public function reverify()
+	{
+	    $custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'user.reverify.redirect' );
+	    $redirect = $custom_redirect ? $custom_redirect : $this->list_route;
+	    
+	    $user = $this->getItem();
+	    if (!empty($user->id)) 
+	    {
+	        $redirect = $custom_redirect ? $custom_redirect : '/admin/user/edit/' . $user->id;
+	        	        
+	        try {
+	            $user->sendEmailValidatingEmailAddress();
+	            \Dsc\System::addMessage('Email sent', 'success');
+	        }
+	        catch (\Exception $e) {
+	            \Dsc\System::addMessage('There was an error sending the email.', 'error');
+	            \Dsc\System::addMessage($e->getMessage(), 'error');
+	        }
+	    }
+	    
+	    else 
+	    {
+	        \Dsc\System::addMessage('Invalid user.', 'error');
+	    }
+
+	    $this->app->reroute( $redirect );
+	}
 }
