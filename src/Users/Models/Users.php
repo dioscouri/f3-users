@@ -577,10 +577,9 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      * 
      * @return	Either link to the image, or an empty string
      */
-    public function profilePicture()
+    public function profilePicture($img = null)
     {
-    	$img = null;
-    	
+    
     	$networks = (array) $this->{'social'};
     	foreach ($networks as $network)
     	{
@@ -590,7 +589,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     	        break;
     	    }
     	}
-    	
+    		
     	return $img;
     }
     
