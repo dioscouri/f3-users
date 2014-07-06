@@ -266,7 +266,7 @@
                     </div>
                     <div class="col-md-2">
                         <a href="./admin/user/edit/<?php echo $item->id; ?>">
-                            <?php echo date( 'Y-m-d', $item->{'last_visit.time'} ); ?>
+                             <?php echo $item->{'last_visit.time'} ? date( 'Y-m-d', $item->{'last_visit.time'} ) : 'Never Visited'; ?>
                         </a>                        
                     </div>
                     <div class="hidden-xs hidden-sm col-md-2">
