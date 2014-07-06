@@ -99,6 +99,10 @@ class Settings extends \Dsc\Mongo\Collections\Settings
             return false;
         }
         
+        if (!empty($provider)) {
+            $provider = strtolower($provider);
+        }
+        
         $result = false;
         switch ($provider)
         {
@@ -146,7 +150,7 @@ class Settings extends \Dsc\Mongo\Collections\Settings
         {
             if ($this->isSocialLoginEnabled(strtolower($network)))
             {
-            	$providers[] = $network;
+            	$providers[] = strtolower($network);
             }
         }
         return $providers;

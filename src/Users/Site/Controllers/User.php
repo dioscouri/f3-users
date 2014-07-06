@@ -134,7 +134,13 @@ class User extends Auth
     	$user = $identity;
     	
     	try {
-    	    $user->clear( 'social.'.$provider );
+    	    foreach ($user->social as $network=>$id)
+    	    {
+                if (strtolower($network) == strtolower($provider)) 
+                {
+                    $user->clear( 'social.'.$network );
+                }
+    	    }
     	    $user->save();
     	    \Dsc\System::addMessage( 'Profile unlinked.', 'success' );
     	}

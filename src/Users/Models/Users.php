@@ -811,16 +811,15 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	public function unlinkedSocialProfiles()
 	{
 	    $settings = \Users\Models\Settings::fetch();
-	    $providers = array_map('strtolower',$settings->enabledSocialProviders());
-	 
+	    $providers = $settings->enabledSocialProviders();
+        	    
 	    if (empty($this->social)) {
 	    	return $providers;
 	    }
 	   	
 	    foreach ($this->social as $network=>$id) 
 	    {
-	    	
-	        $key = array_search($network, $providers);
+	        $key = array_search(strtolower($network), $providers);
 	        if ($key !== false) {
 	            unset($providers[$key]);
 	        }	    	
