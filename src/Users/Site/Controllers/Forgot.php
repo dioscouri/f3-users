@@ -23,6 +23,12 @@ class Forgot extends \Dsc\Controller
     {
         $email = trim( strtolower( $this->input->get('email', null, 'string') ) );
         
+        if (empty($email)) 
+        {
+            \Dsc\System::addMessage( 'Please provide an email address.', 'error' );
+            $f3->reroute('/user/forgot-password');            
+        }
+        
         $user = (new \Users\Models\Users)->setState('filter.email', $email)->getItem();
         if (empty($user->id)) 
         {
@@ -64,7 +70,12 @@ class Forgot extends \Dsc\Controller
         $token = $this->inputfilter->clean( $f3->get('PARAMS.token'), 'alnum' );
         
         try {
-        
+            
+            if (empty($token))
+            {
+                throw new \Exception( 'Invalid token' );
+            }
+                    
             $user = (new \Users\Models\Users)->setState('filter.forgot_password.token', $token)->getItem();
             if (empty($user->id) || $token != (string) $user->{'forgot_password.token'})
             {
