@@ -326,6 +326,11 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             $this->groups = $groups;
         }
         
+        if (isset($this->__groups) && empty($this->__groups)) 
+        {
+            $this->groups = array();
+        }        
+        
         // ensure that groups are unique
         if (!empty($this->groups))
         {
