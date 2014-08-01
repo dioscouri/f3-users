@@ -118,6 +118,12 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         {
         	$this->setCondition('social.'.$filter_social_profile, array( '$exists' => true ) );
         }
+
+        $filter_auto_login_token = $this->getState( 'filter.auto_login_token' );
+        if (strlen($filter_auto_login_token))
+        {
+        	$this->setCondition('auto_login.token', (string)$filter_auto_login_token );
+        }       
         
         $filter_admin_tags = (array) $this->getState('filter.admin_tags');
         if (!empty($filter_admin_tags))
@@ -743,7 +749,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      * 
      * @throws \Exception
      */
-    public static function validateLoginToken( $token )
+	public static function validateLoginToken( $token )
     {
    		$user = (new static)->setState('filter.id', $token)->getItem();
    		if (empty($user->id) || $token != (string) $user->id)

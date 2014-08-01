@@ -10,7 +10,10 @@ class Settings extends \Dsc\Mongo\Collections\Settings
             'username' => 1,
             'dual' => 0,
             'action' => 'email_validation'
-        )
+        )	,
+    	'login' => array(
+    		'auto_login_token_lifetime' => 1440
+    	),
     );
 
     public $social = array(

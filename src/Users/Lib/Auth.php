@@ -189,6 +189,40 @@ class Auth extends \Dsc\Singleton
         return \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
     }
     
+
+    /**
+     * Login user using their auto login token
+     * 
+     * @throws \Exception
+]     */
+    public function loginWithToken( $user_id, $token, $post_login_redirect = null )
+    {
+   		$user = (new \Users\Models\Users)->setState('filter.auto_login_token', $token)->setState('filter.id', $user_id)->getItem();
+   		if( empty( $user->id ) ){
+   			throw new \Exception( 'Invalid Token' );
+   		}
+   		
+   		$token_user = \Dsc\System::instance()->get( 'auth' )->getAutoLoginToken( $user ); // check, if the token is still valid
+
+   		if ( $token != $token_user ) {
+   			if( $token_user == null ){ // expired token => redirect to /sign-up with post-login-redirect
+   				if( !empty( $post_login_redirect ) ) {
+   					\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', $post_login_redirect );
+   				}
+   				
+   				\Dsc\System::instance()->addMessage( 'Your login has expired. Please, log in again.' );
+   				\Base::instance()->reroute( '/login' );
+   				return;
+   			} else {
+   				\Dsc\System::instance()->addMessage( 'Invalid login token.', 'ERROR' );
+   				\Base::instance()->reroute( '/' );
+   			}
+   		}
+   		
+   		$this->login( $user );
+    }
+        
+    
     /**
      * Perform logout actions (e.g. trigger Listeners, etc)
      * and logout the user
@@ -420,5 +454,61 @@ class Auth extends \Dsc\Singleton
             'profile' => $user->profile->name
         ));
         */
+    }
+    
+    /**
+     * Generates auto login token for the user which is valid for next 24 hours
+     * 
+     * @param \Users\Models\Users 	$user
+     * @param boolean 				$fore_regeneration		In case the token has expired, forge generating a new one and return in
+     * 
+     * @return	Token for user as string (null when the token has expired)
+     */
+    public function getAutoLoginToken(\Users\Models\Users $user, $force_regeneration = false){
+    	if( empty( $user->auto_login ) ) {
+    		$settings = \Users\Models\Settings::fetch();
+    		// let's generate a new token
+    		$salt = mt_rand();
+    		$arr = array();
+    		
+    		$arr['token'] = $this->generateAutoLoginToken( $user, $salt );
+    		$arr['valid'] = time() + $settings->get('general.login.auto_login_token_lifetime') * 60; // valid for next 24h
+    		$user->auto_login = $arr;
+    		$user->save();
+    		return $arr['token'];
+    	} else {
+    		if( $user->{'auto_login.valid'}  < time() ) { // auto_login token has expired so let's notify user about that
+    			
+    			if( $force_regeneration ){
+    				// for example, when you want to add this token to URL and you already generated one token a few days ago
+    				$settings = \Users\Models\Settings::fetch();
+    				$salt = mt_rand();
+		    		$arr = array();
+
+    				$arr['token'] = $this->generateAutoLoginToken( $user, $salt );
+    				$arr['valid'] = time() + $settings->get('general.login.auto_login_token_lifetime') * 60; // valid for next 24h
+    				$user->auto_login = $arr;
+    				$user->save();
+    				return $arr['token'];
+    				
+    			} else {
+    				return null;
+    			}
+    		} else {
+    			return $user->{'auto_login.token'};
+    		}
+    	}
+    }
+    
+    /**
+     * Generates auto login token for the user
+     * 
+     * @param \Users\Models\Users 	$user
+     * @param string				$salt
+     * 
+     * @return	Array with proper settings for the auto_login token
+     */
+    public function generateAutoLoginToken(\Users\Models\Users $user, $salt){
+   		return sha1( $salt.$user->username.$user->email.(string)$user->id );
     }
 }
