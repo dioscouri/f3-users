@@ -216,6 +216,7 @@ class Auth extends \Dsc\Singleton
    			} else {
    				\Dsc\System::instance()->addMessage( 'Invalid login token.', 'ERROR' );
    				\Base::instance()->reroute( '/' );
+   				return;
    			}
    		}
    		
