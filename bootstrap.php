@@ -45,6 +45,15 @@ class UsersBootstrap extends \Dsc\Bootstrap
     {
         if (!\Audit::instance()->isbot())
         {
+            if (class_exists('\Activity\Models\Actors')) 
+            {
+                $actor = \Activity\Models\Actors::fetch();
+                if ($actor->isExcluded()) 
+                {
+                    return;
+                }
+            }
+            
             (new \Dsc\Mongo\Collections\Sessions)->store();
         }
         
