@@ -43,7 +43,11 @@ class UsersBootstrap extends \Dsc\Bootstrap
     
     public static function setActive()
     {
-        (new \Dsc\Mongo\Collections\Sessions)->store();
+        if (!\Audit::instance()->isbot())
+        {
+            (new \Dsc\Mongo\Collections\Sessions)->store();
+        }
+        
         \Dsc\Mongo\Collections\Sessions::throttledCleanup();
     }    
 }
