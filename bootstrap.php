@@ -54,7 +54,21 @@ class UsersBootstrap extends \Dsc\Bootstrap
                 }
             }
             
-            (new \Dsc\Mongo\Collections\Sessions)->store();
+            if (\Dsc\System::instance()->get('input')->get('ping', null, 'int') != 1)
+            {
+                $fw = \Base::instance();
+                $path = $fw->hive()['PATH'];
+                switch ($path) 
+                {
+                    // ignore certain paths, even if they aren't specifically pings
+                    case "/minify/css":
+                    case "/minify/js":
+                        break;
+                    default:
+                        (new \Dsc\Mongo\Collections\Sessions)->store();
+                        break;
+                }
+            }            
         }
         
         \Dsc\Mongo\Collections\Sessions::throttledCleanup();
