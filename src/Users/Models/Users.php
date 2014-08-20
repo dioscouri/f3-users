@@ -397,9 +397,14 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      * @param number $length            
      * @return string
      */
-    public function generateRandomString($length = 10)
+    public function generateRandomString($length = 10, $url = false)
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!';
+        
+        if($url == false) {
+        $characters .= '@#&%$^*()';
+        }
+        
         $randomString = '';
         for ($i = 0; $i < $length; $i ++)
         {
