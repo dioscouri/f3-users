@@ -198,24 +198,37 @@ class Auth extends \Dsc\Singleton
     public function loginWithToken( $user_id, $token, $post_login_redirect = null )
     {
    		$user = (new \Users\Models\Users)->setState('filter.auto_login_token', $token)->setState('filter.id', $user_id)->getItem();
-   		if( empty( $user->id ) ){
-   			throw new \Exception( 'Invalid Token' );
+   		if (empty($user->id))
+   		{
+   		    // redirect to /sign-up with post-login-redirect
+   		    if( !empty( $post_login_redirect ) ) {
+   		        \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', $post_login_redirect );
+   		    }
+   		       		    
+   		    \Dsc\System::instance()->addMessage( 'Invalid Token.  Please log in.', 'error' );
+   		    \Base::instance()->reroute( '/login' );
+   		    return;
    		}
    		
    		$token_user = \Dsc\System::instance()->get( 'auth' )->getAutoLoginToken( $user ); // check, if the token is still valid
 
-   		if ( $token != $token_user ) {
-   			if( $token_user == null ){ // expired token => redirect to /sign-up with post-login-redirect
-   				if( !empty( $post_login_redirect ) ) {
-   					\Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', $post_login_redirect );
-   				}
-   				
-   				\Dsc\System::instance()->addMessage( 'Your login has expired. Please, log in again.' );
+   		if ( $token != $token_user ) 
+   		{
+   		    // redirect to /sign-up with post-login-redirect
+   		    if( !empty( $post_login_redirect ) ) {
+   		        \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', $post_login_redirect );
+   		    }
+
+   			if( $token_user == null )
+   			{ 
+   				\Dsc\System::instance()->addMessage( 'Your login has expired. Please log in again.' );
    				\Base::instance()->reroute( '/login' );
    				return;
-   			} else {
-   				\Dsc\System::instance()->addMessage( 'Invalid login token.', 'ERROR' );
-   				\Base::instance()->reroute( '/' );
+   			} 
+   			else 
+   			{
+   				\Dsc\System::instance()->addMessage( 'Invalid Token.  Please log in.', 'error' );
+   				\Base::instance()->reroute( '/login' );
    				return;
    			}
    		}
