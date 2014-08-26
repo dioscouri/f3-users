@@ -61,6 +61,7 @@ class UsersBootstrap extends \Dsc\Bootstrap
                 switch ($path) 
                 {
                     // ignore certain paths, even if they aren't specifically pings
+                    case (strpos($path, '/minify/') === 0 ? true : false):
                     case "/minify/css":
                     case "/minify/js":
                         break;
