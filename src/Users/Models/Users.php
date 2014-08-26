@@ -595,7 +595,12 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      */
     public function profilePicture($img = null)
     {
-    
+    	if($this->{'avatar.slug'}) {
+    		
+    		return '/asset/' . $this->{'avatar.slug'};
+    	}
+    	
+    	
     	$networks = (array) $this->{'social'};
     	foreach ($networks as $network)
     	{

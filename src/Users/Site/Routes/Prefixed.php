@@ -51,7 +51,14 @@ class Prefixed extends \Dsc\Routes\Group
             'controller' => 'Change',
             'action' => 'password'
         ));
-        
+        $this->add('/change-avatar', 'GET', array(
+        		'controller' => 'Change',
+        		'action' => 'avatar'
+        ));
+        $this->add('/change-avatar', 'POST', array(
+        		'controller' => 'Change',
+        		'action' => 'avatarSubmit'
+        ));
         $this->add('/change-password', 'POST', array(
             'controller' => 'Change',
             'action' => 'passwordSubmit'
