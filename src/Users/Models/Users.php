@@ -17,6 +17,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     public $photo;
     public $last_visit = array();
     public $admin_tags = array();
+    public $birthday;   // YYYY-MM-DD
     
     protected $__collection_name = 'users';
     protected $__type = 'users';

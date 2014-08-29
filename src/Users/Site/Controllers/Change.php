@@ -192,7 +192,7 @@ class Change extends \Users\Site\Controllers\Auth
     	$first_name = $this->input->get( 'first_name', null, 'string' );
     	$last_name = $this->input->get( 'last_name', null, 'string' );
     	$username = $this->input->get( 'username', null, 'alnum' );
-    	 
+    	$birthday = $this->input->get( 'birthday', null, 'string' );
     	
     	try
     	{
@@ -217,6 +217,7 @@ class Change extends \Users\Site\Controllers\Auth
     		$identity->first_name = $first_name;
     		$identity->last_name = $last_name;
     		$identity->username = $username;
+    		$identity->birthday = $birthday;
     		$identity->save();    	
     	} catch( \Exception $e ) {
             
