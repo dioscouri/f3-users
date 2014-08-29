@@ -10,6 +10,32 @@ class Change extends \Users\Site\Controllers\Auth
         $view = \Dsc\System::instance()->get( 'theme' );
         echo $view->render( 'Users/Site/Views::change/password.php' );
     }
+    
+    public function avatar()
+    {
+    	$this->app->set('meta.title', 'Change Avatar');
+    
+    	$view = \Dsc\System::instance()->get( 'theme' );
+    	echo $view->render( 'Users/Site/Views::change/avatar.php' );
+    }
+    
+    public function avatarSubmit()
+    {	
+    	$user = $this->getIdentity();
+    	//TODO Should we delete the previous avatar?
+    	if(!empty($_FILES['avatar'])) {
+    		//todo more width/height to settings
+    		$_FILES['avatar']['name'] = $user->fullName() . "'s Avatar";
+    		$avatar = \Users\Models\Avatars::createFromUpload($_FILES['avatar'], array('width'=>200, 'height'=>200, 'tags' =>array($user->id, $user->fullName()) ));
+    		$user->set('avatar.slug', $avatar->{'slug'});
+    		$user->save();
+    	}
+
+    	//RENDER THE PAGE AGAIN
+    	$this->app->set('meta.title', 'Change Avatar');
+    	$view = \Dsc\System::instance()->get( 'theme' );
+    	echo $view->render( 'Users/Site/Views::change/avatar.php' );
+    }
 
     public function passwordSubmit()
     {
