@@ -3,6 +3,7 @@ namespace Users\Site\Routes;
 
 class Prefixed extends \Dsc\Routes\Group
 {
+
     public function initialize()
     {
         $f3 = \Base::instance();
@@ -51,14 +52,17 @@ class Prefixed extends \Dsc\Routes\Group
             'controller' => 'Change',
             'action' => 'password'
         ));
+        
         $this->add('/change-avatar', 'GET', array(
-        		'controller' => 'Change',
-        		'action' => 'avatar'
+            'controller' => 'Change',
+            'action' => 'avatar'
         ));
+        
         $this->add('/change-avatar', 'POST', array(
-        		'controller' => 'Change',
-        		'action' => 'avatarSubmit'
+            'controller' => 'Change',
+            'action' => 'avatarSubmit'
         ));
+        
         $this->add('/change-password', 'POST', array(
             'controller' => 'Change',
             'action' => 'passwordSubmit'
@@ -70,13 +74,13 @@ class Prefixed extends \Dsc\Routes\Group
         ));
         
         $this->add('/change-basic', 'GET', array(
-        		'controller' => 'Change',
-        		'action' => 'basicInfo'
+            'controller' => 'Change',
+            'action' => 'basicInfo'
         ));
-
+        
         $this->add('/change-basic', 'POST', array(
-        		'controller' => 'Change',
-        		'action' => 'basicInfoSubmit'
+            'controller' => 'Change',
+            'action' => 'basicInfoSubmit'
         ));
         
         $this->add('/change-email', 'POST', array(
