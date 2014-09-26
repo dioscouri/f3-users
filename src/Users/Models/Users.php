@@ -49,6 +49,9 @@ class Users extends \Dsc\Mongo\Collections\Taggable
                 'email' => $key
             );
             $where[] = array(
+                'guest_email' => $key
+            );            
+            $where[] = array(
                 'first_name' => $key
             );
             $where[] = array(
@@ -77,6 +80,13 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         {
             $filter_email = strtolower($filter_email);
             $this->setCondition('email', $filter_email);
+        }
+        
+        $filter_guest_email = $this->getState('filter.guest_email');
+        if (strlen($filter_guest_email))
+        {
+            $filter_guest_email = strtolower($filter_guest_email);
+            $this->setCondition('guest_email', $filter_guest_email);
         }
         
         $filter_email_contains = $this->getState('filter.email-contains');
@@ -497,6 +507,23 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     public static function emailExists( $email )
     {
         $clone = (new static)->load(array('email'=>$email));
+    
+        if (!empty($clone->id)) {
+            return $clone;
+        }
+    
+        return false;
+    }
+    
+    /**
+     *
+     *
+     * @param string $slug
+     * @return unknown|boolean
+     */
+    public static function guestEmailExists( $email )
+    {
+        $clone = (new static)->load(array('guest_email'=>$email));
     
         if (!empty($clone->id)) {
             return $clone;
