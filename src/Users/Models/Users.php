@@ -7,7 +7,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     public $password;
     public $first_name;
     public $last_name;
-    public $email;
+    public $email;              // if this is a guest account, store the fake email here
     public $role = null;
     public $active = true;
     public $banned = false;
@@ -18,6 +18,8 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     public $last_visit = array();
     public $admin_tags = array();
     public $birthday;   // YYYY-MM-DD
+    public $guest = false;
+    public $guest_email = null; // if this is a guest account, optionally store the real email here
     
     protected $__collection_name = 'users';
     protected $__type = 'users';
@@ -464,6 +466,26 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     {
         $name = trim($this->first_name . " " . $this->last_name);
         return $name;
+    }
+    
+    /**
+     * Get the account's email address for normal (marketing) communication.
+     * If this is a guest account, the "fake" auto-generated email will be returned so no communication reaches the user.
+     * If you want a guest account's real email address, send $guest=true as the function argument
+     * 
+     * @param bool $guest 
+     * @return string
+     */
+    public function email($guest=false)
+    {
+        $email = $this->email;
+        
+        if ($guest && $this->guest && !empty($this->guest_email)) 
+        {
+            $email = $this->guest_email;
+        }
+        
+        return $email;
     }
     
     /**
