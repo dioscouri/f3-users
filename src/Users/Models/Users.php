@@ -317,6 +317,10 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         
         return parent::validate();
     }
+    
+    public function getRole() {
+    	return  (new \Users\Models\Roles)->setCondition('slug', $this->role)->getItem();
+    }
 
     protected function beforeSave()
     {

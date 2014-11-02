@@ -24,6 +24,19 @@
             <label>Description</label>
             <input type="text" name="description" placeholder="Short Description -- for admin-side display only" value="<?php echo $flash->old('description'); ?>" class="form-control" />
         </div>
+        
+        <div class="form-group">
+            <label>Can Access Admin</label>
+           
+            <select name="adminaccess" class="form-control">
+	            <?php $opts = array(
+		array( 'value' => 1, 'text' => 'Allow' ),
+		array( 'value' => 0, 'text' => 'Deny' ),
+	);
+	             echo \Dsc\Html\Select::options( $opts,  $flash->old('adminaccess')  );?>
+            </select>
+    
+        </div>
         <!-- /.form-group -->
         
         <div class="form-group">
