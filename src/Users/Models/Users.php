@@ -29,7 +29,9 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             'last_visit.time' => -1
         )
     );
-
+	
+    protected $__enable_trash = true;
+    
     const E_EMAIL_EXISTS = 1;
 
     protected function fetchConditions()
