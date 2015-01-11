@@ -8,7 +8,7 @@
                 <div class="row">
                     <?php if ($profilePictureSrc = $user->profilePicture()) { ?>
                         <div class="col-md-3 col-sm-12">
-                            <img src="<?php echo $profilePictureSrc; ?>" alt="Profile Picture" class="img-responsive" />
+                            <p><img src="<?php echo $profilePictureSrc; ?>" alt="Profile Picture" class="img-responsive" /></p>
                         </div>
                     <?php } ?>
                     <div class="col-md-9 col-sm-12">
