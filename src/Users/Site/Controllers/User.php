@@ -5,10 +5,14 @@ class User extends Auth
 {
     public function read()
     {
-        $f3 = \Base::instance();
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->{'general.profiles.enabled'})
+        {
+            $this->app->reroute( "/user/settings" );
+        }        
         
         $user = $this->getItem();
-        $f3->set('user', $user);
+        $this->app->set('user', $user);
         
         $this->app->set('meta.title', $user->fullName() . ' | Profile');
         
@@ -18,12 +22,16 @@ class User extends Auth
     
     public function readSelf()
     {
-        $f3 = \Base::instance();
+        $settings = \Users\Models\Settings::fetch();
+        if (!$settings->{'general.profiles.enabled'})
+        {
+            $this->app->reroute( "/user/settings" );
+        }
     
         $identity = $this->getIdentity();
         if (empty($identity->id)) 
         {
-            $f3->reroute( '/login' );
+            $this->app->reroute( '/login' );
             return;
         }
         
@@ -37,7 +45,7 @@ class User extends Auth
             $user = $model->getItem();
         }
 
-        $f3->set('user', $user);
+        $this->app->set('user', $user);
         
         $this->app->set('meta.title', 'My Profile | My Account');
             
@@ -47,12 +55,10 @@ class User extends Auth
     
     public function settings()
     {
-        $f3 = \Base::instance();
-    
         $identity = $this->getIdentity();
         if (empty($identity->id))
         {
-            $f3->reroute( '/login' );
+            $this->app->reroute( '/login' );
             return;
         }
     
@@ -66,7 +72,7 @@ class User extends Auth
             $user = $model->getItem();
         }
     
-        $f3->set('user', $user);
+        $this->app->set('user', $user);
     
         $this->app->set('meta.title', 'Settings | My Account');
     
@@ -82,8 +88,7 @@ class User extends Auth
     
     protected function getItem()
     {
-        $f3 = \Base::instance();
-        $id = $this->inputfilter->clean( $f3->get( 'PARAMS.id' ), 'alnum' );
+        $id = $this->inputfilter->clean( $this->app->get( 'PARAMS.id' ), 'alnum' );
         $model = $this->getModel()->setState( 'filter.id', $id );
     
         try
@@ -93,7 +98,7 @@ class User extends Auth
         catch ( \Exception $e )
         {
             \Dsc\System::instance()->addMessage( "Invalid Item: " . $e->getMessage(), 'error' );
-            $f3->reroute( '/' );
+            $this->app->reroute( '/' );
             return;
         }
     
@@ -105,8 +110,6 @@ class User extends Auth
      */
     public function socialProfiles()
     {
-        $f3 = \Base::instance();
-
         $settings = \Users\Models\Settings::fetch();
         if (!$settings->isSocialLoginEnabled())
         {
@@ -116,18 +119,18 @@ class User extends Auth
         $identity = $this->getIdentity();
         if (empty($identity->id))
         {
-            $f3->reroute( '/login' );
+            $this->app->reroute( '/login' );
             return;
         }
         
         if (!empty($identity->__safemode))
         {
-            $f3->reroute( '/user' );
+            $this->app->reroute( '/user' );
             return;
         }
         
         $user = $identity;
-        $f3->set('user', $user);
+        $this->app->set('user', $user);
         
         $this->app->set('meta.title', 'Linked Social Profiles | My Account');
         
@@ -144,19 +147,18 @@ class User extends Auth
             \Base::instance()->reroute( "/user" );
         }
                 
-    	$f3 = \Base::instance();
-    	$provider = strtolower( $this->inputfilter->clean( $f3->get( 'PARAMS.provider' ), 'alnum' ) );
+    	$provider = strtolower( $this->inputfilter->clean( $this->app->get( 'PARAMS.provider' ), 'alnum' ) );
     	 
     	$identity = $this->getIdentity();
     	if (empty($identity->id))
     	{
-    		$f3->reroute( '/login' );
+    		$this->app->reroute( '/login' );
     		return;
     	}
     	
     	if (!empty($identity->__safemode))
     	{
-    	    $f3->reroute( '/user' );
+    	    $this->app->reroute( '/user' );
     	    return;
     	}
     	
@@ -178,7 +180,7 @@ class User extends Auth
     	    \Dsc\System::addMessage( $e->getMessage(), 'error' );
     	}
     	
-    	$f3->reroute( '/user/social-profiles' );
+    	$this->app->reroute( '/user/social-profiles' );
     	return; 
     }
     
@@ -191,16 +193,14 @@ class User extends Auth
             \Base::instance()->reroute( "/user" );
         }
         
-        $f3 = \Base::instance();
-        
         $user = $this->getIdentity();
         if (empty($user->id) || !empty($user->__safemode))
         {
-            $f3->reroute( '/user' );
+            $this->app->reroute( '/user' );
             return;
         }
         
-        $provider = strtolower( $f3->get( 'PARAMS.provider' ) );
+        $provider = strtolower( $this->app->get( 'PARAMS.provider' ) );
         if (!$settings->isSocialLoginEnabled($provider))
         {
             \Dsc\System::addMessage( 'This social profile is not supported.', 'error' );
@@ -213,7 +213,7 @@ class User extends Auth
         \Dsc\System::instance()->get( 'session' )->set( 'social_login.failure.redirect', '/user/social-profiles' );
         
         if (empty($config['base_url'])) {
-            $config['base_url'] = $f3->get('SCHEME') . '://' . $f3->get('HOST') . $f3->get('BASE') . '/login/social';
+            $config['base_url'] = $this->app->get('SCHEME') . '://' . $this->app->get('HOST') . $this->app->get('BASE') . '/login/social';
         }
         
         $custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.redirect' );
@@ -288,7 +288,7 @@ class User extends Auth
             	    break;
             }
         
-            if ($f3->get( 'DEBUG' ))
+            if ($this->app->get( 'DEBUG' ))
             {
                 // if debug mode is enabled, display the full error
                 $error .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
@@ -304,13 +304,13 @@ class User extends Auth
             \Dsc\System::addMessage( $error, 'error' );
         
             $redirect = $custom_redirect ? $custom_redirect : '/user';
-            $f3->reroute( $redirect );
+            $this->app->reroute( $redirect );
         }
         
         // redirect to the requested target, or the default if none requested
         $redirect = $custom_redirect ? $custom_redirect : '/user';
         \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
-        $f3->reroute( $redirect );
+        $this->app->reroute( $redirect );
                 
     }
 }

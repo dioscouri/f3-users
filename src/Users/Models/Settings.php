@@ -5,12 +5,15 @@ class Settings extends \Dsc\Mongo\Collections\Settings
 {
 
     public $general = array(
+        'profiles' => array(
+            'enabled' => 1,
+        ),        
         'registration' => array(
             'enabled' => 1,
             'username' => 1,
             'dual' => 0,
             'action' => 'email_validation'
-        )	,
+        ),
     	'login' => array(
     		'auto_login_token_lifetime' => 1440
     	),

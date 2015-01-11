@@ -1,21 +1,24 @@
 <div id="my-profile" class="container">
     <h2>
         <small>Hello <?php echo $this->auth->getIdentity()->fullName(); ?><br/></small>
-        Edit Account
+        Account Settings
+        <?php $settings = \Users\Models\Settings::fetch(); ?>
+        <?php if ($settings->{'general.profiles.enabled'}) { ?>
         <a class="pull-right btn btn-default btn-small" href="./user"><i class="fa fa-angle-left"></i> Back to Profile</a>
+        <?php } ?>
     </h2>
     
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-4">
-                    <legend>Settings</legend>
+                    <legend>Profile</legend>
                     <p class="help-block"><small>Change your password, email, and basic information.</small></p>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-8">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6">
-                            <h4>Account Settings</h4>
+                            <h4>Basic Information</h4>
                             <ul class="list-unstyled">
                                 <li><a href="./user/change-basic">Change basic information</a></li>
                             	<li><a href="./user/change-email">Change email</a></li>

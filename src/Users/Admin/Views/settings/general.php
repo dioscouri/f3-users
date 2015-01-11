@@ -1,5 +1,32 @@
 <div class="row">
     <div class="col-md-12">
+    
+        <div class="row">
+            <div class="col-md-2">
+
+                <h3>Profiles</h3>
+
+            </div>
+            <!-- /.col-md-2 -->
+
+            <div class="col-md-10">
+
+                <div class="form-group">
+                    <label>Enable Profile Pages?</label>
+                    <select name="general[profiles][enabled]" class="form-control">
+                        <option value="1" <?php if ($flash->old('general.profiles.enabled') == '1') { echo "selected='selected'"; } ?>>Yes</option>
+                        <option value="0" <?php if ($flash->old('general.profiles.enabled') == '0') { echo "selected='selected'"; } ?>>No</option>                        
+                    </select>                    
+                </div>
+                <!-- /.form-group -->
+
+            </div>
+            <!-- /.col-md-10 -->
+
+        </div>
+        <!-- /.row -->
+        
+        <hr/>    
 
         <div class="row">
             <div class="col-md-2">
@@ -60,6 +87,7 @@
         <!-- /.row -->
         
 		<hr />
+		
         <div class="row">
             <div class="col-md-2">
 
