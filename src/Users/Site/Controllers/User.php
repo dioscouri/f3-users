@@ -45,6 +45,35 @@ class User extends Auth
         echo $view->render( 'Users/Site/Views::profile/readSelf.php' );
     }
     
+    public function settings()
+    {
+        $f3 = \Base::instance();
+    
+        $identity = $this->getIdentity();
+        if (empty($identity->id))
+        {
+            $f3->reroute( '/login' );
+            return;
+        }
+    
+        if (!empty($identity->__safemode))
+        {
+            $user = $identity;
+        }
+        else
+        {
+            $model = $this->getModel()->setState( 'filter.id', $identity->id );
+            $user = $model->getItem();
+        }
+    
+        $f3->set('user', $user);
+    
+        $this->app->set('meta.title', 'Settings | My Account');
+    
+        $view = \Dsc\System::instance()->get('theme');
+        echo $view->render( 'Users/Site/Views::profile/edit.php' );
+    }
+    
     protected function getModel()
     {
         $model = new \Users\Models\Users;

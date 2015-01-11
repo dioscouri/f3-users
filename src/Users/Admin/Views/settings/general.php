@@ -71,8 +71,8 @@
             <div class="col-md-10">
 
                 <div class="form-group">
-                    <label>Enable the combined login/registration view?</label>
-                    <input class="form-control" name="general[login][auto_login_token_lifetime]" value="<?php echo $flash->old('general.login.auto_login_token_lifetime'); ?>" placeholder="How long should auto login token last for in minutes" />
+                    <label>Auto-login token lifetime (in minutes)</label>
+                    <input class="form-control" name="general[login][auto_login_token_lifetime]" value="<?php echo $flash->old('general.login.auto_login_token_lifetime'); ?>" placeholder="How long should auto login token last for (in minutes)" />
                 </div>
                 <!-- /.form-group -->
 

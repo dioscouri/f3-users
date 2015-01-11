@@ -18,6 +18,11 @@ class Prefixed extends \Dsc\Routes\Group
             'action' => 'readSelf'
         ));
         
+        $this->add('/settings', 'GET', array(
+            'controller' => 'User',
+            'action' => 'settings'
+        ));        
+        
         $this->add('/@id', 'GET', array(
             'controller' => 'User',
             'action' => 'read'

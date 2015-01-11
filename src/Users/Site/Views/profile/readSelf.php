@@ -1,121 +1,95 @@
-<div class="container">
+<div id="user-profile" class="container">
     <h2>
-        <small>Hello <?php echo $this->auth->getIdentity()->fullName(); ?><br/></small>
-        Your Account
+        <?php echo $user->fullName(); ?>
     </h2>
-    
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-4">
-                    <legend>Settings</legend>
-                    <p class="help-block"><small>Change your password, email, and basic information.</small></p>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-8">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6">
-                            <h4>Account Settings</h4>
-                            <ul class="list-unstyled">
-                                <li><a href="./user/change-basic">Change basic information</a></li>
-                            	<li><a href="./user/change-email">Change email</a></li>
-                                <li><a href="./user/change-password">Change password</a></li>
-                            </ul>
+    <div id="profile-container">
+        <div class="row">
+            <div class="col-md-9 col-sm-12">
+                <div class="row">
+                    <?php if ($profilePictureSrc = $user->profilePicture()) { ?>
+                        <div class="col-md-3 col-sm-12">
+                            <img src="<?php echo $profilePictureSrc; ?>" alt="Profile Picture" class="img-responsive" />
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6">
-                            <?php
-                            $settings = \Users\Models\Settings::fetch();
-                            if ($settings->isSocialLoginEnabled()) { ?>
-                                <h4>Social</h4>
-                                <ul class="list-unstyled">
-                                    <li><a href="./user/social-profiles">Linked Social Profiles</a></li>
-                                </ul>
-                            <?php } ?>
-                            
-                            <?php /* ?>
-                            <h4>Newsletters</h4>
-                            <ul class="list-unstyled">
-                                <li>Manage subscriptions</li>
-                            </ul>
-                            */ ?>
-                            
-                        </div>
-                    </div>                
+                    <?php } ?>
+                    <div class="col-md-9 col-sm-12">
+                        <p><a class="btn btn-default btn-small" href="./user/settings"><i class="fa fa-cog"></i> Edit Account</a></p>
+                        <ul class="icons-list">
+                            <li>
+                                <i class="icon-li fa fa-calendar"></i> <b>Last Visit:</b> <?php echo date('Y-m-d', $user->{'last_visit.time'}); ?>
+                            </li>
+                            <li>
+                                <i class="icon-li fa fa-clock-o"></i> <b>Joined:</b> <?php echo date('Y-m-d', $user->{'metadata.created.time'}); ?>
+                            </li>                            
+                        </ul>
+                    </div>
                 </div>
+
+                <?php /* ?>
+                <?php echo \Dsc\Debug::dump( $user ); ?>
+                <h4>Public Activity</h4>
+                <?php */ ?>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <?php /* ?>
+                <?php echo \Dsc\Debug::dump( $user ); ?>
+                <h4>Easy Statistics</h4>
+                <ul class="icons-list">
+                    <li>
+                        <i class="icon-li fa fa-envelope"></i> rod@jumpstartui.com
+                    </li>
+                    <li>
+                        <i class="icon-li fa fa-globe"></i> jumstartthemes.com
+                    </li>
+                    <li>
+                        <i class="icon-li fa fa-map-marker"></i> Las Vegas, NV
+                    </li>
+                </ul>                
+                <div class="list-group">
+                    <a href="javascript:;" class="list-group-item">
+                        <h3 class="pull-right">
+                            <i class="fa fa-eye"></i>
+                        </h3>
+                        <h4 class="list-group-item-heading">38,847</h4>
+                        <p class="list-group-item-text">Profile Views</p>
+                    </a>
+                    <a href="javascript:;" class="list-group-item">
+                        <h3 class="pull-right">
+                            <i class="fa fa-facebook-square"></i>
+                        </h3>
+                        <h4 class="list-group-item-heading">3,482</h4>
+                        <p class="list-group-item-text">Facebook Likes</p>
+                    </a>
+                    <a href="javascript:;" class="list-group-item">
+                        <h3 class="pull-right">
+                            <i class="fa fa-twitter-square"></i>
+                        </h3>
+                        <h4 class="list-group-item-heading">5,845</h4>
+                        <p class="list-group-item-text">Twitter Followers</p>
+                    </a>
+                </div>
+                <!-- /.list-group -->
+                <br />
+                <div class="well">
+                    <h4>Recent Activity</h4>
+                    <ul class="icons-list text-md">
+                        <li>
+                            <i class="icon-li fa fa-location-arrow"></i> <strong>Rod</strong> uploaded 6 files. <br /> <small>about 4 hours ago</small>
+                        </li>
+                        <li>
+                            <i class="icon-li fa fa-location-arrow"></i> <strong>Rod</strong> followed the research interest:
+                            <a href="javascript:;">Open Access Books in Linguistics</a>
+                            . <br /> <small>about 23 hours ago</small>
+                        </li>
+                        <li>
+                            <i class="icon-li fa fa-location-arrow"></i> <strong>Rod</strong> added 51 papers. <br /> <small>2 days ago</small>
+                        </li>
+                    </ul>
+                </div>
+                */ ?>
             </div>
         </div>
+        <!-- /.row -->
     </div>
-    
-    <?php if (class_exists('\Shop\Models\Settings')) { ?>
-    <?php $settings = \Shop\Models\Settings::fetch(); ?>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-4">
-                    <legend>Shopping Personalization</legend>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-8">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6">
-                            <h4>Address Book</h4>
-                            <ul class="list-unstyled">
-                                <li><a href="./shop/account/addresses">Manage existing addresses</a></li>
-                                <li><a href="./shop/account/addresses/create">Add new address</a></li>
-                            </ul>
-                            <?php /* ?>
-                            <h4>Payment Methods</h4>
-                            <ul class="list-unstyled">
-                                <li><a href="./user/credit-cards">Manage credit cards</a></li>
-                            </ul>    
-                            */ ?>                        
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6">
-                            <h4>Lists</h4>
-                            <ul class="list-unstyled">
-                                <li><a href="./shop/wishlist">Wishlist</a></li>
-                            </ul>
-                            
-                            <?php if ($settings->{'reviews.enabled'}) { ?>
-                                <h4>Product Reviews</h4>
-                                <ul class="list-unstyled">
-                                    <li><a href="./shop/account/product-reviews">Your Reviews</a></li>
-                                </ul>                            
-                            <?php } ?>
-                    
-                        </div>
-                    </div>                
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php } ?>
-    
-    <?php if (class_exists('\Affiliates\Models\Referrals')) { ?>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-4">
-                    <legend>Affiliate Account</legend>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-8">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6">
-                        
-                            <h4>Referrals</h4>
-                            <ul class="list-unstyled">
-                                <li><a href="./affiliate/dashboard">Your affiliate account</a></li>
-                                <li><a href="./affiliate/invite-friends">Invite friends</a></li>
-                                <li><a href="./affiliate/invite-history">Your invite history</a></li>
-                            </ul>
-                        
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6">
-                            
-                        </div>
-                    </div>                
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php } ?>
-        
+    <!-- /#profile-container -->
 </div>
+<!-- #user-profile -->
