@@ -1,7 +1,7 @@
 <div id="my-profile" class="container">
     <h2>
         <small>Hello <?php echo $this->auth->getIdentity()->fullName(); ?><br/></small>
-        Your Account
+        Edit Account
         <a class="pull-right btn btn-default btn-small" href="./user"><i class="fa fa-angle-left"></i> Back to Profile</a>
     </h2>
     

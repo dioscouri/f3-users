@@ -38,7 +38,7 @@ class Change extends \Users\Site\Controllers\Auth
         
         \Dsc\System::addMessage( 'Password has been updated.' );
         
-        $redirect = '/user';
+        $redirect = '/user/settings';
         if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'change_password.redirect' ))
         {
             $redirect = $custom_redirect;
@@ -164,7 +164,7 @@ class Change extends \Users\Site\Controllers\Auth
         }
         
         \Dsc\System::addMessage( 'Email changed.' );
-        \Base::instance()->reroute( '/user' );
+        \Base::instance()->reroute( '/user/settings' );
     }
     
     public function basicInfo()
@@ -227,7 +227,7 @@ class Change extends \Users\Site\Controllers\Auth
     		return;
     	}
         \Dsc\System::addMessage( 'Basic information changed.' );
-        \Base::instance()->reroute( '/user' );
+        \Base::instance()->reroute( '/user/settings' );
     }
     
     public function avatar()

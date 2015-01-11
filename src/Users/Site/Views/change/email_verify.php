@@ -2,7 +2,10 @@
 
     <ol class="breadcrumb">
         <li>
-            <a href="./user">My Account</a>
+            <a href="./user">My Profile</a>
+        </li>
+        <li>
+            <a href="./user/settings">Settings</a>
         </li>
         <li class="active">Change Email</li>
     </ol>

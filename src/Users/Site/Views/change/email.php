@@ -1,7 +1,10 @@
 <div class="container">
     <ol class="breadcrumb">
         <li>
-            <a href="./user">My Account</a>
+            <a href="./user">My Profile</a>
+        </li>
+        <li>
+            <a href="./user/settings">Settings</a>
         </li>
         <li class="active">Change Email</li>
     </ol>
@@ -28,7 +31,7 @@
                 </div>
                             
                 <button class="btn btn-lg btn-primary" type="submit">Submit</button>
-                <a class="btn btn-link" href="./user">Cancel</a>
+                <a class="btn btn-link" href="./user/settings">Cancel</a>
                 
             </form>
         </div>
