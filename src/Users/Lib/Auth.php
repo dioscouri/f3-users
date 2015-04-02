@@ -296,7 +296,7 @@ class Auth extends \Dsc\Singleton
         }
         
         //forget the remember me cookie
-       // \Dsc\Cookie::forget('remember');
+        \Dsc\Cookie::forget('remember');
         
         // Trigger plugin event for after logout
         $event = new \Joomla\Event\Event( 'afterUserLogout' );
