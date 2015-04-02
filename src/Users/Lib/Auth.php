@@ -11,7 +11,7 @@ use Users\Models\FailedLogins;
  * Authentication/Identity Management
  */
 class Auth extends \Dsc\Singleton
-{
+{	
     /**
      * Checks the user credentials
      *
@@ -261,6 +261,9 @@ class Auth extends \Dsc\Singleton
             \Dsc\System::instance()->get('session')->removeAppSpace();
         }
         
+        //forget the remember me cookie
+        \Dsc\Cookie::forget('remember');
+        
         // Trigger plugin event for after logout
         $event = new \Joomla\Event\Event( 'afterUserLogout' );
         $event->addArgument('identity', $identity)->addArgument('global_app', $global_app_name);
@@ -328,18 +331,71 @@ class Auth extends \Dsc\Singleton
      */
     public function createRememberEnviroment(\Users\Models\Users $user)
     {
+    	
+    	$newToken = $this->createToken();
+    	$newPersistentToken = $this->createToken();
+    	
+    	//TODO make a config
+    	$expireTime = 604800;
+    	
+    	$expire = time() + $expireTime;
+    	
+    	
+    	$this->storeTriplet($user->id, $newToken . $this->salt(), $newPersistentToken . $this->salt(), $expire);
+    	
+    	\Dsc\Cookie::set('remember', implode("|", array($user->id, $newToken, $newPersistentToken)), $expire);
+   	 
+    	
+    }
+    
+	/*
+	 * TODO SUPPORT SALT PROBABLY FROM CONFIG
+	 */
+    protected function salt() {
+    	return '';
+    }
+    
+    protected function storeTriplet($credential, $token, $newPersistentToken, $expire) {
+    	
+    	$model = (new \Users\Models\Cookies);
+    	$model->set('user_id', $credential);
+    	$model->set('token',$token );
+    	$model->set('newPersistentToken', $newPersistentToken);
+    	$model->set('expire', $expire);
+    	$model->save();
 
     }
-
+    
+    protected function findTriplet($credential, $token, $newPersistentToken) {
+    	$model = (new \Users\Models\Cookies);
+    	$model->setCondition('user_id', new \MongoId($credential));
+    	$model->setCondition('token',$token );
+    	$model->setCondition('newPersistentToken', $newPersistentToken);
+    	return $model->getItem();
+    }
+    
+    /**
+     * Create a pseudo-random token.
+     *
+     * The token is pseudo-random. If you need better security, read from /dev/urandom
+     */
+    protected function createToken()
+    {
+    	return md5(uniqid(mt_rand(), true));
+    }
+    
     /**
      * Check if the session has a remember me cookie
      *
      * @return boolean
      */
     public function hasRememberMe()
-    {
-        // TODO is RMM in the cookie?
-        return false;
+    { 	$cookie = false;
+        if($cookie = \Dsc\Cookie::get('remember')) {
+        	//TODO process cookie?
+        	$cookie = $cookie;
+        }
+       return $cookie;
     }
 
     /**
@@ -349,6 +405,50 @@ class Auth extends \Dsc\Singleton
      */
     public function loginWithRememberMe()
     {
+    	//if we are already logged in do nothing
+    	if($this->getIdentity()) {
+    		return;
+    	} else {
+    		echo 'Logging you in with cookie';
+    	}
+    	
+    	
+    	if($cookie = $this->hasRememberMe()) {
+    		$values = explode("|", $cookie, 3);
+    		try {
+    			$mongoCookie = $this->findTriplet($values[0], $values[1], $values[2]);
+    			if(!empty($mongoCookie)) {
+    				//LOGIN TOKEN FOUND LETS UPDATE THE COOKIE
+    				$expireTime = 604800;
+    				$expire = time() + $expireTime;
+    				$token = $this->createToken() . $this->salt();
+    				$mongoCookie->set('token', $token);
+    				$mongoCookie->set('expire', $expire);
+    				$mongoCookie->save();
+    				\Dsc\Cookie::set('remember', implode("|", array($mongoCookie->user_id, $mongoCookie->token, $mongoCookie->newPersistentToken)), $expire);
+    				//LOGIN THE USER FROM THE COOKIE
+    				$user = (new \Users\Models\Users)->setState('filter.id', $mongoCookie->user_id)->getItem();
+    			
+    				if(!empty($user)) {
+    					echo 'done';
+    					$this->login( $user );
+    				}	
+    			} else {
+    			 //WE HAD A REMEMBER TOKEN BUT IT IS INVALID	
+
+    				\Dsc\Cookie::forget('remember');
+    				//WE MIGHT WANT TO DELETE ALL THE LOGIN COOKIES FOR THIS USER
+    				
+    			}
+    		} catch (\Exception $e) {
+    			echo $e->getMessage(); die();
+    			//fail silently
+    		}
+    		
+    		
+    	}
+    	
+    	
         // TODO try a login from cookie data
     }
 

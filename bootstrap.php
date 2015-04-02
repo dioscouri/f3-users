@@ -21,6 +21,8 @@ class UsersBootstrap extends \Dsc\Bootstrap
             \Minify\Factory::registerPath($this->dir . "/src/");
         }
         
+        \Dsc\System::instance()->get('auth')->loginWithRememberMe();
+        
         static::setActive();
     }
 

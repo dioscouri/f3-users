@@ -102,6 +102,11 @@ class Login extends \Dsc\Controller
             return;
         }
         
+        if(!empty($input['remember'])) {
+        	$user = $this->getIdentity();
+        	$this->auth->createRememberEnviroment($user);
+        }
+        
         \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', null );
         \Base::instance()->reroute( $redirect );
         
