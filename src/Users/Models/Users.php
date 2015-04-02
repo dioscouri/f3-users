@@ -913,7 +913,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
 	public static function distinctAdminTags($query=array())
 	{
 	    $model = new static();
-	    $distinct = $model->collection()->distinct("admin_tags", $query);
+	    $distinct = $model->collection()->distinct("admin_tags", $query ? $query : null);
 	    $distinct = array_values( array_filter( $distinct ) );
 	
 	    return $distinct;
