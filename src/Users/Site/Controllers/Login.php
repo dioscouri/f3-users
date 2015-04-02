@@ -78,6 +78,42 @@ class Login extends \Dsc\Controller
         \Base::instance()->reroute( '/' );
     }
 
+	/*
+	 * SHOWS CONFIRM FORM
+	 */    
+    public function showConfirm() {
+    	
+    	$view = \Dsc\System::instance()->get( 'theme' );
+    	echo $view->render( 'Users/Site/Views::login/confirm.php' );
+    	
+    }
+    /*
+     * CONFIRM A AUTHENTICATED USERS PASSWORD AGAIN. USEFUL FOR USERS LOGGED IN VIA TOKEN OR COOKIE
+     */
+    public function confirm() {
+    	$redirect = '/';
+    	if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.confirm.redirect' ))
+    	{
+    		$redirect = $custom_redirect;
+    	}
+    	$input = $this->input->getArray();
+    	try
+    	{	
+    		$this->auth->confirm( $input );
+    	}
+    	catch ( \Exception $e )
+    	{
+    		\Dsc\System::addMessage( $e->getMessage(), 'error' );
+    		\Base::instance()->reroute( "/confirm/identity" );
+    		return;
+    	}
+    	
+    	
+    	
+    	\Base::instance()->reroute( $redirect );
+    }
+    
+    
     /**
      * Authenticates the user (performs the login)
      */

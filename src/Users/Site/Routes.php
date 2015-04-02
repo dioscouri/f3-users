@@ -28,6 +28,15 @@ class Routes extends \Dsc\Routes\Group
             'action' => 'auth'
         ));
         
+        $this->add('/confirm/identity', 'GET', array(
+        		'controller' => 'Login',
+        		'action' => 'showConfirm'
+        ));
+        $this->add('/confirm/identity', 'POST', array(
+        		'controller' => 'Login',
+        		'action' => 'confirm'
+        ));
+        
         $this->add('/logout', 'GET|POST', array(
             'controller' => 'Login',
             'action' => 'logout'

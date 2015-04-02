@@ -169,13 +169,47 @@ class Auth extends \Dsc\Singleton
     }
     
     /**
+     * Checks the user credentials
+     *
+     * @param array $credentials
+     * @return boolan
+     */
+    public function confirm($credentials)
+    {
+    	$identity = $this->getIdentity();
+    
+
+    	
+    	$password_input = !empty($credentials['login-password']) ? $this->inputfilter->clean( $credentials['login-password'] ) : null;
+    
+    		if (password_verify($password_input, $identity->password))
+    		{
+    
+    			$this->login($identity, 1);
+    
+    		} else {
+    			// otherwise, login failed
+    			throw new \Exception('Invalid login credentials.  Please try again.');
+    		}
+    
+   
+    }
+    
+    /**
      * Triggers Listeners observing the afterUserLogin event
      * 
      * @param unknown $identity
      */
-    public function login( \Users\Models\Users $user )
+    public function login( \Users\Models\Users $user , $level = 1)
     {
         $this->setIdentity($user);
+        
+        if($level == 0) {
+        	\Dsc\System::instance()->get('session')->set('confirm_login', 'yes');
+        } else {
+        	\Dsc\System::instance()->get('session')->set('confirm_login', null);
+        }
+        
         
         try {
             $user->setLastVisit();
@@ -262,7 +296,7 @@ class Auth extends \Dsc\Singleton
         }
         
         //forget the remember me cookie
-        \Dsc\Cookie::forget('remember');
+       // \Dsc\Cookie::forget('remember');
         
         // Trigger plugin event for after logout
         $event = new \Joomla\Event\Event( 'afterUserLogout' );
@@ -406,10 +440,8 @@ class Auth extends \Dsc\Singleton
     public function loginWithRememberMe()
     {
     	//if we are already logged in do nothing
-    	if($this->getIdentity()) {
+    	if(!empty($this->getIdentity()->id)) {
     		return;
-    	} else {
-    		echo 'Logging you in with cookie';
     	}
     	
     	
@@ -430,8 +462,7 @@ class Auth extends \Dsc\Singleton
     				$user = (new \Users\Models\Users)->setState('filter.id', $mongoCookie->user_id)->getItem();
     			
     				if(!empty($user)) {
-    					echo 'done';
-    					$this->login( $user );
+    					$this->login( $user, 0 );
     				}	
     			} else {
     			 //WE HAD A REMEMBER TOKEN BUT IT IS INVALID	
