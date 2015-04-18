@@ -122,6 +122,9 @@
                         <a href="./admin/users/group/edit/<?php echo $item->id; ?>">
                             <?php echo $item->title; ?>
                         </a>
+                        <?php if ($item->description) { ?>
+                            <p class="help-block"><?php echo $item->description; ?></p>
+                        <?php } ?>
                     </td>
                     
                     <td class="text-center">
