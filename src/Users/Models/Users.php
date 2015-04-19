@@ -671,6 +671,24 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     }
     
     /**
+     * Is the user in the requested group
+     *
+     * @return bool
+     */
+    public function inGroup($id, $id_type='slug')
+    {
+        foreach ($this->groups as $group)
+        {
+            if ((string) \Dsc\ArrayHelper::get($group, $id_type) == (string) $id) 
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    /**
      * Get a customer's groups, ordered by group.ordering (highest first)
      * 
      * @return array 
