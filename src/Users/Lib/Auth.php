@@ -202,7 +202,10 @@ class Auth extends \Dsc\Singleton
      */
     public function login( \Users\Models\Users $user , $level = 1)
     {
-        $this->setIdentity($user);
+    	
+    	//get the newest instance of the user doc
+      	
+        $this->setIdentity($user->reload());
         
         if($level == 0) {
         	\Dsc\System::instance()->get('session')->set('confirm_login', 'yes');
@@ -228,7 +231,7 @@ class Auth extends \Dsc\Singleton
      * Login user using their auto login token
      * 
      * @throws \Exception
-]     */
+     */
     public function loginWithToken( $user_id, $token, $post_login_redirect = null )
     {
    		$user = (new \Users\Models\Users)->setState('filter.auto_login_token', $token)->setState('filter.id', $user_id)->getItem();
