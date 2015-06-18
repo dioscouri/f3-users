@@ -4,14 +4,7 @@ namespace Users\Models;
 class Avatars extends \Dsc\Mongo\Collections\Assets 
 {
 		
-	protected function processUpload() {
-		
-		
-		
-		
-		
-	}
-	
+
 	public static function createFromUpload( array $file_upload, $options=array() )
 	{
 		if (!isset($file_upload['error']) || is_array($file_upload['error']))
