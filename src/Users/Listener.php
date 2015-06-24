@@ -58,7 +58,7 @@ class Listener extends \Prefab
     		
     		\Mailer\Models\Events::register('users.validate_email',
     		    [
-    		        'title' => 'New Email Validation',
+    		        'title' => 'New User - Email Validation',
     		        'copy' => 'Sent when validating a newly-registered email address',
     		        'app' => 'Users',
     		    ],
