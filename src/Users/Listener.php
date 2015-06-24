@@ -51,7 +51,8 @@ class Listener extends \Prefab
     
     public function onSystemRegisterEmails($event)
     {
-    	if (class_exists('\Mailer\Factory')) {
+    	if (class_exists('\Mailer\Factory')) 
+    	{
     		
     		$model = (new \Mailer\Models\Events);
     		
@@ -108,11 +109,7 @@ class Listener extends \Prefab
     		);    		
     		
     		\Dsc\System::instance()->addMessage('Users added its emails.');
-    		
     	}
-    	
-    	
-    	
     }
     
     public function registerEmails($event)

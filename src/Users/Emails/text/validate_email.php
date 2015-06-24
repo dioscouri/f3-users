@@ -1,10 +1,9 @@
-<?php $link = $SCHEME . '://' . $HOST . $BASE . '/login/validate/token/' . $user->id; ?>
-<?php echo trim('Hello ' . $user->{'first_name'} ); ?>! 
+Hello {{@user.first_name}}!,
  
 Thanks for creating an account with us.  Please copy and paste the above URL into your web browser: 
  
-<?php echo $link; ?> 
+{{@base_url}}/login/validate/token/{{@user.id}} 
  
-Your token is: <?php echo $user->id; ?> 
+Your token is: {{@user.id}} 
  
 Thanks.
