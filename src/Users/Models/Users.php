@@ -577,6 +577,16 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      */
     public function sendEmailValidatingEmailAddress()
     {
+        $email = $this->email;
+        
+        $mailer = \Dsc\System::instance()->get('mailer');
+        if ($content = $mailer->getEmailContents('users.validate_email', array(
+            'user' => $this
+        ))) {
+            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+        }
+        
+        /*        
         \Base::instance()->set('user', $this);
         
         $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/validation.php' );
@@ -584,6 +594,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $subject = 'Please verify your email address'; // TODO Add this to config?
         
         $this->__sendEmailValidatingEmailAddress = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
+        */
         
         return $this;
     }
@@ -595,6 +606,15 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      */
     public function sendEmailResetPassword()
     {
+        $email = $this->email;
+        
+        $mailer = \Dsc\System::instance()->get('mailer');
+        if ($content = $mailer->getEmailContents('users.password_reset_request', array(
+            'user' => $this
+        ))) {
+            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+        }
+        /*        
         \Base::instance()->set('user', $this);
     
         $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/password_reset_request.php' );
@@ -602,7 +622,8 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $subject = 'Password reset request'; // TODO Add this to config?
     
         $this->__sendEmailResetPassword = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
-    
+        */
+        
         return $this;
     }
     
@@ -613,14 +634,25 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      */
     public function sendEmailPasswordResetNotification()
     {
+        $email = $this->email;
+        
+        $mailer = \Dsc\System::instance()->get('mailer');
+        if ($content = $mailer->getEmailContents('users.password_reset_notification', array(
+            'user' => $this
+        ))) {
+            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+        }
+
+        /*
         \Base::instance()->set('user', $this);
-    
+        
         $html = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_html/password_reset_notification.php' );
         $text = \Dsc\System::instance()->get( 'theme' )->renderView( 'Users/Views::emails_text/password_reset_notification.php' );
         $subject = 'Password reset notification'; // TODO Add this to config?
     
         $this->__sendEmailPasswordResetNotification = \Dsc\System::instance()->get('mailer')->send($this->email, $subject, array($html, $text) );
-    
+        */
+        
         return $this;
     }
     
@@ -631,6 +663,16 @@ class Users extends \Dsc\Mongo\Collections\Taggable
      */
     public function sendEmailChangeEmailConfirmation()
     {
+        $email = $this->{'change_email.email'};
+        
+        $mailer = \Dsc\System::instance()->get('mailer');
+        if ($content = $mailer->getEmailContents('users.verify_change_email', array(
+            'user' => $this
+        ))) {
+            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+        }
+
+        /*
         \Base::instance()->set('user', $this);
         
         $new_email = $this->{'change_email.email'}; 
@@ -640,7 +682,8 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $subject = 'Please verify your email address'; // TODO Add this to config?
     
         $this->__sendEmailPasswordResetNotification = \Dsc\System::instance()->get('mailer')->send($new_email, $subject, array($html, $text) );
-    
+        */
+        
         return $this;
     }
     
