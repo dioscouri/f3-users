@@ -133,8 +133,16 @@ class Login extends \Dsc\Controller
         }
         catch ( \Exception $e )
         {
+        	$redirect = '/login';
+        	if ($custom_redirect = \Dsc\System::instance()->get( 'session' )->get( 'site.login.failed.redirect' ))
+        	{
+        		$redirect = $custom_redirect;
+        	}
+
             \Dsc\System::addMessage( $e->getMessage(), 'error' );
-            \Base::instance()->reroute( "/login" );
+            \Dsc\System::instance()->get( 'session' )->set( 'site.login.failed.redirect', null );
+            \Base::instance()->reroute( $redirect );
+            
             return;
         }
         
