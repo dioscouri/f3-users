@@ -602,7 +602,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         if ($content = $mailer->getEmailContents('users.password_reset_request', array(
             'user' => $this
         ))) {
-            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+            $this->__sendEmailPasswordResetNotification = $mailer->sendEvent( $email, $content);
         }
         
         return $this;
@@ -621,7 +621,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         if ($content = $mailer->getEmailContents('users.password_reset_notification', array(
             'user' => $this
         ))) {
-            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+            $this->__sendEmailPasswordResetNotification = $mailer->sendEvent( $email, $content);
         }
         
         return $this;
@@ -642,7 +642,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             'link' => \Dsc\Url::base() . 'user/change-email/confirm?new_email=' . urlencode( $this->{'change_email.email'} ) . '&token=' . $this->{'change_email.token'},
             'token' => $this->{'change_email.token'}
         ))) {
-            $this->__sendEmailPasswordResetNotification = $mailer->send( $email, $content['subject'], $content['body'], $content['fromEmail'], $content['fromName'] );
+            $this->__sendEmailPasswordResetNotification = $mailer->sendEvent( $email, $content);
         }
         
         return $this;

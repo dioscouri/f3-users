@@ -116,4 +116,59 @@ class Listener extends \Prefab
     {
     	\Dsc\System::instance()->addMessage('Users added its admin menu items.');
     }
+    
+    public function  mailerPreviewUsersVerify_change_email($event) {
+    
+    	$options = [];
+    
+    	$options['user'] = ['first_name'=> 'John', 'last_name' => 'Doe', 'email' => 'fakerandomemail@fakedomain.com'];
+    	$options['link'] = \Dsc\Url::base() . 'user/change-email/confirm?new_email&previewview';
+    	$options['token'] = new \MongoId();
+    
+    	
+    	$event->setArgument('variables', $options);
+    }
+    
+    public function  mailerPreviewUsersPassword_reset_request($event) {
+    
+    	$options = [];
+    
+    	$options['user'] = ['first_name'=> 'John', 'last_name' => 'Doe', 'email' => 'fakerandomemail@fakedomain.com', 'forgot_password' => ['token' => new \MongoId()]];
+    	$options['link'] = \Dsc\Url::base() . 'user/change-email/confirm?new_email&previewview';
+    	$options['token'] = new \MongoId();
+    
+    	 
+    	$event->setArgument('variables', $options);
+    }
+    
+    public function  mailerPreviewUsersValidate_email($event) {
+    
+    	$options = [];
+    
+    	$options['user'] = ['id' => new \MongoId(),'first_name'=> 'John', 'last_name' => 'Doe', 'email' => 'fakerandomemail@fakedomain.com', 'forgot_password' => ['token' => new \MongoId()]];
+    	$options['link'] = \Dsc\Url::base() . 'user/change-email/confirm?new_email&previewview';
+    	$options['token'] = new \MongoId();
+    
+    
+    	$event->setArgument('variables', $options);
+    }
+    
+    public function  mailerPreviewUsersPassword_reset_notification($event) {
+    
+    	$options = [];
+    
+    	$options['user'] = ['id' => new \MongoId(),'first_name'=> 'John', 'last_name' => 'Doe', 'email' => 'fakerandomemail@fakedomain.com', 'forgot_password' => ['token' => new \MongoId()]];
+    	$options['link'] = \Dsc\Url::base() . 'user/change-email/confirm?new_email&previewview';
+    	$options['token'] = new \MongoId();
+    
+    
+    	$event->setArgument('variables', $options);
+    }
+    
+    
+    
+    
+    
+    
+   
 }
