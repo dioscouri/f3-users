@@ -235,6 +235,8 @@ class Auth extends \Dsc\Singleton
     public function loginWithToken( $user_id, $token, $post_login_redirect = null )
     {
    		$user = (new \Users\Models\Users)->setState('filter.auto_login_token', $token)->setState('filter.id', $user_id)->getItem();
+   		
+   		
    		if (empty($user->id))
    		{
    		    // redirect to /sign-up with post-login-redirect
@@ -251,6 +253,7 @@ class Auth extends \Dsc\Singleton
 
    		if ( $token != $token_user ) 
    		{
+   		
    		    // redirect to /sign-up with post-login-redirect
    		    if( !empty( $post_login_redirect ) ) {
    		        \Dsc\System::instance()->get( 'session' )->set( 'site.login.redirect', $post_login_redirect );
@@ -269,6 +272,7 @@ class Auth extends \Dsc\Singleton
    				return;
    			}
    		}
+   	
    		
    		$this->login( $user );
     }

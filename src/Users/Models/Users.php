@@ -137,7 +137,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $filter_auto_login_token = $this->getState( 'filter.auto_login_token' );
         if (strlen($filter_auto_login_token))
         {
-        	$this->setCondition('auto_login.token', (string)$filter_auto_login_token );
+        	$this->setCondition('auto_login.token', (string) $filter_auto_login_token );
         }       
         
         $filter_admin_tags = (array) $this->getState('filter.admin_tags');
