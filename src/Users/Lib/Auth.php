@@ -116,7 +116,7 @@ class Auth extends \Dsc\Singleton
         if (!$identity) 
         {
         	// they are responsible for setting the identity with ->setIdentity( $identity );
-            $event = new \Joomla\Event\Event( 'onUserAuthentication' );
+            $event = new \Dsc\Event\Event( 'onUserAuthentication' );
             $event->addArgument('credentials', $credentials);
             \Dsc\System::instance()->getDispatcher()->triggerEvent($event);        	
         }
@@ -220,7 +220,7 @@ class Auth extends \Dsc\Singleton
         }
        
         
-        $event = new \Joomla\Event\Event( 'afterUserLogin' );
+        $event = new \Dsc\Event\Event( 'afterUserLogin' );
         $event->addArgument('identity', $user);
         
         return \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
@@ -289,7 +289,7 @@ class Auth extends \Dsc\Singleton
         $identity = $this->getIdentity();
         
         // Trigger plugin event for before logout
-        $event = new \Joomla\Event\Event( 'beforeUserLogout' );
+        $event = new \Dsc\Event\Event( 'beforeUserLogout' );
         $event->addArgument('identity', $identity)->addArgument('global_app', $global_app_name);
         \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
 
@@ -306,7 +306,7 @@ class Auth extends \Dsc\Singleton
         \Dsc\Cookie::forget('remember');
         
         // Trigger plugin event for after logout
-        $event = new \Joomla\Event\Event( 'afterUserLogout' );
+        $event = new \Dsc\Event\Event( 'afterUserLogout' );
         $event->addArgument('identity', $identity)->addArgument('global_app', $global_app_name);
         \Dsc\System::instance()->getDispatcher()->triggerEvent($event);
     }
