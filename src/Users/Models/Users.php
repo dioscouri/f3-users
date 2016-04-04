@@ -7,6 +7,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
     public $password;
     public $first_name;
     public $last_name;
+    public $full_name;  // full user's name for searching and dispalying purposes
     public $email;              // if this is a guest account, store the fake email here
     public $role = null;
     public $active = true;
@@ -58,6 +59,9 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             );
             $where[] = array(
                 'last_name' => $key
+            );
+            $where[] = array(
+                'full_name' => $key
             );
             
             $this->setCondition('$or', $where);
@@ -269,6 +273,7 @@ class Users extends \Dsc\Mongo\Collections\Taggable
             $this->password = password_hash($this->__auto_password, PASSWORD_DEFAULT);
         }
         
+        $this->full_name = $this->fullName();
         return parent::beforeValidate();
     }
 
