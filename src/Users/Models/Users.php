@@ -147,7 +147,11 @@ class Users extends \Dsc\Mongo\Collections\Taggable
         $filter_admin_tags = (array) $this->getState('filter.admin_tags');
         if (!empty($filter_admin_tags))
         {
-            $filter_admin_tags = array_filter( array_values( $filter_admin_tags ), function( $var ) {return !empty( trim($var) ); } );
+            $filter_admin_tags = array_filter( array_values( $filter_admin_tags ), function( $var ) {
+                $var = trim($var);
+                return !empty( $var ); 
+            } );		
+		
             
             if (!empty($filter_admin_tags)) {
                 if( count( $filter_admin_tags ) == 1 && $filter_admin_tags[0] == '--' ) {
